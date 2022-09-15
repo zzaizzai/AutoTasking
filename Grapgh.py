@@ -4,11 +4,13 @@ import openpyxl
 target = 'CBA001'
 filePath = fr'C:\Users\junsa\Desktop\CBA001\Oil\{target}.xlsm'
 
-wb = openpyxl.load_workbook(filePath)
+wb = openpyxl.load_workbook(filePath , keep_vba=True)
 ws = wb['Sheet1']
+
+
+# 1/4 data
 for i in range(10):
     ws.delete_rows( 3 + i*3)
-    # 1/4 data
 
 chart = openpyxl.chart.LineChart()
 # chart.style = 26
@@ -47,5 +49,5 @@ for ss in chart.series:
     ss.graphicalProperties.line.noFill=True 
 
 ws.add_chart(chart, 'B8')
-wb.save(fr'C:\Users\junsa\Desktop\CBA001\Oil\{target} done.xlsx')
+wb.save(filePath)
 print('done')
