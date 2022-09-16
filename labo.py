@@ -1,3 +1,3 @@
-import Grapgh
+import Rheometer
 
-Grapgh.Rheometer()
+Rheometer.Rheometer()
