@@ -8,6 +8,9 @@ if __name__ == '__main__':
     user = 'junsai'
     target = 'CBA001'
 
+    # user = input(' what is your name: ')
+    # target = input(' what is you target : ')
+
     print(f'Hello {user}!')
     print(f'target is {target}')
     sleep(1)
