@@ -7,7 +7,7 @@ import os
 class Rheometer:
     def __init__(self, target):
         self.target = target
-        self.filePath = fr'C:\Users\junsa\Desktop\CBA001\Oil\{target}*.xls'
+        self.filePath = fr'C:\Users\junsa\Desktop\{target}\Rheometer\{target}*.xls'
 
     # translate xls to xlsx
     def MakeXlsmFile(self, file: str):
@@ -63,7 +63,7 @@ class Rheometer:
 
 
     def Rheometer(self):
-        print('Rheometer Data system...')
+        print('Searching Rheometer Data....')
         files = glob.glob(self.filePath)
         print(f'candidate files: {files}')
         for file in files:
@@ -78,5 +78,10 @@ class Rheometer:
             self.MakeXlsmFile(file)
             self.CreateGraph(file + 'x')
 
-rheo = Rheometer('CBA001')
-rheo.Rheometer()
+def Rheo(target:str):
+    rheo = Rheometer(target)
+    rheo.Rheometer()    
+
+if __name__ == 'Rheometer.py':
+    Rheo()
+

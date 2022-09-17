@@ -1,3 +1,0 @@
-import Rheometer
-
-Rheometer.Rheometer()
