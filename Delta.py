@@ -1,10 +1,13 @@
+from ast import Del
 import pandas as pd
+import numpy as np
 
 class Delta:
 
     DesktopPath = r'C:\Users\junsa\Desktop'
 
     def __init__(self, target: str):
+        self.target = target
         self.destination = self.DesktopPath + fr'\{target} Data'
         self.filePath = self.destination + fr'\Delta {target}.xlsx'
     
@@ -13,12 +16,43 @@ class Delta:
         # df = pd.read_excel(self.filePath, names=['硬度'])
         df = df.fillna(method='ffill')
         # data = df[[1,2,3]]
-        data = df[[3]].loc[[5]]
-        data = df[[3]].loc[[5]].values[0]
-        print(data)
+        data_median = df[[3]].loc[[5, 9, 13, 17, 21]].values
+        print(df)
+
+        data_input = ['delta', 'ma','cm']
+        print(len(data_median))
+        for i in range(len(data_median)):
+            print(data_median[i][0])
+            data_input.append(data_median[i][0])
+        # print(data_median[0][0])
+        # print(data_median[1][0])
+        # print(data_input)
+        self.InputData(data_input)
+    
+    def InputData(self, data_input):
+        print('inputing data....')
+        print(data_input)
+
+        excelPath = self.destination + fr'\{self.target} Data.xlsx'
+        df_copy = pd.read_excel(excelPath, index_col=0)
+        df_copy.reset_index(inplace= True, drop= True)
+        df_copy.loc[len(df_copy)] =data_input
+        print(df_copy)
+
+        df_copy.to_excel(excelPath, index=True, header=True, startcol=1)
+        
+
+
+        
+
+def Del(target: str):
+    delta = Delta(target)
+    delta.ReadFile()
+
+
+if __name__ == 'Delta.py':
+    Delta()
 
 
 
 
-delta = Delta('CBA001')
-delta.ReadFile()

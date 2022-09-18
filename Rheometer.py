@@ -2,20 +2,23 @@ import openpyxl
 import glob
 import win32com.client as win32
 import os
+import pandas as pd
+import numpy as np
 
 
 class Rheometer:
     def __init__(self, target):
         self.target = target
+        self.folderPath = fr'C:\Users\junsa\Desktop\{target} Data'
         self.filePath = fr'C:\Users\junsa\Desktop\{target} Data\Rheometer {target}*.xls'
 
     # translate from xls to xlsx
     def MakeXlsmFile(self, file: str):
         excel = win32.gencache.EnsureDispatch('Excel.Application')
         wb = excel.Workbooks.Open(file)
-        xlsxFile = file +  'x'
-        wb.SaveAs(xlsxFile, FileFormat = 51)
-        wb.Close() #FileFormat = 56 is for .xls extension
+        xlsxFile = file + 'x'
+        wb.SaveAs(xlsxFile, FileFormat=51)
+        wb.Close()  # FileFormat = 56 is for .xls extension
         excel.Application.Quit()
 
     def CreateGraph(self, xlsxFilePath: str):
@@ -34,13 +37,13 @@ class Rheometer:
         print(f'standard postion cell: {standard_cell}')
         # 1/4 data
         print('1/4 data....')
-        from_row = standard_cell.row + 10
-        for i in range(300):
-            ws.delete_rows( from_row + i*2 + 6)
-            ws.delete_rows( from_row + i*2 + 4)
-            ws.delete_rows( from_row + i*2 + 2)
-            ws.delete_rows( from_row + i*2)
-           
+        # from_row = standard_cell.row + 10
+        # for i in range(300):
+        #     ws.delete_rows( from_row + i*2 + 6)
+        #     ws.delete_rows( from_row + i*2 + 4)
+        #     ws.delete_rows( from_row + i*2 + 2)
+        #     ws.delete_rows( from_row + i*2)
+
         # create a graph
         chart = openpyxl.chart.ScatterChart('marker')
 
@@ -49,23 +52,26 @@ class Rheometer:
         chart.x_axis.title = 'Time'
         chart.y_axis.title = 'torque'
 
-        #add series
+        # add series
         print('adding serials')
         for i in range(8):
             serial_name = ws.cell(row=21, column=2 + 4*i).value
             if serial_name != None:
                 print(serial_name)
-                data = openpyxl.chart.Reference(ws, min_col =2 + i*4, min_row = standard_cell.row, max_row = 550)
-                times = openpyxl.chart.Reference(ws, min_col = 1, min_row = standard_cell.row + 1 , max_row = 550)
+                data = openpyxl.chart.Reference(
+                    ws, min_col=2 + i*4, min_row=standard_cell.row, max_row=550)
+                times = openpyxl.chart.Reference(
+                    ws, min_col=1, min_row=standard_cell.row + 1, max_row=550)
 
-                series = openpyxl.chart.Series(data, times, title_from_data=True)
+                series = openpyxl.chart.Series(
+                    data, times, title_from_data=True)
                 series.graphicalProperties.line.noFill = True
                 series.marker.symbol = "circle"
 
                 chart.series.append(series)
 
         print(f'number of series: {len(chart.series)}')
-        
+
         # # data scail
         # chart.y_axis.scaling.min = 0
         # chart.y_axis.scaling.max = 35
@@ -103,18 +109,30 @@ class Rheometer:
         ws = wb.worksheets[0]
 
         # make values name
+        init_row = 1
+        init_col = 2
 
-        xlsxFilePath_copy = os.path.dirname(xlsxFilePath) + f'\{self.target} Data.xlsx'
+
+
+        xlsxFilePath_copy = os.path.dirname(
+            xlsxFilePath) + f'\{self.target} Data.xlsx'
         wb_copy = openpyxl.load_workbook(xlsxFilePath_copy)
         ws_copy = wb_copy.worksheets[0]
 
-        ws_copy.cell(row=2, column=2, value='MA')
-        ws_copy.cell(row=3, column=2, value='MB')
-        ws_copy.cell(row=4, column=2, value='MC')
+        ws_copy.cell(row=init_row, column=init_col, value='Experiemnts')
+        ws_copy.cell(row=init_row, column=init_col + 1, value='Method')
+        ws_copy.cell(row=init_row, column=init_col + 2, value='Unit')
+
+        ws_copy.cell(row=init_row + 1, column=init_col + 1, value='MA')
+        ws_copy.cell(row=init_row + 2, column=init_col + 1, value='MB')
+        ws_copy.cell(row=init_row + 3, column=init_col + 1, value='MC')
+
+        ws_copy.cell(row=init_row + 1, column=init_col + 2, value='%')
+        ws_copy.cell(row=init_row + 2, column=init_col + 2, value='%')
+        ws_copy.cell(row=init_row + 3, column=init_col + 2, value='%')
+
         for i in range(3):
-            ws_copy.cell(row=2 + i, column=1, value='Rheometer')
-
-
+            ws_copy.cell(row=init_row + 1 + i, column=init_col, value='Rheometer')
 
         cell_init = ws_copy.cell(row=1, column=1)
         # Find top of the value postion
@@ -128,27 +146,51 @@ class Rheometer:
                     break
             if breaker == True:
                 break
-                
+
         print(f'standard cell: {cell_init}')
 
         def values_original(row, col):
-            ws.cell(row= row, column= col).value
-            return ws.cell(row= row, column= col).value
-            
+            ws.cell(row=row, column=col).value
+            return ws.cell(row=row, column=col).value
 
         for i in range(5):
-            ws_copy.cell(row=2 , column= 4 + i, value= values_original(cell_init.row + 1 + i*2 , cell_init.column))
-            ws_copy.cell(row=3 , column= 4 + i, value= values_original(cell_init.row + 1 + i*2, cell_init.column + 2))
-            ws_copy.cell(row=4 , column= 4 + i, value= values_original(cell_init.row + 1 + i*2, cell_init.column + 4))
+            ws_copy.cell(
+                row=2, column=5 + i, value=values_original(cell_init.row + 1 + i*2, cell_init.column))
+            ws_copy.cell(
+                row=3, column=5 + i, value=values_original(cell_init.row + 1 + i*2, cell_init.column + 2))
+            ws_copy.cell(
+                row=4, column=5 + i, value=values_original(cell_init.row + 1 + i*2, cell_init.column + 4))
 
-        wb_copy.save(xlsxFilePath_copy)   
-        print('saved copy values of rheometer')            
+        wb_copy.save(xlsxFilePath_copy)
+        print('saved copy values of rheometer')
+
+    def removeNanCol(self):
+        wb = openpyxl.Workbook()
+        ws = wb.active
+
+        # delete nan value col
+        excelPath = self.folderPath + fr'\{self.target} Data.xlsx'
+        df = pd.read_excel(excelPath, header=None, index_col=0)
+        df.reset_index(inplace= True, drop= True)
+        # df.loc[len(df)] = data_input
+        print(df)
+        print(len(df.columns))
+
+        for i in range(4, len(df.columns) + 1):
+            print(df[i])
+            np.isnan(df[i][2])
+            if np.isnan(df[i][2]):
+                del df[i]
+
+        df.to_excel(excelPath, index=False, header=False, startcol=1)
+        # wb.save(self.folderPath + fr'\{self.target} Data.xlsx')
 
 
-def Rheo(target:str):
+def Rheo(target: str):
     rheo = Rheometer(target)
-    rheo.Rheometer()    
+    rheo.Rheometer()
+    rheo.removeNanCol()
+
 
 if __name__ == 'Rheometer.py':
     Rheo()
-

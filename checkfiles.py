@@ -44,7 +44,8 @@ class CheckFiles:
         print('making data excel')
         wb = openpyxl.Workbook()
         sheet = wb.active
-        sheet.cell(row=1, column=4,  value=f'{self.target}')
+        for i in range(8):
+            sheet.cell(row=1, column=5 + i,  value=f'{self.target}({i+1})')
         wb.save( self.destination +  fr'\{self.target} Data.xlsx')
 
         

@@ -1,6 +1,8 @@
 from time import sleep
 import CheckFiles
+import Delta
 import Rheometer
+
 
 
 
@@ -16,3 +18,5 @@ if __name__ == '__main__':
     sleep(1)
     CheckFiles.Check(user, target)
     Rheometer.Rheo(target)
+    Delta.Del(target)
+    
