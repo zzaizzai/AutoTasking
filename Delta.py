@@ -1,4 +1,5 @@
 from ast import Del
+import glob
 import pandas as pd
 import numpy as np
 
@@ -45,9 +46,17 @@ class Delta:
 
         
 
-def Del(target: str):
-    delta = Delta(target)
-    delta.ReadFile()
+def Del(target: str, DesktopPath: str):
+    file_list = glob.glob(DesktopPath + rf'\{target} Data\Delta {target}*.xlsx')
+    if len(file_list) > 0 :
+        print()
+        print()
+        print('Delta file exist')
+        print(file_list)
+        delta = Delta(target)
+        delta.ReadFile()
+    else:
+        print('no Delta file')
 
 
 if __name__ == 'Delta.py':

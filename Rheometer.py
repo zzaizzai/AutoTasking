@@ -7,10 +7,10 @@ import numpy as np
 
 
 class Rheometer:
-    def __init__(self, target):
+    def __init__(self, target, DesktopPath:str):
         self.target = target
-        self.folderPath = fr'C:\Users\junsa\Desktop\{target} Data'
-        self.filePath = fr'C:\Users\junsa\Desktop\{target} Data\Rheometer {target}*.xls'
+        self.folderPath = DesktopPath + fr'\{target} Data'
+        self.filePath = DesktopPath + fr'\{target} Data\Rheometer {target}*.xls'
 
     # translate from xls to xlsx
     def MakeXlsmFile(self, file: str):
@@ -186,10 +186,20 @@ class Rheometer:
         # wb.save(self.folderPath + fr'\{self.target} Data.xlsx')
 
 
-def Rheo(target: str):
-    rheo = Rheometer(target)
-    rheo.Rheometer()
-    rheo.removeNanCol()
+def Rheo(target: str, DesktopPath:str):
+    
+    file_list =  glob.glob(DesktopPath + fr'\{target} Data\Rheometer {target}*.xls')
+    if len(file_list) > 0:
+        print()
+        print()
+        print('rheometer file exists')
+        print(file_list)
+        rheo = Rheometer(target, DesktopPath)
+        rheo.Rheometer()
+        rheo.removeNanCol()
+    else:
+        print('no rheometer Data')
+
 
 
 if __name__ == 'Rheometer.py':

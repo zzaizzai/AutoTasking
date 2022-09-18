@@ -10,15 +10,13 @@ import openpyxl
 
 class CheckFiles:
 
-    ShareFolderPath = r'C:\Users\junsa\Desktop'
-    DesktopPath = r'C:\Users\junsa\Desktop'
 
-    def __init__(self, user: str, target: str):
+    def __init__(self, user: str, target: str, destinationFolderPath:str, DesktopPath:str):
         self.user= user
         self.target = target
-        self.filePath = self.ShareFolderPath +  fr'\{user}\*\**\*.x*'
-        self.destination = self.DesktopPath + fr'\{target} Data'
-        self.fileNamePath = self.DesktopPath + fr'\{user}'
+        self.filePath = destinationFolderPath +  fr'\{user}\*\**\*.x*'
+        self.destination = DesktopPath + fr'\{target} Data'
+        self.fileNamePath = DesktopPath + fr'\{user}'
 
 
     def FindFiles(self):    
@@ -51,8 +49,8 @@ class CheckFiles:
         
 
 
-def Check(user: str, target: str):
-    ff = CheckFiles(user, target)
+def Check(user: str, target: str, destinationFolderPath: str, DesktopPath: str):
+    ff = CheckFiles(user, target, destinationFolderPath, DesktopPath)
     ff.FindFiles()
     ff.MakeDataExcel()
 
