@@ -1,8 +1,5 @@
-import matplotlib.pylab as plt
 import openpyxl
-import xlrd
 
-import pyexcel
 
 target = 'FJX001'
 # filePath = fr'C:\Users\junsa\Desktop\CBA001\Oil\{target}.xlsm'

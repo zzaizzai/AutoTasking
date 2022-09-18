@@ -9,12 +9,17 @@ import openpyxl
 
 
 class CheckFiles:
+
+    ShareFolderPath = r'C:\Users\junsa\Desktop'
+    DesktopPath = r'C:\Users\junsa\Desktop'
+
     def __init__(self, user: str, target: str):
         self.user= user
         self.target = target
-        self.filePath = fr'C:\Users\junsa\Desktop\{user}\*\**\*.x*'
-        self.destination = fr'C:\Users\junsa\Desktop\{target} Data'
-        self.fileNamePath = fr'C:\Users\junsa\Desktop\{user}'
+        self.filePath = self.ShareFolderPath +  fr'\{user}\*\**\*.x*'
+        self.destination = self.DesktopPath + fr'\{target} Data'
+        self.fileNamePath = self.DesktopPath + fr'\{user}'
+
 
     def FindFiles(self):    
         os.makedirs(self.destination, exist_ok=True)
