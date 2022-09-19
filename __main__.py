@@ -8,11 +8,15 @@ import Rheometer
 
 if __name__ == '__main__':
 
-    user = 'junsai'
-    target = 'CBA001'
+    user = '小暮準才'
+    target = 'FJX001'
 
-    targetFolderPath = r'C:\Users\junsa\Desktop'
-    DesktopPath = r'C:\Users\junsa\Desktop'
+    # for company
+    DesktopPath = r'C:\Users\1010020990\Desktop'
+    targetFolderPath = r'\\kfs03a\labo\9101-NVH_DATA\ホース'
+    
+    # targetFolderPath = r'C:\Users\junsa\Desktop'
+    # DesktopPath = r'C:\Users\junsa\Desktop'
     # user = input(' what is your name: ')
     # target = input(' what is you target : ')
 
@@ -22,4 +26,3 @@ if __name__ == '__main__':
     CheckFiles.Check(user, target, targetFolderPath, DesktopPath)
     Rheometer.Rheo(target, DesktopPath)
     Delta.Del(target, DesktopPath)
-    
