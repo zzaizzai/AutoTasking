@@ -16,7 +16,7 @@ class CheckFiles:
         self.target = target
         self.filePath = destinationFolderPath +  fr'\{user}\*\**\*.x*'
         self.destination = DesktopPath + fr'\{target} Data'
-        self.fileNamePath = DesktopPath + fr'\{user}'
+        self.fileNamePath = destinationFolderPath + fr'\{user}'
 
 
     def FindFiles(self):    
@@ -24,11 +24,12 @@ class CheckFiles:
         list = glob.glob(self.filePath, recursive=True)
         for file in list:
             if self.target in file:
-                print(file[len(self.filePath) -10:])
+                # print(file[len(self.filePath) -10:])
                 self.Copyfiles(file)
 
     def Copyfiles(self, targetFile: string):
     # check what experiment you want
+        print(self.fileNamePath)
         experiments = os.listdir(self.fileNamePath)
 
         for experiment in experiments:
@@ -56,7 +57,3 @@ def Check(user: str, target: str, destinationFolderPath: str, DesktopPath: str):
 
 if __name__ == 'CheckFiles.py':
     Check()
-
-
-
-
