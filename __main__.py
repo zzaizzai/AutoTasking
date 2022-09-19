@@ -2,6 +2,7 @@ from time import sleep
 import CheckFiles
 import Delta
 import Rheometer
+import os
 
 
 
@@ -12,7 +13,7 @@ if __name__ == '__main__':
     target = 'FJX001'
 
     # for company
-    DesktopPath = r'C:\Users\1010020990\Desktop'
+    DesktopPath = os.path.expanduser('~/Desktop')
     targetFolderPath = r'\\kfs03a\labo\9101-NVH_DATA\ホース'
     
     # targetFolderPath = r'C:\Users\junsa\Desktop'
