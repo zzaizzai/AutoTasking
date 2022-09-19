@@ -10,7 +10,7 @@ class Rheometer:
     def __init__(self, target, DesktopPath:str):
         self.target = target
         self.folderPath = DesktopPath + fr'\{target} Data'
-        self.filePath = DesktopPath + fr'\{target} Data\Rheometer {target}*.xls'
+        self.filePath = DesktopPath + fr'\{target} Data\レオメータ*{target}*.xls'
 
     # translate from xls to xlsx
     def MakeXlsmFile(self, file: str):
@@ -24,25 +24,27 @@ class Rheometer:
     def CreateGraph(self, xlsxFilePath: str):
         wb = openpyxl.load_workbook(xlsxFilePath)
         # wb = openpyxl.load_workbook(xlsxFile , keep_vba=True)
-        ws = wb['Sheet1']
+        # ws = wb['Sheet1']
+        ws = wb.worksheets[0]
 
         standard_cell = ws.cell(row=1, column=1)
         # Find 'Time' cell
         for row in ws.rows:
             for cell in row:
-                if cell.value == 'Time':
+                if cell.value == 'Time(NO.1)':
                     standard_cell = cell
                     break
 
         print(f'standard postion cell: {standard_cell}')
         # 1/4 data
-        print('1/4 data....')
-        # from_row = standard_cell.row + 10
-        # for i in range(300):
-        #     ws.delete_rows( from_row + i*2 + 6)
-        #     ws.delete_rows( from_row + i*2 + 4)
-        #     ws.delete_rows( from_row + i*2 + 2)
-        #     ws.delete_rows( from_row + i*2)
+        # print('1/4 data....')
+        # from_row = standard_cell.row + 20
+        # for i in range(200):
+        #     print(f'deleting{i}')
+        #     ws.delete_rows( from_row + i*3 + 3)
+        #     ws.delete_rows( from_row + i*3 + 2)
+        #     ws.delete_rows( from_row + i*3 + 1)
+        #     ws.delete_rows( from_row + i*3)
 
         # create a graph
         chart = openpyxl.chart.ScatterChart('marker')
@@ -139,7 +141,7 @@ class Rheometer:
         breaker = False
         for row in ws.rows:
             for cell in row:
-                if cell.value == 'MA':
+                if cell.value == 'MH':
                     print(cell)
                     cell_init = cell
                     breaker = True
@@ -178,8 +180,9 @@ class Rheometer:
 
         for i in range(4, len(df.columns) + 1):
             print(df[i])
-            np.isnan(df[i][2])
-            if np.isnan(df[i][2]):
+            # np.isnan(df[i][2])
+            if pd.isna(df[i][2]):
+            # if np.isnan(df[i][2]):
                 del df[i]
 
         df.to_excel(excelPath, index=False, header=False, startcol=1)
@@ -188,7 +191,7 @@ class Rheometer:
 
 def Rheo(target: str, DesktopPath:str):
     
-    file_list =  glob.glob(DesktopPath + fr'\{target} Data\Rheometer {target}*.xls')
+    file_list =  glob.glob(DesktopPath + fr'\{target} Data\レオメータ*{target}*.xls')
     if len(file_list) > 0:
         print()
         print()
