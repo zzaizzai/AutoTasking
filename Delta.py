@@ -1,11 +1,11 @@
-from ast import Del
 import glob
 import pandas as pd
 import numpy as np
+import os
 
 class Delta:
 
-    DesktopPath = r'C:\Users\junsa\Desktop'
+    DesktopPath = os.path.expanduser('~/Desktop')
 
     def __init__(self, target: str):
         self.target = target
