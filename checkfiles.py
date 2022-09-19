@@ -22,29 +22,33 @@ class CheckFiles:
     def FindFiles(self):    
         os.makedirs(self.destination, exist_ok=True)
         list = glob.glob(self.filePath, recursive=True)
+        
+        file_copy_num: int = 0
         for file in list:
             if self.target in file:
                 # print(file[len(self.filePath) -10:])
                 self.Copyfiles(file)
+                file_copy_num = file_copy_num + 1
+        print(f'we found {file_copy_num} files!!')
+        print()
 
     def Copyfiles(self, targetFile: string):
     # check what experiment you want
-        print(self.fileNamePath)
+        # print(self.fileNamePath)
         experiments = os.listdir(self.fileNamePath)
 
         for experiment in experiments:
             if experiment in targetFile:
                 # os.makedirs(self.destination + fr'\{experiment}', exist_ok=True)
                 # shutil.copy2(targetFile, self.destination + fr'\{experiment}')
-
+                print(targetFile)
                 shutil.copy2(targetFile, self.destination + fr'\{experiment} {os.path.basename(targetFile)}')
-    
+
+
     def MakeDataExcel(self):
         print('making data excel')
         wb = openpyxl.Workbook()
         sheet = wb.active
-        for i in range(8):
-            sheet.cell(row=1, column=5 + i,  value=f'{self.target}({i+1})')
         wb.save( self.destination +  fr'\{self.target} Data.xlsx')
 
         
