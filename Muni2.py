@@ -17,12 +17,14 @@ class Muuni:
         self.path_xls = self.file_dir + rf'\{self.exp_name} {target}*.xls'
         self.file_xls = ''
         self.file_xlsx = ''
+        self.index_name = ''
 
     def FindFile(self):
         print('find files...')
         print(self.path_xls)
 
         file_list = glob.glob(self.path_xls)
+        file_list = sorted(file_list, key=len)
         print(file_list)
 
         if len(file_list) > 0 :
@@ -66,19 +68,44 @@ class Muuni:
         print(df)
         for i, value in enumerate(df[0]):
             if value == '特性値：':
-                num_target = i - 1
+                num_target = df[0][i-1]
                 row_init = i + 4
         
         print(f'number of target: {num_target}')
         print(f'samples start row: {row_init}')
 
         df_input = df.loc[[row_init]]
+        for i in range(1, num_target):
+            df_input = df_input.append(df.loc[[row_init + 2*i]])
+
+        print('translate row and col')
+        df_input = df_input.transpose()
+        print(df_input)
+
+        print('')
+        df_input = df_input.loc[[2,3,4]]
+        print(df_input)
+
+        file_name = os.path.splitext(os.path.basename(self.file_xlsx))[0]
+        print(file_name)
+        unit = ['M', 'M', 'min' ]
+        method = ['M1', 'Vm', 'T1']
+        name = [file_name, file_name, file_name]
+        df_input.insert(0, 2, unit)
+        df_input.insert(0, 1, method)
+        df_input.insert(0, 0, name)
+
+        print(df_input)
+        
+        # reset title and index
+        df_input.reset_index(inplace= True, drop= True)
+        df_input = df_input.T.reset_index(drop=True).T
 
         print(df_input)
 
-        
+        self.WriteData(df_input)
 
-    def WriteData(self):
+    def WriteData(self, df_input) :
         print('writing data...')
 
         file_data = self.file_dir + fr'\{self.target} Data.xlsx'
@@ -95,5 +122,14 @@ class Muuni:
         df = pd.read_excel(file_data, index_col=0)
         print(df)
 
-muni = Muuni('CBA001')
-muni.FindFile()
+        df_merge = pd.concat([df, df_input])
+        print(df_merge)
+
+        df_merge.to_excel(file_data, index=True, header=True, startcol=0)
+        print(f'saved data file in {file_data}')
+
+def MuniMuni(target: str):
+    muni = Muuni(target)
+    muni.FindFile()
+
+MuniMuni('CBA001')

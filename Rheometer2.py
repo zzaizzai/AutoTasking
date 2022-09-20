@@ -65,7 +65,7 @@ class Rheometer:
         print(df)
         for i, value in enumerate(df[0]):
             if value == '特性値：':
-                num_target = i - 1
+                num_target = df[0][i-1]
                 row_init = i + 4
         
         print(f'number of target: {num_target}')
@@ -102,7 +102,6 @@ class Rheometer:
 
     def WriteData(self, df_input):
         print('writing data....')
-        print(df_input)
 
         file_data = self.file_dir + fr'\{self.target} Data.xlsx'
 
@@ -120,7 +119,7 @@ class Rheometer:
 
 
 
-def Rheomeo(target):
+def Rheomeo(target: str):
     reo = Rheometer(target)
     is_file = reo.FindFile()
     if is_file:
