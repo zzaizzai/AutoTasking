@@ -1,5 +1,5 @@
 from time import sleep
-import checkfiles
+import Checkfiles
 import Delta
 import Rheometer
 import os
@@ -27,6 +27,6 @@ if __name__ == '__main__':
     print(f'Hello {user}!')
     print(f'target is {target}')
     sleep(1)
-    checkfiles.Check(user, target, targetFolderPath, DesktopPath)
-    Rheometer.Rheo(target, DesktopPath)
-    Delta.Del(target, DesktopPath)
+    Checkfiles.Check(user, target, targetFolderPath, DesktopPath)
+    # Rheometer.Rheo(target, DesktopPath)
+    # Delta.Del(target, DesktopPath)
