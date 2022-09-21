@@ -8,7 +8,7 @@ import pandas as pd
 class Muuni:
 
     def __init__(self, target):
-        self.exp_name = 'Muni'
+        self.exp_name = 'ムーニー_ロータ_自動集積'
 
         self.DesktopPath = os.path.expanduser('~/Desktop')
 
@@ -132,4 +132,8 @@ def MuniMuni(target: str):
     muni = Muuni(target)
     muni.FindFile()
 
-MuniMuni('CBA001')
+
+
+if __name__ == '__main__':
+    target = target = input('target number (ex: ABC001): ')
+    MuniMuni(target)
