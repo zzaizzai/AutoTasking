@@ -2,7 +2,7 @@ import os
 import glob
 import win32com.client as win32
 import pandas as pd
-
+import openpyxl
 
 
 
@@ -15,7 +15,7 @@ class Rheometer:
 
         self.file_dir = self.DesktopPath  + rf'\{target} Data'
         self.target = target
-        self.file_path_xls = self.file_dir + rf'\{self.exp_name} {target}*.xls'
+        self.file_path_xls = self.file_dir + rf'\{self.exp_name}*{target}*.xls'
         self.file_xls = ''
         self.file_xlsx = ''
 
@@ -57,6 +57,82 @@ class Rheometer:
 
         print('make new xlsx file done')
     
+    def CreateGraph(self):
+        print('creating graph')
+        wb = openpyxl.load_workbook(self.file_xlsx)
+        ws = wb.worksheets[0]
+
+        standard_cell = ws.cell(row=1, column=1)
+
+        # Find 'Time' value of cell
+
+        is_ok = False
+        for row in ws.rows:
+            for cell in row:
+                if cell.value == 'Time(NO.1)':
+                    standard_cell = cell
+                    is_ok = True
+                    break
+            if is_ok:
+                break
+
+
+        self.number_of_target = int(ws.cell(row=standard_cell.row - 2, column=standard_cell.column).value)
+        print(f'number of target: {self.number_of_target}')
+
+        print(f'standard postion cell: {standard_cell}')
+        # 1/4 data
+        # print('1/4 data....')
+        # from_row = standard_cell.row + 20
+        # for i in range(200):
+        #     print(f'deleting{i}')
+        #     ws.delete_rows( from_row + i*3 + 3)
+        #     ws.delete_rows( from_row + i*3 + 2)
+        #     ws.delete_rows( from_row + i*3 + 1)
+        #     ws.delete_rows( from_row + i*3)
+
+        # create a graph
+        chart = openpyxl.chart.ScatterChart('marker')
+
+        # data titles
+        chart.title = 'Rheometer'
+        chart.x_axis.title = 'Time'
+        chart.y_axis.title = 'torque'
+
+        # add series
+        print('adding serials')
+        for i in range(self.number_of_target):
+            serial_name = ws.cell(row=21, column=2 + 4*i).value
+            if serial_name != None:
+                print(serial_name)
+                data = openpyxl.chart.Reference(
+                    ws, min_col=2 + i*4, min_row=standard_cell.row, max_row=1000)
+                times = openpyxl.chart.Reference(
+                    ws, min_col=1, min_row=standard_cell.row + 1, max_row=1000)
+
+                series = openpyxl.chart.Series(
+                    data, times, title_from_data=True)
+                series.graphicalProperties.line.noFill = True
+                series.marker.symbol = "circle"
+                # series.spPr.ln.solidFill = "000000"
+
+                chart.series.append(series)
+
+        print(f'number of series: {len(chart.series)}')
+
+        # # data scail
+        # chart.y_axis.scaling.min = 0
+        # chart.y_axis.scaling.max = 35
+
+        chart.x_axis.scaling.min = 0
+        chart.x_axis.scaling.max = 30
+
+        ws.add_chart(chart, 'B8')
+        wb.save(self.file_xlsx)
+
+        print('graph save done!!')
+
+
     def ReadFile(self):
         df = pd.read_excel(self.file_xlsx, header=None)
 
@@ -129,8 +205,9 @@ def Rheomeo(target: str):
         return
     
     reo.MakeXlsmFile()
+    reo.CreateGraph()
     reo.ReadFile()
 
-Rheomeo('CBA001')
-
-
+if __name__ == '__main__':
+    target = 'FJX001'
+    Rheomeo(target)
