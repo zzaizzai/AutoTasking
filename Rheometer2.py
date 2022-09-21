@@ -209,5 +209,5 @@ def Rheomeo(target: str):
     reo.ReadFile()
 
 if __name__ == '__main__':
-    target = 'FJX001'
+    target = input('target number (ex: ABC001): ')
     Rheomeo(target)
