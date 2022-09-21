@@ -127,8 +127,6 @@ class Muuni:
         print(df_merge)
 
         df_merge.reset_index(inplace= True, drop= True)
-        # df_merge = df_input.T.reset_index(drop=True).T
-
 
         df_merge.to_excel(file_data, index=True, header=True, startcol=0)
         print(f'saved data file in {file_data}')

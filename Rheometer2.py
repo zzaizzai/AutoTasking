@@ -24,6 +24,7 @@ class Rheometer:
         print(self.file_path_xls)
 
         file_list = glob.glob(self.file_path_xls)
+        file_list = sorted(file_list, key=len)
         print(file_list)
 
         if len(file_list) > 0:
@@ -194,22 +195,21 @@ class Rheometer:
             # or you can make a data file
             return
 
-        df_input.to_excel(file_data, index=True, header=True, startcol=0)
+        df = pd.read_excel(file_data, index_col=0)
+        print(df)
+
+        df_merge = pd.concat([df, df_input])
+        print(df_merge)
+
+        df_merge.reset_index(inplace= True, drop= True)
+
+        df_merge.to_excel(file_data, index=True, header=True, startcol=0)
         print(f'saved data file in {file_data}')
 
 
 def Rheomeo(target: str):
     reo = Rheometer(target)
-    is_file = reo.FindFile()
-    # if is_file:
-    #     pass
-    # else:
-    #     print('process done')
-    #     return
-
-    # reo.MakeXlsmFile()
-    # reo.CreateGraph()
-    # reo.ReadFile()
+    reo.FindFile()
 
 
 if __name__ == '__main__':
