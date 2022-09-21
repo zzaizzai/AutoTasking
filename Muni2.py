@@ -14,16 +14,15 @@ class Muuni:
 
         self.file_dir = self.DesktopPath  + rf'\{target} Data'
         self.target = target
-        self.path_xls = self.file_dir + rf'\{self.exp_name} {target}*.xls'
-        self.file_xls = ''
+        self.path_xlsx = self.file_dir + rf'\{self.exp_name} {target}*.xlsx'
         self.file_xlsx = ''
         self.index_name = ''
 
     def FindFile(self):
         print('find files...')
-        print(self.path_xls)
+        print(self.path_xlsx)
 
-        file_list = glob.glob(self.path_xls)
+        file_list = glob.glob(self.path_xlsx)
         file_list = sorted(file_list, key=len)
         print(file_list)
 
@@ -31,32 +30,32 @@ class Muuni:
             print(f'found {len(file_list)} {self.exp_name} file(s) ')
 
             for file in file_list:
-                self.file_xls = file
+                self.file_xlsx = file
                 self.MAkeXlsmFile()
         else:
             print(f'No {self.exp_name}')
             return
 
     def MAkeXlsmFile(self):
-        print('make xlsm file...')
+        # print('make xlsm file...')
 
-        self.file_xlsx = self.file_xls + 'x'
-        is_file = os.path.isfile(self.file_xlsx)
+        # self.file_xlsx = self.file_xls + 'x'
+        # is_file = os.path.isfile(self.file_xlsx)
 
-        if is_file:
-            print('xlsx file exist')
-            os.remove(self.file_xlsx)
-        else:
-            pass
+        # if is_file:
+        #     print('xlsx file exist')
+        #     os.remove(self.file_xlsx)
+        # else:
+        #     pass
 
-        print('make new xlsx file...')
-        excel = win32.gencache.EnsureDispatch('Excel.Application')
-        wb = excel.Workbooks.Open(self.file_xls)
-        wb.SaveAs(self.file_xlsx, FileFormat=51)
-        wb.Close()
-        excel.Application.Quit()
+        # print('make new xlsx file...')
+        # excel = win32.gencache.EnsureDispatch('Excel.Application')
+        # wb = excel.Workbooks.Open(self.file_xls)
+        # wb.SaveAs(self.file_xlsx, FileFormat=51)
+        # wb.Close()
+        # excel.Application.Quit()
 
-        print('make new xlsx file done')
+        # print('make new xlsx file done')
 
         self.ReadFile()
 
@@ -90,9 +89,11 @@ class Muuni:
         print(file_name)
         unit = ['M', 'M', 'min' ]
         method = ['M1', 'Vm', 'T1']
+        condition = ['none','none','none']
         name = [file_name, file_name, file_name]
-        df_input.insert(0, 2, unit)
-        df_input.insert(0, 1, method)
+        df_input.insert(0, 3, unit)
+        df_input.insert(0, 2, method)
+        df_input.insert(0, 1, condition)
         df_input.insert(0, 0, name)
 
         print(df_input)
@@ -124,6 +125,10 @@ class Muuni:
 
         df_merge = pd.concat([df, df_input])
         print(df_merge)
+
+        df_merge.reset_index(inplace= True, drop= True)
+        # df_merge = df_input.T.reset_index(drop=True).T
+
 
         df_merge.to_excel(file_data, index=True, header=True, startcol=0)
         print(f'saved data file in {file_data}')
