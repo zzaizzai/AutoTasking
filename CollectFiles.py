@@ -61,6 +61,7 @@ class CollectFiles:
                 print(f'translate... {file_xls} + x')
                 excel = win32.gencache.EnsureDispatch('Excel.Application')
                 wb = excel.Workbooks.Open(file_xls)
+                excel.DisplayAlerts = False
                 wb.SaveAs(file_xls+"x", FileFormat = 51) #FileFormat = 51 is for .xlsx extension
                 wb.Close()
                 excel.Application.Quit()
