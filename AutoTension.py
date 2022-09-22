@@ -182,6 +182,6 @@ def TenTen(target: str):
     tension.GetFiles()
 
 if __name__ == '__main__':
-
-    target = 'FJX001'
+    target = input('target name (ex: ABC001): ')
+    # target = 'FJX001'
     TenTen(target)
