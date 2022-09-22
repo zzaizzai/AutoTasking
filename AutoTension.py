@@ -56,7 +56,6 @@ class Tension:
 
         print(f'{num_samples} samples')
         
-        count = int(len(df_all)/num_samples)
 
         # divide df and write the data to data excel file
         for i in range(num_samples):
@@ -69,16 +68,17 @@ class Tension:
 
             unit = ['M', 'M', 'min' ,'a', 'a']
             method = ['M1', 'Vm', 'T1','a','a']
-            condition = [df_part[0][1]] * 5
+            condition_name = df_part[0][1]
+            condition = [condition_name] * 5
             print(condition)
             name = ['auto tesntion'] * 5
 
             df_part = df_part.loc[[2,3,4,5,6]]
-            df_part.insert(0, 5, unit)
-            df_part.insert(0, 6, method)
-            df_part.insert(0, 7, condition)
-            df_part.insert(0, 8, name)
-            # return 
+            df_part.insert(loc=0, column='unit', value=unit)
+            df_part.insert(loc=0, column='method', value=method)
+            df_part.insert(loc=0, column='condition', value=condition)
+            df_part.insert(loc=0, column='name', value=name)
+
             print(df_part)
 
             
@@ -182,6 +182,6 @@ def TenTen(target: str):
     tension.GetFiles()
 
 if __name__ == '__main__':
-    target = input('target name (ex: ABC001): ')
-    # target = 'FJX001'
+    # target = input('target name (ex: ABC001): ')
+    target = 'CBA001'
     TenTen(target)

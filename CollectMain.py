@@ -1,7 +1,5 @@
 from time import sleep
 import CollectFiles
-import os
-import Hippari
 
 
 
