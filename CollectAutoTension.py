@@ -58,6 +58,8 @@ class hippari:
         print('target files')
         print(files_list)
 
+
+        print('collecting wait a minute.......')
         
         self.CopyFiles(files_list)
         
@@ -65,10 +67,12 @@ class hippari:
 
     
     def CopyFiles(self, files_list):
+        dir_auto_tension = self.DataFolder + r'\auto_tension'
+        os.makedirs(dir_auto_tension, exist_ok=True)
         for file in files_list:
             file_path_list = glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\**\{file}*', recursive=True)
             print(f'copying... {file_path_list}')
-            shutil.copy2(file_path_list[0], self.DataFolder)
+            shutil.copy2(file_path_list[0], dir_auto_tension)
         print('copy done')
         
 def ReadFile(target: str, user_family_name:str ):
@@ -83,11 +87,10 @@ def ReadFile(target: str, user_family_name:str ):
 
 
 if __name__ == '__main__':
-    # user_family_name = input('user name (only family name): ')
-    # target = input('target Series ( ex: ABC001 ): ')
+    user_family_name = input('user name (only family name): ')
+    target = input('target Series ( ex: ABC001 ): ')
     
-    user_family_name = '小暮'
-    target = 'FJX001'
+    # user_family_name = '小暮'
+    # target = 'FJX001'
     
     ReadFile(target, user_family_name)
-
