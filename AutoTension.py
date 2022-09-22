@@ -1,21 +1,29 @@
-from email import header
 import pandas as pd
-import glob
 import os
+import glob
+
 
 class Tension:
 
 
-    def __init__(self, target: str ,auto_file_dir: str):
+    def __init__(self, target: str ):
         self.DesktopPath = os.path.expanduser('~/Desktop')
 
         self.file_dir = self.DesktopPath  + rf'\{target} Data'
-        self.auto_file_dir = auto_file_dir
+        # self.auto_file_dir = auto_file_dir
+        self.auto_file_dir = self.file_dir + r'\auto_tension'
         self.target = target
 
     def GetFiles(self):
-        auto_file_list = glob.glob(self.auto_file_dir + r'\auto_tension\*.xlsx')
+
+        auto_file_path = self.auto_file_dir + r'\*.xlsm'
+        print(auto_file_path)
+        auto_file_list = glob.glob(auto_file_path)
         print(auto_file_list)
+
+        if len(auto_file_list) == 0 :
+            print('no auto tesnion data file')
+            return
 
         df_all =pd.DataFrame()
 
@@ -23,49 +31,69 @@ class Tension:
             print(auto_file)
             df_all = pd.concat([df_all, self.GetData(auto_file)])
         
+        print(df_all)
+        
         print('showing merge df with sorted')
-        df_all = df_all.sort_values(by=[2, 1], na_position='first')
+        # sort witt tile
+        df_all = df_all.sort_values(by=[2, 1])
 
         df_all.reset_index(inplace= True, drop= True)
         df_all = df_all.T.reset_index(drop=True).T
 
         print(df_all)
 
-        group_name_list = []
-        for value in df_all[1]:
-            group_name_list.append(value)
+        target_name_list = []
+        for value in df_all[0]:
+            target_name_list.append(value)
 
-        group_name_set =set(group_name_list)
-        group_name_list = list(group_name_set)
+        group_name_set =set(target_name_list)
+        target_name_list = list(group_name_set)
 
         print('conditions')
-        print(group_name_list)
+        print(target_name_list)
 
-        num_samples = len(group_name_list)
-        num_rows_sampels  = int(len(df_all)/ len(group_name_list))
+        num_samples = len(target_name_list)
 
-        print(f'{num_samples} samples with {num_rows_sampels} rows')
+        print(f'{num_samples} samples')
+        
+        count = int(len(df_all)/num_samples)
 
         # divide df and write the data to data excel file
         for i in range(num_samples):
-            df_part = df_all.iloc[ 0 +i*num_rows_sampels : num_rows_sampels + i*num_rows_sampels   , : ]
+            df_part = df_all.iloc[ 0 +i*num_samples : num_samples + i*num_samples   , : ]
 
             df_part = df_part.transpose()
+            df_part = df_part.T.reset_index(drop=True).T
+            df_part.reset_index(inplace= True, drop= True)
             print(df_part)
-            # unit = ['M', 'M', 'min' ]
-            # method = ['M1', 'Vm', 'T1']
-            name = ['auto tesntion', 'auto tesntion', 'auto tesntion']
-            # df_part.insert(1, 2, unit)
-            # df_part.insert(1, 1, method)
-            df_part = df_part.loc[[2,3,4,5]]
+
+            unit = ['M', 'M', 'min' ,'a', 'a']
+            method = ['M1', 'Vm', 'T1','a','a']
+            condition = [df_part[0][1]] * 5
+            print(condition)
+            name = ['auto tesntion'] * 5
+
+            df_part = df_part.loc[[2,3,4,5,6]]
+            df_part.insert(0, 5, unit)
+            df_part.insert(0, 6, method)
+            df_part.insert(0, 7, condition)
+            df_part.insert(0, 8, name)
+            # return 
             print(df_part)
-            # df_part.reset_index(inplace= True, drop= True)
-            # df_part = df_part.T.reset_index(drop=True).T
-            df_part.insert(0, 0, name)
+
+            
+            
+            df_part.reset_index(inplace= True, drop= True)
+            df_part = df_part.T.reset_index(drop=True).T
+
             
 
+            print(df_part)
 
-            # self.WriteData(df_part)
+            
+            
+
+            self.WriteData(df_part)
 
 
 
@@ -75,6 +103,7 @@ class Tension:
         file_data = self.file_dir + fr'\{self.target} Data.xlsx'
 
         is_file = os.path.isfile(file_data)
+
 
         if is_file:
             pass
@@ -90,8 +119,10 @@ class Tension:
 
         df_merge.reset_index(inplace= True, drop= True)
 
-        # df_merge.to_excel(file_data, index=True, header=True, startcol=0)
-        # print(f'saved data file in {file_data}')
+        df_merge.to_excel(file_data, index=True, header=True, startcol=0)
+
+        print(df_merge)
+        print(f'saved data file in {file_data}')
 
 
     def GetData(self, auto_file)-> (any):
@@ -105,48 +136,52 @@ class Tension:
         #         print(df[2][row_num])
         #         if pd.isnull(df[2][2+ i*5]):
         #             df.at[2+ i*5, 2] = 0
-        
+        df[2] = df[2].fillna('Normal')
+        df[2] = df[2] + df[3]
+
         for i in range(len(df)):
-            row_num = 2 + i*5
+            row_num = 2 + i*4
             if row_num < len(df):
                 for j in range(1, 4):
-                    df.at[row_num + 4, j] = df.at[row_num, j]
+                    df.at[row_num + 3, j] = df.at[row_num, j]
         print(df)
 
         df_data = pd.DataFrame()
 
         for i in range(len(df)):
-            row_num = 6 + i*5
+            row_num = 5 + i*4
             if row_num < len(df):
                 df_data = df_data.append(df.loc[[row_num]], ignore_index=True)
 
-        print(df_data)
 
+        print('..df only average values...')
+        print(df_data)
+        print(self.target[:2])
         target_list_row = []
         for i, value in enumerate(df_data[1]):
+            print(i)
             print(value)
-            if target[:3] in value:
-                print(f'include CBA at {value}')
+            if self.target[:2] in str(value):
+                print(f'include {self.target[0:2]} at {value}')
                 target_list_row.append(i)
-        
+
         print(target_list_row)
 
         df_data = df_data.loc[target_list_row]
         print(df_data)
 
-
-        df_data = df_data[[1,2,6,7,8,9]]
+        # select titles
+        df_data = df_data[[1,2,9,10,11,12,15]]
 
         print(df_data)
 
         return df_data
 
-def TenTen(target: str, auto_file_dir: str ):
-    tension = Tension(target, auto_file_dir)
+def TenTen(target: str):
+    tension = Tension(target)
     tension.GetFiles()
 
 if __name__ == '__main__':
-    auto_file_dir = r'C:\Users\junsa\Desktop\auto'
-    target = 'CBA001'
 
-    TenTen(target, auto_file_dir)
+    target = 'FJX001'
+    TenTen(target)
