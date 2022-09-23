@@ -81,19 +81,16 @@ class Tension:
 
             print(df_part)
 
-            
-            
             df_part.reset_index(inplace= True, drop= True)
             df_part = df_part.T.reset_index(drop=True).T
 
-            
-
+        
             print(df_part)
-
-            
-            
-
             self.WriteData(df_part)
+
+
+
+        print('merge done')
 
 
 
@@ -112,7 +109,6 @@ class Tension:
             return
 
         df = pd.read_excel(file_data, index_col=0)
-        print(df)
 
         df_merge = pd.concat([df, df_input])
         print(df_merge)
@@ -130,12 +126,6 @@ class Tension:
         df = pd.read_excel(auto_file , header=None)
         print(df)
 
-        # for i in range(len(df)):
-        #     row_num = 2 + i*5
-        #     if row_num < len(df):
-        #         print(df[2][row_num])
-        #         if pd.isnull(df[2][2+ i*5]):
-        #             df.at[2+ i*5, 2] = 0
         df[2] = df[2].fillna('Normal')
         df[2] = df[2] + df[3]
 

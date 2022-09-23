@@ -97,12 +97,15 @@ class Rheometer:
 
         # create a graph
         chart = openpyxl.chart.ScatterChart('marker')
+        # chart = openpyxl.chart.LineChart()
 
         # data titles
         chart.title = 'Rheometer'
         chart.x_axis.title = 'Time'
         chart.y_axis.title = 'torque'
 
+
+        colors  = ['ff0000','ffaa00','00ff00' ,'0055ff','8000ff','00ff55','ff00d5']
         # add series
         print('adding serials')
         for i in range(self.number_of_target):
@@ -116,9 +119,13 @@ class Rheometer:
 
                 series = openpyxl.chart.Series(
                     data, times, title_from_data=True)
-                series.graphicalProperties.line.noFill = True
-                series.marker.symbol = "circle"
+                # series.graphicalProperties.line.noFill = True
+                
+                series.graphicalProperties.line.solidFill = colors[i]
+                # series.marker.symbol = "circle"
+                # series.marker.size = 0
                 # series.spPr.ln.solidFill = "000000"
+                # series.smooth = True
 
                 chart.series.append(series)
 
@@ -128,8 +135,8 @@ class Rheometer:
         # chart.y_axis.scaling.min = 0
         # chart.y_axis.scaling.max = 35
 
-        chart.x_axis.scaling.min = 0
-        chart.x_axis.scaling.max = 30
+        # chart.x_axis.scaling.min = 0
+        # chart.x_axis.scaling.max = 30
 
         ws.add_chart(chart, 'B8')
         wb.save(self.file_xlsx)
