@@ -5,7 +5,7 @@ import shutil
 import string
 import openpyxl
 import win32com.client as win32
-
+from tqdm import tqdm
 
 class CollectFiles:
 
@@ -24,7 +24,7 @@ class CollectFiles:
         list = glob.glob(self.filePath, recursive=True)
         
         file_copy_num: int = 0
-        for file in list:
+        for file in tqdm(list, desc="Searching Files"):
             if self.target in file:
                 self.Copyfiles(file)
                 file_copy_num = file_copy_num + 1

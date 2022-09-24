@@ -2,6 +2,7 @@ import pandas as pd
 import glob
 import shutil
 import os
+from tqdm import tqdm
 
 class hippari:
 
@@ -69,7 +70,8 @@ class hippari:
     def CopyFiles(self, files_list):
         dir_auto_tension = self.DataFolder + r'\auto_tension'
         os.makedirs(dir_auto_tension, exist_ok=True)
-        for file in files_list:
+        for file in tqdm(files_list):
+            print(file)
             file_path_list = glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\**\{file}*', recursive=True)
             print(f'copying... {file_path_list}')
             shutil.copy2(file_path_list[0], dir_auto_tension)
