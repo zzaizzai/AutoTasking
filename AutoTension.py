@@ -42,24 +42,23 @@ class Tension:
 
         print(df_all)
 
-        target_name_list = []
-        for value in df_all[0]:
-            target_name_list.append(value)
+        target_condition_list = []
+        for value in df_all[1]:
+            target_condition_list.append(value)
 
-        group_name_set =set(target_name_list)
-        target_name_list = list(group_name_set)
+        target_condition_set = set(target_condition_list)
+        target_condition_list = list(target_condition_set)
 
-        print('conditions')
-        print(target_name_list)
+        print(target_condition_list)
 
-        num_samples = len(target_name_list)
+        target_condition_list = sorted(target_condition_list, key=len)
+        for condition in target_condition_list:
+            df_part = pd.DataFrame()
 
-        print(f'{num_samples} samples')
-        
-
-        # divide df and write the data to data excel file
-        for i in range(num_samples):
-            df_part = df_all.iloc[ 0 +i*num_samples : num_samples + i*num_samples   , : ]
+            for i, value in enumerate(df_all[1]):
+                if value == condition:
+                    df_part = df_part.append(df_all.loc[[i]])
+            print(df_part)
 
             df_part = df_part.transpose()
             df_part = df_part.T.reset_index(drop=True).T
@@ -70,24 +69,20 @@ class Tension:
             method = ['M1', 'Vm', 'T1','a','a']
             condition_name = df_part[0][1]
             condition = [condition_name] * 5
-            print(condition)
             name = ['auto tesntion'] * 5
-
             df_part = df_part.loc[[2,3,4,5,6]]
+
             df_part.insert(loc=0, column='unit', value=unit)
             df_part.insert(loc=0, column='method', value=method)
             df_part.insert(loc=0, column='condition', value=condition)
             df_part.insert(loc=0, column='name', value=name)
 
-            print(df_part)
-
-            df_part.reset_index(inplace= True, drop= True)
             df_part = df_part.T.reset_index(drop=True).T
+            df_part.reset_index(inplace= True, drop= True)
 
-        
             print(df_part)
-            self.WriteData(df_part)
 
+            self.WriteData(df_part)
 
 
         print('merge done')
@@ -172,6 +167,6 @@ def TenTen(target: str):
     tension.GetFiles()
 
 if __name__ == '__main__':
-    # target = input('target name (ex: ABC001): ')
-    target = 'CBA001'
+    target = input('target name (ex: ABC001): ')
+    # target = 'CBA001'
     TenTen(target)

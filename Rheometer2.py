@@ -3,7 +3,7 @@ import glob
 import win32com.client as win32
 import pandas as pd
 import openpyxl
-
+from openpyxl.drawing.text import ParagraphProperties, CharacterProperties, Font
 
 class Rheometer:
 
@@ -101,8 +101,23 @@ class Rheometer:
 
         # data titles
         chart.title = 'Rheometer'
-        chart.x_axis.title = 'Time'
+        font = Font(typeface='Calibri')
+        size = 1600
+        char_prop = CharacterProperties(latin=font, sz=size, b=True) 
+        para_prop = ParagraphProperties(defRPr=char_prop)
+        chart.title.tx.rich.p[0].pPr = para_prop
+
+
+        chart.x_axis.title = 'Time (min)'
         chart.y_axis.title = 'torque'
+
+        
+        font = Font(typeface='Calibri')
+        size = 1200 # 14 point size 
+        char_prop = CharacterProperties(latin=font, sz=size, b=False) 
+        para_prop = ParagraphProperties(defRPr=char_prop)
+        chart.x_axis.title.tx.rich.p[0].pPr = para_prop
+        chart.y_axis.title.tx.rich.p[0].pPr = para_prop
 
 
         colors  = ['ff0000','ffaa00','00ff00' ,'0055ff','8000ff','00ff55','ff00d5']
@@ -122,6 +137,8 @@ class Rheometer:
                 # series.graphicalProperties.line.noFill = True
                 
                 series.graphicalProperties.line.solidFill = colors[i]
+
+
                 # series.marker.symbol = "circle"
                 # series.marker.size = 0
                 # series.spPr.ln.solidFill = "000000"
