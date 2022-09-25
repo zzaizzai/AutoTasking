@@ -94,12 +94,15 @@ class hippari:
 
         # multi Thread
         pool = ThreadPool(4)
-        file_path_list = pool.map(get_file_path ,files_list)
+        for _ in tqdm(pool.map(get_file_path ,files_list), total=100):
+            pass
+
+        file_path_list = list(files_list)
         for file_path in file_path_list:
             shutil.copy2(file_path, dir_auto_tension)
         print('copy done')
 
-def ReadFile(target: str, user_family_name:str ):
+def DoIt(target: str, user_family_name:str ):
 
     file_auto_list =  [r'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\全自動引張り試験共通リスト2022年.xlsx']       
 
@@ -117,4 +120,4 @@ if __name__ == '__main__':
     # user_family_name = '小暮'
     # target = 'FJX001'
     
-    ReadFile(target, user_family_name)
+    DoIt(target, user_family_name)
