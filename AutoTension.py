@@ -73,9 +73,9 @@ class Tension:
             df_part = df_part.loc[[2,3,4,5,6]]
 
             df_part.insert(loc=0, column='unit', value=unit)
-            df_part.insert(loc=0, column='method', value=method)
+            df_part.insert(loc=0, column='type', value=method)
             df_part.insert(loc=0, column='condition', value=condition)
-            df_part.insert(loc=0, column='name', value=name)
+            df_part.insert(loc=0, column='method', value=name)
 
             df_part = df_part.T.reset_index(drop=True).T
             df_part.reset_index(inplace= True, drop= True)

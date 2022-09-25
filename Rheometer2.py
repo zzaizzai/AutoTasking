@@ -15,7 +15,7 @@ class Rheometer:
         self.file_dir = self.DesktopPath + rf'\{target} Data'
         self.target = target
         self.file_path_xls = self.file_dir + \
-            rf'\{self.exp_name}*{target}*.xlsx'
+            rf'\{self.exp_name} {target}*.xlsx'
         self.file_xls = ''
         self.file_xlsx = ''
 

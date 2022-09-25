@@ -11,21 +11,30 @@ class Deruta:
 
         self.target = target
         self.file_dir = self.DesktopPath + fr'\{target} Data'
-        self.file_path_xls = self.file_dir + rf'\{self.exp_name} {target}*.xls'
-        self.file_path_xlsx = ''
+        self.file_path_xlsx = self.file_dir + rf'\{self.exp_name} {target}*.xlsx'
     
-    def FindFile(self) -> bool:
+    def Start(self):
         print('find file Delta....')
-        file_list = glob.glob(self.file_path_xls)
+        file_list = glob.glob(self.file_path_xlsx)
 
         if len(file_list) > 0:
             print('xls file exist')
             self.file_path_xlsx = file_list[0]
-            return True
         else:
-            return False
+            return
+
+    def ReadFile(self):
+        print()
 
 
+
+
+if __name__ == '__main__':
+    
+    target = input('input your target')
+    target = 'CBA001'
+    deru = Deruta(target)
+    deru.Start()
 
 
 
@@ -38,16 +47,16 @@ class Deruta:
 # else:
 #     print('no file')
 
-file_xls = r'C:\Users\1010020990\Desktop\FJX001 Data\⊿Ｖ FJX001-005.xls'
-file_xlsm = r'C:\Users\1010020990\Desktop\FJX001 Data\⊿Ｖ FJX001-005.xlsm'
-is_file = os.path.isfile(file_xlsm)
-if is_file:
-    print('file exist')
-    pass
-else: 
-    excel = win32.gencache.EnsureDispatch('Excel.Application')
-    wb = excel.Workbooks.Open(file_xls)
-    wb.SaveAs(file_xlsm, FileFormat=51)
-    wb.Close()
-    excel.Application.Quit()
-    print('made xlsx')
+# file_xls = r'C:\Users\1010020990\Desktop\FJX001 Data\⊿Ｖ FJX001-005.xls'
+# file_xlsm = r'C:\Users\1010020990\Desktop\FJX001 Data\⊿Ｖ FJX001-005.xlsm'
+# is_file = os.path.isfile(file_xlsm)
+# if is_file:
+#     print('file exist')
+#     pass
+# else: 
+#     excel = win32.gencache.EnsureDispatch('Excel.Application')
+#     wb = excel.Workbooks.Open(file_xls)
+#     wb.SaveAs(file_xlsm, FileFormat=51)
+#     wb.Close()
+#     excel.Application.Quit()
+#     print('made xlsx')

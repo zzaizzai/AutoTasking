@@ -3,6 +3,7 @@ import glob
 import shutil
 import os
 from tqdm import tqdm
+from multiprocessing.dummy import Pool as ThreadPool
 
 class hippari:
 
@@ -70,13 +71,34 @@ class hippari:
     def CopyFiles(self, files_list):
         dir_auto_tension = self.DataFolder + r'\auto_tension'
         os.makedirs(dir_auto_tension, exist_ok=True)
-        for file in tqdm(files_list):
-            print(file)
-            file_path_list = glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\**\{file}*', recursive=True)
-            print(f'copying... {file_path_list}')
-            shutil.copy2(file_path_list[0], dir_auto_tension)
+        # for file in tqdm(files_list):
+        #     print(file)
+
+        #     year = file[0:4]
+        #     month = file[4:6]
+        #     day = file[6:8]
+
+        #     print(f'{year} {month} {day}')
+
+        #     file_path_list = glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\**\{file}*', recursive=True)
+        #     print(f'copying... {file_path_list}')
+        #     shutil.copy2(file_path_list[0], dir_auto_tension)
+        # print('copy done')
+
+        def get_file_path(file):
+            file_path = ''
+            while len(file_path) > 1:
+                files_path =  glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\**\{file}*', recursive=True)
+                file_path = files_path[0]
+            return file_path
+
+        # multi Thread
+        pool = ThreadPool(4)
+        file_path_list = pool.map(get_file_path ,files_list)
+        for file_path in file_path_list:
+            shutil.copy2(file_path, dir_auto_tension)
         print('copy done')
-        
+
 def ReadFile(target: str, user_family_name:str ):
 
     file_auto_list =  [r'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\全自動引張り試験共通リスト2022年.xlsx']       

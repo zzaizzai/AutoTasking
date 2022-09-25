@@ -6,6 +6,9 @@ import string
 import openpyxl
 import win32com.client as win32
 from tqdm import tqdm
+# from win32com.client.gencache import EnsureDispatch
+# import sys
+
 
 class CollectFiles:
 
@@ -45,7 +48,6 @@ class CollectFiles:
     def MakeDataExcel(self):
         print('making data excel')
         wb = openpyxl.Workbook()
-        sheet = wb.active
         wb.save( self.dir_data +  fr'\{self.target} Data.xlsx')
 
     def TranslateFromXlsToXlsx(self):
@@ -80,6 +82,8 @@ def Check(user: str, target: str, destination_dir_path: str):
     ff.TranslateFromXlsToXlsx()
 
 if __name__ == '__main__':
+    # xl = EnsureDispatch("Word.Application")
+    # print(sys.modules[xl.__module__].__file__)
 
     user = 'junsai'
     target = 'CBA001'
