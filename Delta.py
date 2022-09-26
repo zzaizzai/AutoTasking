@@ -7,6 +7,7 @@ class Delta:
 
     DesktopPath = os.path.expanduser('~/Desktop')
 
+
     def __init__(self, target: str):
         self.target = target
         self.destination = self.DesktopPath + fr'\{target} Data'

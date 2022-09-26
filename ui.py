@@ -1,7 +1,7 @@
 import CollectFiles
 import labo
-
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -90,7 +90,7 @@ class Ui_Dialog(object):
     def clickSubmit(self):
         name = self.lineEdit.text()
         target = self.lineEdit_2.text() 
-        CheckFiles.Check(name, target)
+        CollectFiles.Check(name, target)
         Dialog.close()
     def checkInfo(self):
         name = self.lineEdit.text()

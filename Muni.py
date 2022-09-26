@@ -131,7 +131,7 @@ class Muuni:
         df_merge.to_excel(file_data, index=True, header=True, startcol=0)
         print(f'saved data file in {file_data}')
 
-def MuniMuni(target: str):
+def DoIt(target: str):
     muni = Muuni(target)
     muni.FindFile()
 
@@ -139,4 +139,4 @@ def MuniMuni(target: str):
 
 if __name__ == '__main__':
     target = target = input('target number (ex: ABC001): ')
-    MuniMuni(target)
+    DoIt(target)

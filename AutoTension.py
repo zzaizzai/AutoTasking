@@ -56,6 +56,10 @@ class Tension:
         df_len = pd.read_excel(self.file_data, index_col=0)
         self.len_df_col = len(df_len.columns) - 4 # without condition, method, type, unit
         print(f'len of col with only data : {self.len_df_col}')
+        
+        if self.len_df_col < 1:
+            print('you should do another method first')
+            return
 
         remove_row_list = []
         for i, value in enumerate(df_all[0]):

@@ -1,7 +1,6 @@
-from turtle import title
 import pandas as pd
 import os
-
+import numpy as np
 
 class Treatment:
 
@@ -41,13 +40,40 @@ class Treatment:
         print(df)
         df.to_excel(self.file, index=True, header=True, startcol=0)
         print(f'saved done {self.file}')
-        
+
+    def RoundData(self):
+        print('round data')
+        df = pd.read_excel(self.file, index_col=0)
+        print(df)
+
+
+        ## round
+        df = df.round(1)
+        print(df)
+
+        print(df[(df['type'] == 'elongation')])
+        df[(df['type'] == 'elongation')] = df[(df['type'] == 'elongation')].round(-1)
+        print(df)
+
+        ## drop angles of autotension
+        # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
+        print(df.query('condition.str.contains("アングル") and type in ["25%M", "50%M", "100%M", "elongation"]').index)
+        index_drop = df.query('condition.str.contains("アングル") and type in ["25%M", "50%M", "100%M", "elongation"]').index
+        df.drop(list(index_drop), inplace=True)
+
+        print(df)
+
+
+
+        ## save
+        # df.to_excel(self.file, index=True, header=True, startcol=0)
+        # print(f'saved done {self.file}')
 
 
 def DoIt(target: str):
     toritori = Treatment(target)
     toritori.ChangeTitles()
-
+    toritori.RoundData()
 
 if __name__ == "__main__":
     target = input('target: ')
