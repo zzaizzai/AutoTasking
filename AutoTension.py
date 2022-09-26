@@ -136,10 +136,10 @@ class Tension:
 
         df_merge.reset_index(inplace= True, drop= True)
 
-        # df_merge.to_excel(file_data, index=True, header=True, startcol=0)
+        df_merge.to_excel(self.file_data, index=True, header=True, startcol=0)
 
-        # print(df_merge)
-        # print(f'saved data file in {file_data}')
+        print(df_merge)
+        print(f'saved data file in {self.file_data}')
 
 
     def GetData(self, auto_file)-> (any):

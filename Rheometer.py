@@ -1,5 +1,6 @@
 import os
 import glob
+from re import A
 import win32com.client as win32
 import pandas as pd
 import openpyxl
@@ -84,16 +85,24 @@ class Rheometer:
             ws.cell(row=standard_cell.row - 2, column=standard_cell.column).value)
         print(f'number of target: {self.number_of_target}')
 
+
+
+        def ChangeToTargetNum(number:int):
+            target = self.target
+            alphabet = target[0:3]
+            num = int(target[3:])
+            alphabet_num = alphabet + str('%03d' % (num + number))
+            return alphabet_num
+
+        # change title of legend in graph
+        for i in range(self.number_of_target):
+            ws.cell(row=standard_cell.row, column=standard_cell.column + 1 + 4*i).value = ChangeToTargetNum(i)
+
+
+
+
+
         print(f'standard postion cell: {standard_cell}')
-        # 1/4 data
-        # print('1/4 data....')
-        # from_row = standard_cell.row + 20
-        # for i in range(200):
-        #     print(f'deleting{i}')
-        #     ws.delete_rows( from_row + i*3 + 3)
-        #     ws.delete_rows( from_row + i*3 + 2)
-        #     ws.delete_rows( from_row + i*3 + 1)
-        #     ws.delete_rows( from_row + i*3)
 
         # create a graph
         chart = openpyxl.chart.ScatterChart('marker')
@@ -152,8 +161,8 @@ class Rheometer:
         # chart.y_axis.scaling.min = 0
         # chart.y_axis.scaling.max = 35
 
-        # chart.x_axis.scaling.min = 0
-        # chart.x_axis.scaling.max = 30
+        chart.x_axis.scaling.min = 0
+        chart.x_axis.scaling.max = 30
 
         ws.add_chart(chart, 'B8')
         wb.save(self.file_xlsx)

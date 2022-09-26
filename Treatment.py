@@ -39,8 +39,8 @@ class Treatment:
         df.columns = titles
 
         print(df)
-        # df.to_excel(self.file, index=True, header=True, startcol=0)
-        # print(f'saved done {self.file}')
+        df.to_excel(self.file, index=True, header=True, startcol=0)
+        print(f'saved done {self.file}')
         
 
 
