@@ -27,9 +27,10 @@ if __name__ == '__main__':
 
     # for company
 
-    # target_dir_path = r'\\kfs03a\labo\9101-NVH_DATA\ホース'
-    target_dir_path = r'C:\Users\junsa\Desktop'
-
+    target_dir_path = r'\\kfs03a\labo\9101-NVH_DATA\ホース'
+    # target_dir_path = r'C:\Users\junsa\Desktop'
+    
+    print(f'path : {target_dir_path} \n')
     user_family = input(' input your family name (ex: 田中) : ')
     user_first = input('\n ※ if EPDM data please input EPDM \n input your first name (ex: 花子) :  ')
     
