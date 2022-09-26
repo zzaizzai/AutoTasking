@@ -4,6 +4,7 @@ import CollectAutoTension
 import Rheometer
 import Muni
 import AutoTension
+import Treatment
 
 
 
@@ -11,9 +12,10 @@ import AutoTension
 def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     CollectFiles.Check(user, target, target_dir_path)
     CollectAutoTension.DoIt(target, user_family)
-    Rheometer.DoIt(target)
-    Muni.DoIt(target)
-    AutoTension.DoIt(target)
+    Rheometer.Rheomeo(target)
+    Muni.MuniMuni(target)
+    AutoTension.TenTen(target)
+    Treatment.DoIt(target)
 
     print('process done')
 
