@@ -151,7 +151,7 @@ class Rheometer:
                 # series.marker.symbol = "circle"
                 # series.marker.size = 0
                 # series.spPr.ln.solidFill = "000000"
-                # series.smooth = True
+                series.smooth = True
 
                 chart.series.append(series)
 
