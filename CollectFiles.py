@@ -5,7 +5,6 @@ import shutil
 import string
 import openpyxl
 import win32com.client as win32
-from tqdm import tqdm
 # from win32com.client.gencache import EnsureDispatch
 # import sys
 
@@ -27,7 +26,7 @@ class CollectFiles:
         list = glob.glob(self.filePath, recursive=True)
         
         file_copy_num: int = 0
-        for file in tqdm(list, desc="Searching Files"):
+        for file in list:
             if self.target in file:
                 self.Copyfiles(file)
                 file_copy_num = file_copy_num + 1

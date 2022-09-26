@@ -2,7 +2,6 @@ import pandas as pd
 import glob
 import shutil
 import os
-from tqdm import tqdm
 from multiprocessing.dummy import Pool as ThreadPool
 
 class hippari:
@@ -87,17 +86,17 @@ class hippari:
 
         def get_file_path(file):
             file_path = ''
-            while len(file_path) > 1:
-                files_path =  glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\**\{file}*', recursive=True)
+            while len(file_path) < 1:
+                files_path =  glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年7～12月\**\{file}*', recursive=True)
+                print(files_path)
                 file_path = files_path[0]
             return file_path
 
         # multi Thread
         pool = ThreadPool(4)
-        for _ in tqdm(pool.map(get_file_path ,files_list), total=100):
-            pass
-
-        file_path_list = list(files_list)
+        
+        file_path_list = list(pool.map(get_file_path ,files_list))
+        # print(file_path_list)
         for file_path in file_path_list:
             shutil.copy2(file_path, dir_auto_tension)
         print('copy done')
@@ -114,10 +113,10 @@ def DoIt(target: str, user_family_name:str ):
 
 
 if __name__ == '__main__':
-    user_family_name = input('user name (only family name): ')
-    target = input('target Series ( ex: ABC001 ): ')
+    # user_family_name = input('user name (only family name): ')
+    # target = input('target Series ( ex: ABC001 ): ')
     
-    # user_family_name = '小暮'
-    # target = 'FJX001'
+    user_family_name = '小暮'
+    target = 'FJX001'
     
     DoIt(target, user_family_name)
