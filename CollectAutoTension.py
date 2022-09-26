@@ -41,7 +41,7 @@ class hippari:
 
             print(file_date_list)
             
-            myname_rows = df.query(f'依頼者名 == "{user_family_name}"')
+            myname_rows = df.query(f'依頼者名 == "{self.user_family_name}"')
             for date in file_date_list:
                 target_files = myname_rows.query(f'測定日 == "{date}"')
                 print('target_files')
@@ -86,8 +86,12 @@ class hippari:
 
         def get_file_path(file):
             file_path = ''
+            year = file[0:4]
+            month = int(file[4:6])
+            day = file[6:8]
+            
             while len(file_path) < 1:
-                files_path =  glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年7～12月\**\{file}*', recursive=True)
+                files_path =  glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\{month}*\{file[0:8]}\**\{file}*', recursive=True)
                 print(files_path)
                 file_path = files_path[0]
             return file_path

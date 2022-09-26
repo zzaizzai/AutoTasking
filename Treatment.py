@@ -44,11 +44,11 @@ class Treatment:
         
 
 
-def toriri(target: str):
+def DoIt(target: str):
     toritori = Treatment(target)
     toritori.ChangeTitles()
 
 
 if __name__ == "__main__":
     target = input('target: ')
-    toriri(target)
+    DoIt(target)

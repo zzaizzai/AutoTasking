@@ -13,8 +13,19 @@ class Tension:
         # self.auto_file_dir = auto_file_dir
         self.auto_file_dir = self.file_dir + r'\auto_tension'
         self.target = target
+        self.file_data = self.file_dir + fr'\{self.target} Data.xlsx'
+        self.len_df_col = 0
 
     def GetFiles(self):
+
+        is_file = os.path.isfile(self.file_data)
+
+
+        if is_file:
+            pass
+        else:
+            print('no data file')
+            return
 
         auto_file_path = self.auto_file_dir + r'\*.xlsm'
         print(auto_file_path)
@@ -39,8 +50,30 @@ class Tension:
 
         df_all.reset_index(inplace= True, drop= True)
         df_all = df_all.T.reset_index(drop=True).T
-
         print(df_all)
+
+        # remove another targets with checking target number and data file lengh
+        df_len = pd.read_excel(self.file_data, index_col=0)
+        self.len_df_col = len(df_len.columns) - 4 # without condition, method, type, unit
+        print(f'len of col with only data : {self.len_df_col}')
+
+        remove_row_list = []
+        for i, value in enumerate(df_all[0]):
+            print(int(value[3:])) 
+            if int(value[3:]) < int(self.target[3:]):
+                print('below range ')
+                remove_row_list.append(i)
+            if int(value[3:]) >=  self.len_df_col + int(self.target[3:]):
+                print('over range')
+                remove_row_list.append(i)
+        print(remove_row_list)
+        df_all = df_all.drop(remove_row_list)
+        print(df_all)
+
+
+        df_all.reset_index(inplace= True, drop= True)
+        df_all = df_all.T.reset_index(drop=True).T
+        
 
         target_condition_list = []
         for value in df_all[1]:
@@ -65,8 +98,8 @@ class Tension:
             df_part.reset_index(inplace= True, drop= True)
             print(df_part)
 
-            unit = ['M', 'M', 'min' ,'a', 'a']
-            method = ['M1', 'Vm', 'T1','a','a']
+            unit = ['MPa', 'MPa', 'MPa' ,'MPa', '%']
+            method = ['25%M', '50%M', '100%M','tension','elongation']
             condition_name = df_part[0][1]
             condition = [condition_name] * 5
             name = ['auto tesntion'] * 5
@@ -92,28 +125,21 @@ class Tension:
     def WriteData(self, df_input):
         print('writing data...')
 
-        file_data = self.file_dir + fr'\{self.target} Data.xlsx'
-
-        is_file = os.path.isfile(file_data)
+        
 
 
-        if is_file:
-            pass
-        else:
-            print('no data file')
-            return
 
-        df = pd.read_excel(file_data, index_col=0)
+        df = pd.read_excel(self.file_data, index_col=0)
 
         df_merge = pd.concat([df, df_input])
         print(df_merge)
 
         df_merge.reset_index(inplace= True, drop= True)
 
-        df_merge.to_excel(file_data, index=True, header=True, startcol=0)
+        # df_merge.to_excel(file_data, index=True, header=True, startcol=0)
 
-        print(df_merge)
-        print(f'saved data file in {file_data}')
+        # print(df_merge)
+        # print(f'saved data file in {file_data}')
 
 
     def GetData(self, auto_file)-> (any):
@@ -156,7 +182,7 @@ class Tension:
         print(df_data)
 
         # select titles
-        df_data = df_data[[1,2,9,10,11,12,15]]
+        df_data = df_data[[1,2,11,12,13,14,15]]
 
         print(df_data)
 
