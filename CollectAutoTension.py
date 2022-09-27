@@ -117,10 +117,10 @@ def DoIt(target: str, user_family_name:str ):
 
 
 if __name__ == '__main__':
-    # user_family_name = input('user name (only family name): ')
-    # target = input('target Series ( ex: ABC001 ): ')
+    user_family_name = input('user name (only family name): ')
+    target = input('target Series ( ex: ABC001 ): ')
     
-    user_family_name = '小暮'
-    target = 'FJX001'
+    # user_family_name = '小暮'
+    # target = 'FJX001'
     
     DoIt(target, user_family_name)
