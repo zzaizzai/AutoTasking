@@ -28,7 +28,10 @@ class CollectFiles:
         file_copy_num: int = 0
         for file in list:
             if self.target in file:
-                self.Copyfiles(file)
+                try:
+                    self.Copyfiles(file)
+                except OSError as e:
+                    print(e)
                 file_copy_num = file_copy_num + 1
         print(f'we found {file_copy_num} files!!')
         print()
@@ -84,9 +87,10 @@ def Check(user: str, target: str, destination_dir_path: str):
 if __name__ == '__main__':
     # xl = EnsureDispatch("Word.Application")
     # print(sys.modules[xl.__module__].__file__)
-
-    user = 'junsai'
-    target = 'CBA001'
+    user = input('your fill name: ')
+    target = input('target: ')
+    # user = 'junsai'
+    # target = 'CBA001'
     targetFolderPath = r'C:\Users\junsa\Desktop'
     
     Check(user, target, targetFolderPath)

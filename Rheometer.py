@@ -15,7 +15,7 @@ class Rheometer:
         self.file_dir = self.DesktopPath + rf'\{target} Data'
         self.target = target
         self.file_path_xls = self.file_dir + \
-            rf'\{self.exp_name} {target}*.xlsx'
+            rf'\{self.exp_name}*{target}*.xlsx'
         self.file_xls = ''
         self.file_xlsx = ''
 
@@ -142,7 +142,7 @@ class Rheometer:
                 # series.marker.symbol = "circle"
                 # series.marker.size = 0
                 # series.spPr.ln.solidFill = "000000"
-                # series.smooth = True
+                series.smooth = True
 
                 chart.series.append(series)
 
@@ -152,8 +152,8 @@ class Rheometer:
         # chart.y_axis.scaling.min = 0
         # chart.y_axis.scaling.max = 35
 
-        # chart.x_axis.scaling.min = 0
-        # chart.x_axis.scaling.max = 30
+        chart.x_axis.scaling.min = 0
+        chart.x_axis.scaling.max = 30
 
         ws.add_chart(chart, 'B8')
         wb.save(self.file_xlsx)
