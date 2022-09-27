@@ -192,11 +192,11 @@ class Tension:
 
         return df_data
 
-def TenTen(target: str):
+def DoIt(target: str):
     tension = Tension(target)
     tension.GetFiles()
 
 if __name__ == '__main__':
     target = input('target name (ex: ABC001): ')
     # target = 'CBA001'
-    TenTen(target)
+    DoIt(target)
