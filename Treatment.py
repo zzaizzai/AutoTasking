@@ -49,8 +49,9 @@ class Treatment:
 
 
 
-        ## round ## not work at company
-        print(df.round(1))
+        ## round
+        print('rounding')
+        df = df.round(1)
         print(df)
 
         print(df[(df['type'] == 'elongation')])
@@ -59,8 +60,8 @@ class Treatment:
 
         ## drop angles of autotension
         # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
-        print(df.query("condition.str.contains('アングル') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
-        index_drop = df.query("condition.str.contains('アングル') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python').index
+        print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
+        index_drop = df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python').index
         df.drop(list(index_drop), inplace=True)
 
         print(df)
