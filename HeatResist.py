@@ -4,14 +4,14 @@ import pandas as pd
 class HeatResist:
 
     def __init__(self, target: str):
-        self.exp_name = 'HeatResist '
+        self.exp_name = '熱老化_自動集積 '
 
         self.DesktopPath = os.path.expanduser('~/Desktop')
 
         self.file_dir = self.DesktopPath  + rf'\{target} Data'
         self.target = target
 
-        self.file_path = self.file_dir + rf'\{self.exp_name}*{target}*.xlsx'
+        self.file_path = self.file_dir + rf'\{self.exp_name}*{target}*.xlsm'
 
         self.file_now = ''
     
@@ -39,6 +39,8 @@ class HeatResist:
         print(self.file_now)
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
         print(sheet_list)
+        sheet_list.remove('設定シート')
+        print(sheet_list)
 
 
         df_all = pd.DataFrame()
@@ -47,7 +49,7 @@ class HeatResist:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
         
 
-        print(df_all)
+        # print(df_all)
 
     def ReadDataSheet(self, sheet: str):
 
@@ -57,7 +59,11 @@ class HeatResist:
 
             
         print(sheet)
-        df = pd.read_excel(self.file_now, sheet_name=sheet)
+        df = pd.read_excel(self.file_now, sheet_name=sheet, header=10, index_col=1)
+        df = df.transpose()
+        print(df.index)
+
+
         print(df)
 
         return df
@@ -68,6 +74,7 @@ def DoIt(target:str):
     heat.FindFile()
 
 if __name__ == '__main__':
-    target = 'CBA001'
+    target = 'FJX001'
+    # target = input('target: ')
     
     DoIt(target)
