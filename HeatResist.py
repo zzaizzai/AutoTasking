@@ -64,20 +64,17 @@ class HeatResist:
 
             
         print(sheet)
-        df = pd.read_excel(self.file_now, sheet_name=sheet, header=None, index_col=1)
+        df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=1)
         df = df.transpose()
+        df.reset_index(inplace= True, drop= True)
         print(df.index)
 
 
         print(df)
 
 
-
         ## title
-        print(df)
-        print(df.iloc[:,[2,3]])
-
-        print(df.loc[[4]].values.tolist()[0])
+        print(df.loc[[3]].values.tolist()[0])
         col_index = []
         for i, value in enumerate(df.loc[[4]].values.tolist()[0]):
             print(i, value)
@@ -127,7 +124,7 @@ def DoIt(target:str):
     heat.FindFile()
 
 if __name__ == '__main__':
-    target = 'CBA001'
+    target = 'FJX001'
     # target = input('target: ')
     
     DoIt(target)
