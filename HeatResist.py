@@ -53,15 +53,13 @@ class HeatResist:
         for sheet in sheet_list:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
         
+        print('all od input data')
 
-        # print(df_all)
+        print(df_all)
+
+        self.WriteData(df_all)
 
     def ReadDataSheet(self, sheet: str):
-
-        def handleData():
-            # make df simple row and col
-            print()
-
             
         print(sheet)
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=1)
@@ -100,13 +98,36 @@ class HeatResist:
 
         
         mean_col_index = [0]
-        row_mean_str = df.loc[[3]].values.tolist()[0]
+        row_mean_str = df.loc[[2]].values.tolist()[0]
         print(row_mean_str)
         for i, value in enumerate(row_mean_str):
             print(value)
             if '中央値' in str(value):
                 print('mean str', i)
                 mean_col_index.append(i)
+        
+        #  0s 
+        zero_col_index = [0]
+        row_zero = df.loc[[12]].values.tolist()[0]
+        print(row_zero)
+        
+        for i in range(10):
+            print(row_zero[1+ i*4])
+            if str(row_zero[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_zero) :
+                row_zero[1+i*4 + 3] = row_zero[1+i*4] 
+            else:
+                break
+            
+        print(row_zero)
+        df.loc[[12]] = row_zero
+        print(df)
+
+
+        for i, value in enumerate(row_zero):
+            print(value)
+            if str(value) != 'nan' and str(value) != '０秒' and i < len(row_zero) -3:
+                print('it is zero hardness', i)
+                # row_zero[i+ 3] = row_zero[i]
 
         print(mean_col_index)
 
@@ -114,17 +135,59 @@ class HeatResist:
         df_input = df_input.dropna()
         print(df_input)
 
-        print(df_input.query("配合番号 in ['引っ張り','伸び']"))
+        # change unit title
+        unit_list = df_input.columns.tolist()
+        unit_list[0] = 'type'
+        print(unit_list)
+        df_input.columns = unit_list
 
-        return df
 
+        print('query')
+        df_input = df_input.query("type in ['M 100%', '抗張力 ＭＰａ', '破断伸び％', '０秒']")
+        print(df_input)
+
+
+        # condition
+        condition = [sheet]*4
+        method = ['heat tension']*4
+        unit = ['dd','dd','dd','dd']
+        df_input.insert(1, 'unit', unit)
+        df_input.insert(0, 'condition', condition)
+        df_input.insert(0, 'method', method)
+
+
+        return df_input
+
+
+    def WriteData(self, df_input):
+        print('merging data....')
+
+        file_data = self.file_dir + fr'\{self.target} Data.xlsx'
+        is_file = os.path.isfile(file_data)
+        if is_file:
+            pass
+        else:
+            print('no data file')
+            # or you can make a data file
+            return
+
+        df = pd.read_excel(file_data, index_col=0)
+        print(df)
+
+        df_merge = pd.concat([df, df_input])
+        print(df_merge)
+
+        df_merge.reset_index(inplace= True, drop= True)
+
+        df_merge.to_excel(file_data, index=True, header=True, startcol=0)
+        print(f'saved data file in {file_data}')
 
 def DoIt(target:str):
     heat = HeatResist(target)
     heat.FindFile()
 
 if __name__ == '__main__':
-    target = 'FJX001'
-    # target = input('target: ')
+    # target = 'FJX001'
+    target = input('target: ')
     
     DoIt(target)

@@ -91,6 +91,10 @@ class Muuni:
         method = ['M1', 'Vm', 'T1']
         condition = ['none','none','none']
         name = [file_name, file_name, file_name]
+
+        print(name)
+        # return
+        # WE HAVE TO REDESIG NAMEING
         df_input.insert(0, 3, unit)
         df_input.insert(0, 2, method)
         df_input.insert(0, 1, condition)
