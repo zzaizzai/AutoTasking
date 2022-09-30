@@ -1,5 +1,7 @@
 import os
 import glob
+from numpy import number
+from pyparsing import col
 import win32com.client as win32
 import pandas as pd
 import openpyxl
@@ -85,22 +87,14 @@ class Rheometer:
         print(f'number of target: {self.number_of_target}')
 
         print(f'standard postion cell: {standard_cell}')
-        # 1/4 data
-        # print('1/4 data....')
-        # from_row = standard_cell.row + 20
-        # for i in range(200):
-        #     print(f'deleting{i}')
-        #     ws.delete_rows( from_row + i*3 + 3)
-        #     ws.delete_rows( from_row + i*3 + 2)
-        #     ws.delete_rows( from_row + i*3 + 1)
-        #     ws.delete_rows( from_row + i*3)
+
 
         # create a graph
         chart = openpyxl.chart.ScatterChart('marker')
         # chart = openpyxl.chart.LineChart()
 
         # data titles
-        chart.title = 'Rheometer'
+        chart.title = '加硫曲線 150℃'
         font = Font(typeface='Calibri')
         size = 1600
         char_prop = CharacterProperties(latin=font, sz=size, b=True) 
@@ -154,6 +148,20 @@ class Rheometer:
 
         chart.x_axis.scaling.min = 0
         chart.x_axis.scaling.max = 30
+
+        def target_number(number: int):
+            target = self.target
+            alphabet = target[0:3]
+            num = int(target[3:])
+            alphabet_num = alphabet + str('%03d' % (num + number))
+            return alphabet_num
+
+        # change legend title
+        print("legen title")
+        for i in range(self.number_of_target):
+            print(ws.cell(row=standard_cell.row, column=2 + i*4).value)
+            ws.cell(row=standard_cell.row, column=2 + i*4).value = target_number(i)
+            print(target_number(i))
 
         ws.add_chart(chart, 'B8')
         wb.save(self.file_xlsx)
