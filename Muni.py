@@ -2,6 +2,7 @@ import os
 import glob
 import win32com.client as win32
 import pandas as pd
+import Service
 
 
 
@@ -85,29 +86,48 @@ class Muuni:
         df_input = df_input.loc[[2,3,4]]
         print(df_input)
 
+
+        # target numbers
+        print('target numbering')
+        print(len(df_input.columns))
+        target_titles = []
+        for i in range(len(df_input.columns)):
+            target_titles.append(Service.target_number(i, self.target))
+        print(target_titles)
+        df_input.columns = target_titles
+
+        print(df_input)
+        
+        # insert unit, method.. else
         file_name = os.path.splitext(os.path.basename(self.file_xlsx))[0]
         print(file_name)
         unit = ['M', 'M', 'min' ]
-        method = ['M1', 'Vm', 'T1']
-        condition = ['none','none','none']
-        name = [file_name, file_name, file_name]
+        type = ['M1', 'Vm', 'T1']
+        condition_list = []
+        method_list = [file_name, file_name, file_name]
+        for i, method in enumerate(method_list):
+            print(method.split()[-1])
+            condition_list.append(method.split()[-1])
+            method_list[i] = method.split()[0]
 
-        print(name)
+        print(method_list)
+        print(condition_list)
         # return
         # WE HAVE TO REDESIG NAMEING
-        df_input.insert(0, 3, unit)
-        df_input.insert(0, 2, method)
-        df_input.insert(0, 1, condition)
-        df_input.insert(0, 0, name)
+        df_input.insert(0, 'unit', unit)
+        df_input.insert(0, 'type', type)
+        df_input.insert(0, 'condition', condition_list)
+        df_input.insert(0, 'method', method_list)
 
         print(df_input)
         
         # reset title and index
-        df_input.reset_index(inplace= True, drop= True)
-        df_input = df_input.T.reset_index(drop=True).T
+        # df_input.reset_index(inplace= True, drop= True)
+        # df_input = df_input.T.reset_index(drop=True).T
 
         print(df_input)
 
+        # return
         self.WriteData(df_input)
 
     def WriteData(self, df_input) :
@@ -127,7 +147,7 @@ class Muuni:
         df = pd.read_excel(file_data, index_col=0)
         print(df)
 
-        df_merge = pd.concat([df, df_input])
+        df_merge = pd.concat([df, df_input], sort=False)
         print(df_merge)
 
         df_merge.reset_index(inplace= True, drop= True)

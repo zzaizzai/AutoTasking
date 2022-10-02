@@ -1,11 +1,12 @@
 import os
 import glob
 from numpy import number
-from pyparsing import col
 import win32com.client as win32
 import pandas as pd
 import openpyxl
 from openpyxl.drawing.text import ParagraphProperties, CharacterProperties, Font
+from openpyxl.chart.layout import Layout, ManualLayout
+import Service
 
 class Rheometer:
 
@@ -136,6 +137,11 @@ class Rheometer:
                 # series.marker.symbol = "circle"
                 # series.marker.size = 0
                 # series.spPr.ln.solidFill = "000000"
+                if i == 0:
+                    series.spPr.ln.prstDash = "sysDash"
+                else:
+                    pass
+
                 series.smooth = True
 
                 chart.series.append(series)
@@ -148,6 +154,17 @@ class Rheometer:
 
         chart.x_axis.scaling.min = 0
         chart.x_axis.scaling.max = 30
+
+        chart.legend.position = 'tr'
+        # chart.layout = Layout(
+        #     ManualLayout(
+        #     x=0.25, y=0.25,
+        #     h=0.5, w=0.5,
+        #     xMode="edge",
+        #     yMode="edge",
+        #     )
+        # )
+
 
         def target_number(number: int):
             target = self.target
@@ -192,25 +209,40 @@ class Rheometer:
 
         print(df_input)
 
+        print('target numbering')
+        print(len(df_input.columns))
+        target_title = []
+        for i in range(len(df_input.columns)):
+            target_title.append(Service.target_number(i, self.target))
+        print(target_title)
+        df_input.columns = target_title
+
+
         file_name = os.path.splitext(os.path.basename(self.file_xlsx))[0]
         unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min']
-        method = ['MH', 'ML', 't10', 't50', 't90', 'CR']
+        type = ['MH', 'ML', 't10', 't50', 't90', 'CR']
         condition = ['none','none','none','none','none','none',]
-        name = [file_name, file_name, file_name,
+        method_list = [file_name, file_name, file_name,
                 file_name, file_name, file_name, ]
-        df_input.insert(0, 3, unit)
-        df_input.insert(0, 2, method)
-        df_input.insert(0, 1, condition)
-        df_input.insert(0, 0, name)
+
+        for i, method in enumerate(method_list):
+            method_list[i] = method.split()[0]
+
+
+        df_input.insert(0, 'unit', unit)
+        df_input.insert(0, 'type', type)
+        df_input.insert(0, 'condition', condition)
+        df_input.insert(0, 'method', method_list)
 
         print(df_input)
 
         # reset title and index
-        df_input.reset_index(inplace=True, drop=True)
-        df_input = df_input.T.reset_index(drop=True).T
+        # df_input.reset_index(inplace=True, drop=True)
+        # df_input = df_input.T.reset_index(drop=True).T
 
         print(df_input)
 
+        # return
         self.WriteData(df_input)
 
     def WriteData(self, df_input):
@@ -230,7 +262,7 @@ class Rheometer:
         df = pd.read_excel(file_data, index_col=0)
         print(df)
 
-        df_merge = pd.concat([df, df_input])
+        df_merge = pd.concat([df, df_input], sort=False)
         print(df_merge)
 
         df_merge.reset_index(inplace= True, drop= True)

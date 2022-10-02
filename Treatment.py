@@ -61,6 +61,7 @@ class Treatment:
         ## drop angles of autotension
         # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
         print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
+        print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
         index_drop = df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python').index
         df.drop(list(index_drop), inplace=True)
 
@@ -75,7 +76,7 @@ class Treatment:
 
 def DoIt(target: str):
     toritori = Treatment(target)
-    toritori.ChangeTitles()
+    # toritori.ChangeTitles()
     toritori.RoundData()
 
 if __name__ == "__main__":

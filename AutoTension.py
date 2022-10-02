@@ -88,7 +88,9 @@ class Tension:
 
         print(target_condition_list)
 
-        target_condition_list = sorted(target_condition_list, key=len)
+        target_condition_list = sorted(target_condition_list, key=len, reverse=True)
+
+        df_merge = pd.DataFrame()
         for condition in target_condition_list:
             df_part = pd.DataFrame()
 
@@ -101,6 +103,8 @@ class Tension:
             df_part = df_part.T.reset_index(drop=True).T
             df_part.reset_index(inplace= True, drop= True)
             print(df_part)
+            target_titles = df_part.iloc[[0]].values.tolist()[0]
+            print(df_part.iloc[[0]].values.tolist()[0])
 
             unit = ['MPa', 'MPa', 'MPa' ,'MPa', '%']
             method = ['25%M', '50%M', '100%M','tension','elongation']
@@ -108,20 +112,28 @@ class Tension:
             condition = [condition_name] * 5
             name = ['auto tesntion'] * 5
             df_part = df_part.loc[[2,3,4,5,6]]
+            
+            df_part.columns = target_titles
+            print(df_part)
+            
+
 
             df_part.insert(loc=0, column='unit', value=unit)
             df_part.insert(loc=0, column='type', value=method)
             df_part.insert(loc=0, column='condition', value=condition)
             df_part.insert(loc=0, column='method', value=name)
 
-            df_part = df_part.T.reset_index(drop=True).T
+            # df_part = df_part.T.reset_index(drop=True).T
             df_part.reset_index(inplace= True, drop= True)
 
             print(df_part)
-
+            
+            # return
             self.WriteData(df_part)
 
+            # df_all = pd.concat([df_all, df_part],axis=0, sort=False)
 
+        # print(df_all)
         print('merge done')
 
 
@@ -130,13 +142,11 @@ class Tension:
         print('writing data...')
 
         
-
-
-
         df = pd.read_excel(self.file_data, index_col=0)
 
-        df_merge = pd.concat([df, df_input])
+        df_merge = pd.concat([df, df_input],axis=0, sort=False)
         print(df_merge)
+        # return
 
         df_merge.reset_index(inplace= True, drop= True)
 

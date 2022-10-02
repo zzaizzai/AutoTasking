@@ -174,7 +174,7 @@ class HeatResist:
         df = pd.read_excel(file_data, index_col=0)
         print(df)
 
-        df_merge = pd.concat([df, df_input])
+        df_merge = pd.concat([df, df_input], sort=False)
         print(df_merge)
 
         df_merge.reset_index(inplace= True, drop= True)
