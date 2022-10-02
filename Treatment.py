@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import numpy as np
+import Service
 
 class Treatment:
 
@@ -20,20 +21,13 @@ class Treatment:
             print('no data file')
             return
 
-        def target_number(number: int):
-            target = self.target
-            alphabet = target[0:3]
-            num = int(target[3:])
-            alphabet_num = alphabet + str('%03d' % (num + number))
-            return alphabet_num
-
         df = pd.read_excel(self.file, index_col=0)
         print(df)
 
         titles = ['method', 'condition', 'type', 'unit']
 
         for i in range(len(df.columns[4:])):
-            titles.append(target_number(i))
+            titles.append(Service.target_number(i))
 
         df.columns = titles
 
@@ -42,12 +36,25 @@ class Treatment:
         print(f'saved done {self.file}')
 
     def RoundData(self):
+
+        is_file = os.path.isfile(self.file)
+        if is_file:
+            pass
+        else:
+            print('no data file')
+            return
+
         print('round data')
         df = pd.read_excel(self.file, index_col=0)
         print(df)
 
+        print('df lengh: ', len(df))
 
-
+        if len(df) < 1:
+            print('no df')
+            return
+        else:
+            pass
 
         ## round
         print('rounding')

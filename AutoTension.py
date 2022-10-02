@@ -10,7 +10,7 @@ class Tension:
         self.DesktopPath = os.path.expanduser('~/Desktop')
 
         self.file_dir = self.DesktopPath  + rf'\{target} Data'
-        # self.auto_file_dir = auto_file_dir
+        
         self.auto_file_dir = self.file_dir + r'\auto_tension'
         self.target = target
         self.file_data = self.file_dir + fr'\{self.target} Data.xlsx'

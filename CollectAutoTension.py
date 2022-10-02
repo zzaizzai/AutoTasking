@@ -30,6 +30,13 @@ class hippari:
 
         def getData(file_auto: str):
             print(file_auto)
+            is_file = os.path.isfile(file_auto)
+            if is_file:
+                pass
+            else:
+                print('no file')
+                return
+                
             df = pd.read_excel(file_auto)
 
             target_rows = df.query(f'配合番号 == "{self.target}"')
@@ -48,7 +55,13 @@ class hippari:
                 print(target_files)
                 for file_name in target_files['ファイル名']:
                     files_list.append(file_name)
-            
+
+        if len(self.file_auto_list) == 0:
+            print("no file list of auto tension")
+            return
+        else:
+            pass
+
         for file_auto in self.file_auto_list:
             getData(file_auto)
 

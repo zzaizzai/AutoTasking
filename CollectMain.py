@@ -6,6 +6,7 @@ import Muni
 import AutoTension
 import Treatment
 import HeatResist
+import Service
 
 
 
@@ -13,13 +14,14 @@ import HeatResist
 def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     CollectFiles.Check(user, target, target_dir_path)
     CollectAutoTension.DoIt(target, user_family)
-    Rheometer.DoIt(target)
     Muni.DoIt(target)
+    Rheometer.DoIt(target)
     AutoTension.DoIt(target)
     Treatment.DoIt(target)
     HeatResist.DoIt(target)
-
-    print('process done')
+    print('\n===================')
+    print('   process done   ')
+    print('===================\n')
 
 
 if __name__ == '__main__':
@@ -49,7 +51,7 @@ if __name__ == '__main__':
         user_family = '小暮'
         user_first = '準才'
     else:
-        user_first = input('\n ※ if EPDM data please input EPDM \n input your first name (ex: 花子) :  ')
+        user_first = input('\n ※ if you want EPDM data, please input EPDM \n input your first name (ex: 花子) :  ')
     
     user = user_family + user_first
 
@@ -60,8 +62,24 @@ if __name__ == '__main__':
 
     print(f'Hello {user}!')
 
-    target = input(' what is you target (ex: ABC001) : ')
+    # target = input(' what is you target (ex: ABC001) : ')
 
-    print(f'target is {target}')
-    time.sleep(1)
-    DoProcess(user, user_family, target, target_dir_path)
+    # print(f'target is {target}')
+    # time.sleep(1)
+    # DoProcess(user, user_family, target, target_dir_path)
+
+
+
+    while True:
+        target = input(' what is your target (ex: ABC001) or say "bye" : ')
+        if target == "bye":
+            print("I miss you! :(")
+            time.sleep(4)
+            break
+        else:
+            if Service.check_target(target):
+                print(f'target is {target}')
+                time.sleep(1)
+                DoProcess(user, user_family, target, target_dir_path)
+            else:
+                pass

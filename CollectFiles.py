@@ -5,8 +5,6 @@ import shutil
 import string
 import openpyxl
 import win32com.client as win32
-# from win32com.client.gencache import EnsureDispatch
-# import sys
 
 
 class CollectFiles:
@@ -41,8 +39,7 @@ class CollectFiles:
 
         for experiment in experiments:
             if experiment in targetFile:
-                # os.makedirs(self.destination + fr'\{experiment}', exist_ok=True)
-                # shutil.copy2(targetFile, self.destination + fr'\{experiment}')
+
                 print(targetFile)
                 shutil.copy2(targetFile, self.dir_data + fr'\{experiment} {os.path.basename(targetFile)}')
 
@@ -72,10 +69,6 @@ class CollectFiles:
                 excel.Application.Quit()
                 os.remove(file_xls)                
 
-
-
-
-        
 
 
 def Check(user: str, target: str, destination_dir_path: str):
