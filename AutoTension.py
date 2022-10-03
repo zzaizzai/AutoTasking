@@ -110,7 +110,7 @@ class Tension:
             method = ['25%M', '50%M', '100%M','tension','elongation']
             condition_name = df_part[0][1]
             condition = [condition_name] * 5
-            name = ['auto tesntion'] * 5
+            name = ['auto tension'] * 5
             df_part = df_part.loc[[2,3,4,5,6]]
             
             df_part.columns = target_titles

@@ -1,3 +1,5 @@
+import os
+
 
 def target_number(number: int, target:str) -> (str):
     alphabet = target[0:3]
@@ -14,3 +16,5 @@ def check_target(target:str) -> bool:
         return False
     else:
         return True
+
+desktop = os.path.expanduser('~/Desktop')
