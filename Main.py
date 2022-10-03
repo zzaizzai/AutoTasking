@@ -17,8 +17,9 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     Muni.DoIt(target)
     Rheometer.DoIt(target)
     AutoTension.DoIt(target)
-    Treatment.DoIt(target)
     HeatResist.DoIt(target)
+    
+    Treatment.DoIt(target)
     print('\n===================')
     print('   process done   ')
     print('===================\n')

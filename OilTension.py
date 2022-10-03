@@ -1,5 +1,4 @@
 import glob
-from operator import index
 import Service
 import pandas as pd
 
@@ -9,10 +8,8 @@ class OilTension:
     def __init__(self, target:str):
         self.exp_name = '耐油引張り '
 
-        self.file_dir = Service.desktop  + rf'\{target} Data'
         self.target = target
-
-        self.file_path = self.file_dir + rf'\{self.exp_name}*{target}*.xls*'
+        self.file_path = Service.data_dir(target) + rf'\{self.exp_name}*{target}*.xls*'
 
         self.file_now = ''
 
@@ -58,14 +55,42 @@ class OilTension:
 
     def ReadDataSheet(self, sheet: str):
         print('read data shett')
-        df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=None)
+        df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=1)
         print(df)
-        print(df.iloc[:,[1,9,10,11]])
+        print(df.iloc[:,[1,9,10]])
 
-        df_data = df.iloc[:,[1,9,10,11]]
+        df_data = df.iloc[:,[1,9,10]]
+
+        # delete NaN
         df_data = df_data.query("EB == EB")
 
         print(df_data)
+
+
+        #  handle df titles
+        df_data = df_data.transpose()
+        print(df_data.columns.to_list())
+        titles_list = df_data.columns.to_list()
+        for i, value in enumerate(titles_list):
+            if 'nan' in str(value):
+                print('nan',i)
+                titles_list[i] = titles_list[i-1]
+        print(titles_list)
+        df_data.columns = titles_list
+        print(df_data)
+
+        # find mean value
+        mean_col_index = []
+        for i in range(1, len(titles_list)):
+            print(titles_list[i])
+            if titles_list[i] != titles_list[i-1]:
+                print('it is mena data')
+                mean_col_index.append(i-1)
+        print('mean_col_index', mean_col_index)
+
+        
+
+
 def DoIt(target:str):
     oiru = OilTension(target)
     oiru.FindFile()

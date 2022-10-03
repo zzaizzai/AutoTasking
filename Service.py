@@ -1,7 +1,11 @@
 import os
 
 
-def target_number(number: int, target:str) -> (str):
+def target_number(number: int, target:str) -> str:
+    """
+    if you want 2 after target number of ABC001:
+        target_number(2,target) -> ABC003
+    """
     alphabet = target[0:3]
     num = int(target[3:])
     alphabet_num = alphabet + str('%03d' % (num + number))
@@ -18,3 +22,10 @@ def check_target(target:str) -> bool:
         return True
 
 desktop = os.path.expanduser('~/Desktop')
+
+def data_dir(target:str) -> str:
+    """
+    Data file in your desktop
+    """
+    return desktop  + rf'\{target} Data'
+

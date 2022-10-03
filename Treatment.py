@@ -56,7 +56,8 @@ class Treatment:
         else:
             pass
 
-        ## round
+        ## round\
+        df = df.replace('******', 0)
         print('rounding')
         df = df.round(1)
         print(df)
