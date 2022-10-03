@@ -5,6 +5,7 @@ import shutil
 import string
 import openpyxl
 import win32com.client as win32
+import Service
 
 
 class CollectFiles:
@@ -14,13 +15,12 @@ class CollectFiles:
         self.user= user
         self.target = target
         self.filePath = destination_dir_path +  fr'\{user}\*\**\*.x*'
-        self.desktop_path = os.path.expanduser('~/Desktop')
-        self.dir_data = self.desktop_path + fr'\{target} Data'
+        self.data_dir = Service.data_dir(target)
         self.fileNamePath = destination_dir_path + fr'\{user}'
 
 
     def FindFiles(self):    
-        os.makedirs(self.dir_data, exist_ok=True)
+        os.makedirs(self.data_dir, exist_ok=True)
         list = glob.glob(self.filePath, recursive=True)
         
         file_copy_num: int = 0
@@ -41,17 +41,17 @@ class CollectFiles:
             if experiment in targetFile:
 
                 print(targetFile)
-                shutil.copy2(targetFile, self.dir_data + fr'\{experiment} {os.path.basename(targetFile)}')
+                shutil.copy2(targetFile, self.data_dir + fr'\{experiment} {os.path.basename(targetFile)}')
 
 
     def MakeDataExcel(self):
         print('making data excel')
         wb = openpyxl.Workbook()
-        wb.save( self.dir_data +  fr'\{self.target} Data.xlsx')
+        wb.save( self.data_dir +  fr'\{self.target} Data.xlsx')
 
     def TranslateFromXlsToXlsx(self):
         print('translating xls files to xlsx file....')
-        file_list = glob.glob(self.dir_data + r'\*.xls')
+        file_list = glob.glob(self.data_dir + r'\*.xls')
         print(file_list)
 
         for file_xls in file_list:

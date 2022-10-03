@@ -1,17 +1,16 @@
 import os
 import glob
 import pandas as pd
+import Service
+
 class HeatResist:
 
     def __init__(self, target: str):
         self.exp_name = '熱老化_自動集積 '
 
-        self.DesktopPath = os.path.expanduser('~/Desktop')
-
-        self.file_dir = self.DesktopPath  + rf'\{target} Data'
         self.target = target
 
-        self.file_path = self.file_dir + rf'\{self.exp_name}*{target}*.xls*'
+        self.file_path = Service.data_dir(target) + rf'\{self.exp_name}*{target}*.xls*'
 
         self.file_now = ''
     

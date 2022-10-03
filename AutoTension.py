@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import glob
-
+import Service
 
 class Tension:
 
@@ -9,11 +9,11 @@ class Tension:
     def __init__(self, target: str ):
         self.DesktopPath = os.path.expanduser('~/Desktop')
 
-        self.file_dir = self.DesktopPath  + rf'\{target} Data'
+        self.data_dir = Service.data_dir(target)
         
-        self.auto_file_dir = self.file_dir + r'\auto_tension'
+        self.auto_file_dir = self.data_dir + r'\auto_tension'
         self.target = target
-        self.file_data = self.file_dir + fr'\{self.target} Data.xlsx'
+        self.file_data = self.data_dir + fr'\{self.target} Data.xlsx'
         self.len_df_col = 0
 
     def GetFiles(self):

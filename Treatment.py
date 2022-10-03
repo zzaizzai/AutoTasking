@@ -7,10 +7,7 @@ class Treatment:
 
     def __init__(self, target):
         self.target = target
-        self.desktop = os.path.expanduser('~/Desktop')
-        self.file = self.desktop + \
-            rf'\{self.target} Data\{self.target} Data.xlsx'
-
+        self.file = Service.data_dir(target) +  rf'\{self.target} Data.xlsx'
 
     def ChangeTitles(self):
         
@@ -38,6 +35,7 @@ class Treatment:
     def RoundData(self):
 
         is_file = os.path.isfile(self.file)
+        
         if is_file:
             pass
         else:

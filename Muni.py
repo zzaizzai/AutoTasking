@@ -11,11 +11,8 @@ class Muuni:
     def __init__(self, target):
         self.exp_name = 'ムーニー_ロータ_自動集積'
 
-        self.DesktopPath = os.path.expanduser('~/Desktop')
-
-        self.file_dir = self.DesktopPath  + rf'\{target} Data'
         self.target = target
-        self.path_xlsx = self.file_dir + rf'\{self.exp_name} {target}*.xlsx'
+        self.path_xlsx = Service.data_dir(target)  + rf'\{self.exp_name} {target}*.xlsx'
         self.file_xlsx = ''
         self.index_name = ''
 
@@ -32,33 +29,10 @@ class Muuni:
 
             for file in file_list:
                 self.file_xlsx = file
-                self.MAkeXlsmFile()
+                self.ReadFile()
         else:
             print(f'No {self.exp_name}')
             return
-
-    def MAkeXlsmFile(self):
-        # print('make xlsm file...')
-
-        # self.file_xlsx = self.file_xls + 'x'
-        # is_file = os.path.isfile(self.file_xlsx)
-
-        # if is_file:
-        #     print('xlsx file exist')
-        #     os.remove(self.file_xlsx)
-        # else:
-        #     pass
-
-        # print('make new xlsx file...')
-        # excel = win32.gencache.EnsureDispatch('Excel.Application')
-        # wb = excel.Workbooks.Open(self.file_xls)
-        # wb.SaveAs(self.file_xlsx, FileFormat=51)
-        # wb.Close()
-        # excel.Application.Quit()
-
-        # print('make new xlsx file done')
-
-        self.ReadFile()
 
     def ReadFile(self):
         print('read file...')

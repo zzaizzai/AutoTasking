@@ -2,6 +2,7 @@ import pandas as pd
 import glob
 import shutil
 import os
+import Service
 from multiprocessing.dummy import Pool as ThreadPool
 
 class hippari:
@@ -9,19 +10,18 @@ class hippari:
     def __init__(self, target: str, file_auto_list: list, user_family_name:str ):
         self.file_auto_list = file_auto_list
         self.target = target
-        self.DesktopPath = os.path.expanduser('~/Desktop')
-        self.DataFolder = self.DesktopPath + fr'\{target} Data'
+        self.data_dir = Service.data_dir(target)
         self.user_family_name = user_family_name
     
     def CheckDeaktopPath(self):
         print('checking dir folder exist or not')
-        print(self.DataFolder)
-        is_file = os.path.isdir(self.DataFolder)
+        print(self.data_dir)
+        is_file = os.path.isdir(self.data_dir)
         if is_file:
             print('data directory exists')
         else:
             print('you have no data dir')
-            os.makedirs(self.DataFolder, exist_ok=True)
+            os.makedirs(self.data_dir, exist_ok=True)
 
 
     def ReadFile(self):
@@ -81,7 +81,7 @@ class hippari:
 
     
     def CopyFiles(self, files_list):
-        dir_auto_tension = self.DataFolder + r'\auto_tension'
+        dir_auto_tension = self.data_dir + r'\auto_tension'
         os.makedirs(dir_auto_tension, exist_ok=True)
         # for file in tqdm(files_list):
         #     print(file)

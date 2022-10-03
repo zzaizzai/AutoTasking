@@ -13,12 +13,9 @@ class Rheometer:
     def __init__(self, target):
         self.exp_name = 'レオメータ'
 
-        self.DesktopPath = os.path.expanduser('~/Desktop')
-
-        self.file_dir = self.DesktopPath + rf'\{target} Data'
+        self.file_dir = Service.data_dir(target)
         self.target = target
-        self.file_path_xls = self.file_dir + \
-            rf'\{self.exp_name}*{target}*.xlsx'
+        self.file_path_xls = self.file_dir + rf'\{self.exp_name}*{target}*.xlsx'
         self.file_xls = ''
         self.file_xlsx = ''
 
@@ -41,25 +38,6 @@ class Rheometer:
             return
 
     def MakeXlsmFile(self):
-        # print('make xlsm file...')
-
-        # self.file_xlsx = self.file_xls + 'x'
-        # is_file = os.path.isfile(self.file_xlsx)
-
-        # if is_file:
-        #     print('xlsx file exist')
-        #     os.remove(self.file_xlsx)
-        # else:
-        #     pass
-
-        # print('make new xlsx file...')
-        # excel = win32.gencache.EnsureDispatch('Excel.Application')
-        # wb = excel.Workbooks.Open(self.file_xls)
-        # wb.SaveAs(self.file_xlsx, FileFormat=51)
-        # wb.Close()
-        # excel.Application.Quit()
-
-        # print('make new xlsx file done')
 
         self.CreateGraph()
         self.ReadFile()
