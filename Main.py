@@ -1,6 +1,7 @@
 import time
 import CollectFiles
 import CollectAutoTension
+import OilTension
 import Rheometer
 import Muni
 import AutoTension
@@ -18,6 +19,7 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     Rheometer.DoIt(target)
     AutoTension.DoIt(target)
     HeatResist.DoIt(target)
+    OilTension.DoIt(target)
     
     Treatment.DoIt(target)
     print('\n===================')

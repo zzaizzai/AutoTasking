@@ -107,7 +107,7 @@ class Muuni:
     def WriteData(self, df_input) :
         print('writing data...')
 
-        file_data = self.file_dir + fr'\{self.target} Data.xlsx'
+        file_data = Service.data_dir(self.target) + fr'\{self.target} Data.xlsx'
 
         is_file = os.path.isfile(file_data)
 
