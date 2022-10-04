@@ -62,6 +62,8 @@ class Treatment:
 
         print(df[(df['type'] == 'elongation')])
         df[(df['type'] == 'elongation')] = df[(df['type'] == 'elongation')].round(-1)
+        df[(df['type'] == '破断伸び％')] = df[(df['type'] == '破断伸び％')].round(-1)
+        df[(df['type'] == '０秒')] = df[(df['type'] == '０秒')].round(0)
         print(df)
 
         ## drop angles of autotension
