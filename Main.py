@@ -7,6 +7,7 @@ import Muni
 import AutoTension
 import Treatment
 import HeatResist
+import Hardness
 import Service
 
 
@@ -18,6 +19,7 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     Muni.DoIt(target)
     Rheometer.DoIt(target)
     AutoTension.DoIt(target)
+    Hardness.DoIt(target)
     HeatResist.DoIt(target)
     OilTension.DoIt(target)
     
