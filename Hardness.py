@@ -1,44 +1,7 @@
-from matplotlib.pyplot import title
 import pandas as pd
 import Service
 import os
 import glob
-
-# file = r'C:\Users\1010020990\Desktop\FJX010 Data\硬度_自動集積 FJX010.xlsx'
-# target = 'FJX010'
-
-# df = pd.read_excel(file, header=7)
-# print(df.iloc[:,13:16])
-# taregt_2 = df.iloc[:,13].to_list()
-
-# for i in range(len(taregt_2)):
-#     if str(taregt_2[i]) != "nan":
-#         taregt_2[i] = Service.target_number(i, target)
-# print(taregt_2)
-# df.iloc[:,13] =taregt_2
-
-
-# df = df.iloc[:,13:16]
-# print(df)
-
-# titles = df.columns.to_list()
-# print(titles)
-# titles = ['配合番号', '０秒','3秒']
-# df.columns = titles
-
-# print(df)
-
-# df.dropna(how='all', inplace=True)
-# df.dropna(how='all',axis=1,  inplace=True)
-# print(df)
-
-# df = df.transpose()
-# # df = df[:,1]
-# titles_new = df.loc['配合番号'].to_list()
-# print(titles_new)
-# df.columns = titles_new
-# df = df.drop('配合番号', axis=0)
-# print(df)
 
 class Hardness:
 
@@ -106,21 +69,28 @@ class Hardness:
         print(file_name)
 
         print(len(df))
+        df.reset_index(inplace= True, drop= True)
 
         unit = ['HA'] * len(df)
         type = []
         if len(df) == 1 :
             type = ['０秒']
         elif len(df) == 2:
-            type == ['０秒', '3秒']
-        condition = [file_name[0]] * len(df)
+            type = ['０秒', '3秒']
+        condition = []
+
+        if file_name[0][-1] == 'S':
+            condition = ['スチームJIS'] * len(df)
+        else:
+            condition = ['NormalJIS'] * len(df)
+
         method = ['auto tension'] * len(df)
 
         df.insert(0, 'unit', unit)
         df.insert(0, 'type', type)
         df.insert(0, 'condition', condition)
         df.insert(0, 'method', method)
-        df.reset_index(inplace= True, drop= True)
+        
 
         print(df)
 
@@ -142,14 +112,21 @@ class Hardness:
             return
 
         df_data = pd.read_excel(file_data, index_col=0)
-        print(df_data)
+        
 
         df_merge = pd.concat([df_data, df_input], sort=False)
+        df_merge.reset_index(inplace= True, drop= True)
 
-        df_merge.to_excel(file_data, index=True, header=True)
         print(df_merge)
+        
+        # print(df_merge.query("condition.str.contains('NormalJIS') and type.str.contains('elongation')", engine='python' ).index.to_list())
+        # print(df_merge.index.to_list())
 
-        print(f'saved data file in {file_data}')
+
+        # df_merge.to_excel(file_data, index=True, header=True)
+        # print(df_merge)
+
+        # print(f'saved data file in {file_data}')
 
 
 def DoIt(target:str):

@@ -150,7 +150,7 @@ class HeatResist:
         # condition
         condition = [sheet]*4
         method = ['heat tension']*4
-        unit = ['dd','dd','dd','dd']
+        unit = ['MPa','MPa','%','HA']
         df_input.insert(1, 'unit', unit)
         df_input.insert(0, 'condition', condition)
         df_input.insert(0, 'method', method)
