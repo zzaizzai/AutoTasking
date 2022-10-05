@@ -132,7 +132,7 @@ class HeatResist:
         print(mean_col_index)
 
         df_input = df.iloc[:,mean_col_index]
-        df_input = df_input.dropna()
+        # df_input = df_input.dropna()
         print(df_input)
 
         # change unit title
