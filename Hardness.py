@@ -123,10 +123,10 @@ class Hardness:
         # print(df_merge.index.to_list())
 
 
-        # df_merge.to_excel(file_data, index=True, header=True)
-        # print(df_merge)
+        df_merge.to_excel(file_data, index=True, header=True)
+        print(df_merge)
 
-        # print(f'saved data file in {file_data}')
+        print(f'saved data file in {file_data}')
 
 
 def DoIt(target:str):
