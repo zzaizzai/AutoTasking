@@ -1,6 +1,7 @@
 import time
 import CollectFiles
 import CollectAutoTension
+import Compression
 import OilTension
 import Rheometer
 import Muni
@@ -9,6 +10,7 @@ import Treatment
 import HeatResist
 import Hardness
 import Service
+
 
 
 
@@ -22,6 +24,7 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     Hardness.DoIt(target)
     HeatResist.DoIt(target)
     OilTension.DoIt(target)
+    Compression.DoIt(target)
     
     Treatment.DoIt(target)
     print('\n===================')
@@ -49,17 +52,47 @@ if __name__ == '__main__':
     print(f' path : {target_dir_path} {Color.RESET}')
 
     print(f'{Color.BLUE}=============================================================={Color.RESET}')
-    
-    
-    user_family = input(' input your family name (ex: 田中) : ')
-    if user_family == 'qq':
-        user_family = '小暮'
-        user_first = '準才'
-    else:
+
+
+    is_ok_family_name = False
+    if_ok_first_name = False
+
+    # checking family name
+    while not is_ok_family_name:
+        user_family = input(' input your family name (ex: 田中) : ')
+
+        # admin special
+        if user_family == 'qq':
+            user_family = '小暮'
+            user_first = '準才'
+            is_ok_family_name = True
+            if_ok_first_name = True
+
+
+        # too short or too long of the name
+        elif len(user_family) == 0 or len(user_family) > 10:
+            print(' something wrong try again')
+        
+        # maybe OK
+        else:
+            is_ok_family_name = True
+
+
+    # checking first name
+    while not if_ok_first_name:
         user_first = input('\n ※ if you want EPDM data, please input EPDM \n input your first name (ex: 花子) :  ')
-    
+        
+        # too short or too long of the name
+        if len(user_first) == 0 or len(user_first) > 10:
+            print(' somthing wrong try again')
+
+        # maybe OK
+        else:
+            if_ok_first_name =True
+
     user = user_family + user_first
 
+    # for exception
     if user_first == "EPDM":
         user = 'EPDM'
     else:
@@ -67,19 +100,11 @@ if __name__ == '__main__':
 
     print(f'Hello {user}!')
 
-    # target = input(' what is you target (ex: ABC001) : ')
-
-    # print(f'target is {target}')
-    # time.sleep(1)
-    # DoProcess(user, user_family, target, target_dir_path)
-
-
-
     while True:
         target = input(' what is your target (ex: ABC001) or say "bye" : ')
         if target == "bye":
             print("I miss you! :(")
-            time.sleep(4)
+            time.sleep(3)
             break
         else:
             if Service.check_target(target):
