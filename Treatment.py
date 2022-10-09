@@ -82,10 +82,23 @@ class Treatment:
         print(f'saved done {self.file}')
 
 
+    def Sorting(self):
+        print('sorting')
+        
+        is_file = os.path.isfile(self.file)
+        
+        if is_file:
+            pass
+        else:
+            print('no data file')
+            return
+        df = pd.read_excel(self.file, index_col=0)
+        
 def DoIt(target: str):
     toritori = Treatment(target)
     # toritori.ChangeTitles()
-    toritori.RoundData()
+    # toritori.RoundData()
+    toritori.Sorting()
 
 if __name__ == "__main__":
     print(pd.__version__)

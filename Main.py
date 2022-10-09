@@ -10,7 +10,8 @@ import Treatment
 import HeatResist
 import Hardness
 import Service
-
+import platform
+import pandas as pd
 
 
 
@@ -53,6 +54,8 @@ if __name__ == '__main__':
 
     print(f'{Color.BLUE}=============================================================={Color.RESET}')
 
+    print('python version: ' , platform.python_version())
+    print('pandas version: '  , pd.__version__)
 
     is_ok_family_name = False
     if_ok_first_name = False
