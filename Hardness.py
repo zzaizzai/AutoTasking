@@ -6,7 +6,9 @@ import glob
 class Hardness:
 
     def __init__(self, target):
+        
         self.target = target
+
         self.exp_name = '硬度_自動集積'
         self.file_path = Service.data_dir(target) + rf'\{self.exp_name}*{target}*.xls*'
         self.file_now = ''

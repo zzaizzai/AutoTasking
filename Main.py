@@ -72,26 +72,22 @@ if __name__ == '__main__':
             if_ok_first_name = True
 
 
-        # too short or too long of the name
-        elif len(user_family) == 0 or len(user_family) > 10:
-            print(' something wrong try again')
-        
-        # maybe OK
-        else:
+        elif Service.check_user_name(user_family):
             is_ok_family_name = True
+        else:
+            print()
+            pass
 
 
     # checking first name
     while not if_ok_first_name:
         user_first = input('\n ※ if you want EPDM data, please input EPDM \n input your first name (ex: 花子) :  ')
         
-        # too short or too long of the name
-        if len(user_first) == 0 or len(user_first) > 10:
-            print(' somthing wrong try again')
-
-        # maybe OK
+        if Service.check_user_name(user_first):
+            if_ok_first_name = True
         else:
-            if_ok_first_name =True
+            print()
+            pass
 
     user = user_family + user_first
 
@@ -115,4 +111,5 @@ if __name__ == '__main__':
                 time.sleep(1)
                 DoProcess(user, user_family, target, target_dir_path)
             else:
+                print()
                 pass

@@ -1,9 +1,8 @@
 import os
-from typing import Any
 import pandas as pd
 
 
-def target_number(number: int, target:str) -> str:
+def target_number(number: int, target: str) -> str:
     """
     if you want 2 after target number of ABC001:
         target_number(2,target) -> ABC003
@@ -13,26 +12,42 @@ def target_number(number: int, target:str) -> str:
     alphabet_num = alphabet + str('%03d' % (num + number))
     return alphabet_num
 
-def check_target(target:str) -> bool:
+
+def check_target(target: str) -> bool:
     if len(target) != 6:
-        print('the target must be 6 characters like ABC123')
+        print(' the target must be 6 characters like ABC123')
         return False
-    elif target[:3].isalpha() == False or target[3:].isdigit() == False :
-        print('target rule wrong')
+    elif target[:3].isalpha() == False or target[3:].isdigit() == False:
+        print(' target rule wrong')
         return False
     else:
         return True
 
-desktop = os.path.expanduser('~/Desktop')
 
-def data_dir(target:str) -> str:
+def check_user_name(user_name: str) -> bool:
+    """
+    check user name is good for the environment
+    True: It is ok
+    """
+    if len(user_name) == 0 or len(user_name) > 8:
+        print(' user name is too short or too long')
+        return False
+    elif user_name.isdigit():
+        print(' input only string')
+        return False
+    else:
+        return True
+
+
+def data_dir(target: str) -> str:
     """
     Data file in your desktop
     """
-    return desktop  + rf'\{target} Data'
+    desktop = os.path.expanduser('~/Desktop')
+    return desktop + rf'\{target} Data'
 
 
-def save_to_data_excel(file_data:str, df_input: Any):
+def save_to_data_excel(file_data: str, df_input):
     """
     save df to data file as merged df
     """
@@ -47,4 +62,3 @@ def save_to_data_excel(file_data:str, df_input: Any):
     df_merge.to_excel(file_data, index=True, header=True, startcol=0)
 
     print(f'saved data file in {file_data}')
-

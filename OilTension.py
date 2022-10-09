@@ -1,6 +1,7 @@
 import glob
 import Service
 import pandas as pd
+import os 
 
 
 class OilTension:
@@ -107,7 +108,7 @@ class OilTension:
         unit = ['Mpa', 'Mpa', '%']
         type = ['100%M', 'tension', 'elongation']
         condition = [sheet]*3
-        method =['oil tension']*3
+        method =['oil']*3
 
         df_data.insert(0,'unit',unit)
         df_data.insert(0,'type', type)
@@ -119,19 +120,29 @@ class OilTension:
         print(df_data)
         
         return df_data
+
     def WriteData(self, df_input):
         print('writing data')
 
-        df = pd.read_excel(self.file_data, index_col=0)
-        print(df)
-        df_merge = pd.concat([df, df_input], axis=0, sort=False)
+        is_file = os.path.isfile(self.file_data)
 
-        print(df_merge)
+        if is_file:
+            pass
+        else:
+            print('no data file')
+            return
 
-        df_merge.reset_index(inplace=True, drop=True)
+        Service.save_to_data_excel(self.file_data, df_input)
+        # df = pd.read_excel(self.file_data, index_col=0)
+        # print(df)
+        # df_merge = pd.concat([df, df_input], axis=0, sort=False)
 
-        df_merge.to_excel(self.file_data, index=True, header=True, startcol=0)
-        print(f'saved data file in {self.file_data}')
+        # print(df_merge)
+
+        # df_merge.reset_index(inplace=True, drop=True)
+
+        # df_merge.to_excel(self.file_data, index=True, header=True, startcol=0)
+        # print(f'saved data file in {self.file_data}')
 
 def DoIt(target:str):
     oiru = OilTension(target)

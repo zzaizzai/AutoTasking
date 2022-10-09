@@ -6,9 +6,10 @@ import Service
 class HeatResist:
 
     def __init__(self, target: str):
-        self.exp_name = '熱老化_自動集積 '
 
         self.target = target
+
+        self.exp_name = '熱老化_自動集積 '
 
         self.file_path = Service.data_dir(target) + rf'\{self.exp_name}*{target}*.xls*'
 
@@ -149,7 +150,7 @@ class HeatResist:
 
         # condition
         condition = [sheet]*4
-        method = ['heat tension']*4
+        method = ['heat']*4
         unit = ['MPa','MPa','%','HA']
         df_input.insert(1, 'unit', unit)
         df_input.insert(0, 'condition', condition)
