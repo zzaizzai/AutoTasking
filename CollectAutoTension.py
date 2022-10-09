@@ -40,8 +40,8 @@ class hippari:
             df = pd.read_excel(file_auto)
 
             target_rows = df.query(f'配合番号 == "{self.target}"')
-            print(target_rows)
-            print(target_rows['ファイル名'])
+            # print(target_rows)
+            # print(target_rows['ファイル名'])
             file_date_list = []
             for date in target_rows['測定日']:
                 file_date_list.append(date)
@@ -51,8 +51,8 @@ class hippari:
             myname_rows = df.query(f'依頼者名 == "{self.user_family_name}"')
             for date in file_date_list:
                 target_files = myname_rows.query(f'測定日 == "{date}"')
-                print('target_files')
-                print(target_files)
+                # print('target_files')
+                # print(target_files)
                 for file_name in target_files['ファイル名']:
                     files_list.append(file_name)
 
@@ -83,19 +83,6 @@ class hippari:
     def CopyFiles(self, files_list):
         dir_auto_tension = self.data_dir + r'\auto_tension'
         os.makedirs(dir_auto_tension, exist_ok=True)
-        # for file in tqdm(files_list):
-        #     print(file)
-
-        #     year = file[0:4]
-        #     month = file[4:6]
-        #     day = file[6:8]
-
-        #     print(f'{year} {month} {day}')
-
-        #     file_path_list = glob.glob(rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\**\{file}*', recursive=True)
-        #     print(f'copying... {file_path_list}')
-        #     shutil.copy2(file_path_list[0], dir_auto_tension)
-        # print('copy done')
 
         def get_file_path(file):
             file_path = ''

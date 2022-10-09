@@ -1,6 +1,5 @@
 import os
 import glob
-import win32com.client as win32
 import pandas as pd
 import Service
 
@@ -78,7 +77,7 @@ class Muuni:
         unit = ['M', 'M', 'min' ]
         type = ['M1', 'Vm', 'T1']
         condition_list = []
-        method_list = [file_name, file_name, file_name]
+        method_list = [file_name]*3
         for i, method in enumerate(method_list):
             print(method.split()[-1])
             condition_list.append(method.split()[-1])

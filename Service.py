@@ -1,4 +1,6 @@
 import os
+from typing import Any
+import pandas as pd
 
 
 def target_number(number: int, target:str) -> str:
@@ -28,4 +30,21 @@ def data_dir(target:str) -> str:
     Data file in your desktop
     """
     return desktop  + rf'\{target} Data'
+
+
+def save_to_data_excel(file_data:str, df_input: Any):
+    """
+    save df to data file as merged df
+    """
+    df = pd.read_excel(file_data, index_col=0)
+    print(df)
+
+    df_merge = pd.concat([df, df_input], sort=False)
+    print(df_merge)
+
+    df_merge.reset_index(inplace=True, drop=True)
+
+    df_merge.to_excel(file_data, index=True, header=True, startcol=0)
+
+    print(f'saved data file in {file_data}')
 
