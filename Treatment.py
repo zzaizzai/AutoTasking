@@ -97,7 +97,7 @@ class Treatment:
 def DoIt(target: str):
     toritori = Treatment(target)
     # toritori.ChangeTitles()
-    # toritori.RoundData()
+    toritori.RoundData()
     toritori.Sorting()
 
 if __name__ == "__main__":
