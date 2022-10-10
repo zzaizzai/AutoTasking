@@ -199,12 +199,12 @@ class Tension:
 
         # select titles
         df_data = df_data[[1,2,9,10,11,14,15]]
-        # df_data = df_data.loc[:,['配合番号','加硫条件','0.25','0.5','1.0','抗張力(MPa)',' 破断伸び(%)']]
+        # df_data = df_data.loc[:,['配合番号','加硫条件','0.25','0.5','1.0','抗張力(MPa)','破断伸び(%)']]
         # df_data = df_data.loc[:,['配合番号','加硫条件試験片形状','抗張力(MPa)']]
 
         print(df_data)
 
-        return
+        # return
         return df_data
 
 def DoIt(target: str):
