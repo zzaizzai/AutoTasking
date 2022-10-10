@@ -174,17 +174,6 @@ class HeatResist:
 
         Service.save_to_data_excel(file_data, df_input)
 
-        # df = pd.read_excel(file_data, index_col=0)
-        # print(df)
-
-        # df_merge = pd.concat([df, df_input], sort=False)
-        # print(df_merge)
-
-        # df_merge.reset_index(inplace= True, drop= True)
-
-        # df_merge.to_excel(file_data, index=True, header=True, startcol=0)
-        # print(f'saved data file in {file_data}')
-
 def DoIt(target:str):
     heat = HeatResist(target)
     heat.FindFile()

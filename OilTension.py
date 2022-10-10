@@ -63,9 +63,9 @@ class OilTension:
         print('read data shett')
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=1)
         print(df)
-        print(df.iloc[:,[1,9,10]])
+        print(df.iloc[:,[1,9,10, 11]])
 
-        df_data = df.iloc[:,[8,9,10]]
+        df_data = df.iloc[:,[8,9,10, 11]]
 
         # delete NaN
         df_data = df_data.query("EB == EB")
@@ -105,10 +105,10 @@ class OilTension:
         print(df_data.iloc[:,mean_col_index])
         df_data = df_data.iloc[:,mean_col_index]
 
-        unit = ['Mpa', 'Mpa', '%']
-        type = ['100%M', 'tension', 'elongation']
-        condition = [sheet]*3
-        method =['oil']*3
+        unit = ['Mpa', 'Mpa', '%','HA']
+        type = ['100%M', 'tension', 'elongation', 'HA(0s)']
+        condition = [sheet]*4
+        method =['oil']*4
 
         df_data.insert(0,'unit',unit)
         df_data.insert(0,'type', type)
@@ -133,16 +133,6 @@ class OilTension:
             return
 
         Service.save_to_data_excel(self.file_data, df_input)
-        # df = pd.read_excel(self.file_data, index_col=0)
-        # print(df)
-        # df_merge = pd.concat([df, df_input], axis=0, sort=False)
-
-        # print(df_merge)
-
-        # df_merge.reset_index(inplace=True, drop=True)
-
-        # df_merge.to_excel(self.file_data, index=True, header=True, startcol=0)
-        # print(f'saved data file in {self.file_data}')
 
 def DoIt(target:str):
     oiru = OilTension(target)
