@@ -67,11 +67,15 @@ class OilTension:
 
         df_data = df.iloc[:,[8,9,10, 11]]
 
+        # print(df_data[['JIS A']])
+
         # delete NaN
         df_data = df_data.query("EB == EB")
 
         print(df_data)
 
+        df_data.iloc[:,[-1]] = df_data.iloc[:,[-1]].ffill()
+        
 
         #  handle df titles
         df_data = df_data.transpose()
