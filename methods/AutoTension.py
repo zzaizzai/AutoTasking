@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import glob
-import Service
+from . import Service
 
 class Tension:
 

@@ -5,7 +5,7 @@ import shutil
 import string
 import openpyxl
 import win32com.client as win32
-import Service
+from . import Service
 
 
 class CollectFiles:

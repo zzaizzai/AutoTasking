@@ -6,7 +6,7 @@ import pandas as pd
 import openpyxl
 from openpyxl.drawing.text import ParagraphProperties, CharacterProperties, Font
 from openpyxl.chart.layout import Layout, ManualLayout
-import Service
+from . import Service
 
 class Rheometer:
 

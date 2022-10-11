@@ -1,15 +1,15 @@
 import time
-import CollectFiles
-import CollectAutoTension
-import Compression
-import OilTension
-import Rheometer
-import Muni
-import AutoTension
-import Treatment
-import HeatResist
-import Hardness
-import Service
+from methods import CollectFiles
+from methods import CollectAutoTension
+from methods import Compression
+from methods import OilTension
+from methods import Rheometer
+from methods import Muni
+from methods import AutoTension
+from methods import Treatment
+from methods import HeatResist
+from methods import Hardness
+from methods import Service
 import platform
 import pandas as pd
 
@@ -28,9 +28,11 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     Compression.DoIt(target)
     
     Treatment.DoIt(target)
-    print('\n===================')
-    print('   process done   ')
-    print('===================\n')
+    print('\n=========================================================')
+    # print('   process done   ')
+    print(Service.work_done)
+    print('=========================================================\n')
+    
 
 
 if __name__ == '__main__':
@@ -43,16 +45,21 @@ if __name__ == '__main__':
 
     
     
-    print(f'{Color.BLUE}=============================================================={Color.RESET}')
+    
+    print(f'{Color.BLUE}========================================================================================={Color.RESET}')
     print(f'{Color.BLUE} Hello!! this is Auto Handling Data System made by K.J.  ver 0.2 \n ')
     display_time = time.localtime() 
     print(f' Current time is {display_time.tm_year}/ {display_time.tm_mon}/ {display_time.tm_mday}   {display_time.tm_hour}:{display_time.tm_min}  \n')
     # for company
     target_dir_path = r'\\kfs03a\labo\9101-NVH_DATA\ホース'
     # target_dir_path = r'C:\Users\junsa\Desktop'
+
+    print(Service.rakuraku_hose)
+
+
     print(f' path : {target_dir_path} {Color.RESET}')
 
-    print(f'{Color.BLUE}=============================================================={Color.RESET}')
+    print(f'{Color.BLUE}========================================================================================={Color.RESET}')
 
     print('python version: ' , platform.python_version())
     print('pandas version: '  , pd.__version__)
