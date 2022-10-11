@@ -6,7 +6,7 @@ import pandas as pd
 import openpyxl
 from openpyxl.drawing.text import ParagraphProperties, CharacterProperties, Font
 from openpyxl.chart.layout import Layout, ManualLayout
-from . import Service
+import Service
 
 class Rheometer:
 
@@ -199,9 +199,9 @@ class Rheometer:
         file_name = os.path.splitext(os.path.basename(self.file_xlsx))[0]
         unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min']
         type = ['MH', 'ML', 't10', 't50', 't90', 'CR']
-        condition = ['none','none','none','none','none','none',]
-        method_list = [file_name, file_name, file_name,
-                file_name, file_name, file_name, ]
+        condition = ['none'] * 6
+        # something is needed in condition.....
+        method_list = [file_name] * 6
 
         for i, method in enumerate(method_list):
             method_list[i] = method.split()[0]

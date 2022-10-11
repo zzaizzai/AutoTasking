@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import numpy as np
-from . import Service
+import Service
 
 class Treatment:
 

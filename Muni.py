@@ -121,3 +121,14 @@ def DoIt(target: str):
 if __name__ == '__main__':
     target = target = input('target number (ex: ABC001): ')
     DoIt(target)
+
+
+
+
+"""to the setting json with ctrl shift p
+    "workbench.colorCustomizations": {
+        "editorCursor.foreground": "#15ff00",
+        "terminalCursor.foreground": "#15ff00"
+    }
+    
+    """

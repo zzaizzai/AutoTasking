@@ -1,15 +1,15 @@
 import time
-from methods import CollectFiles
-from methods import CollectAutoTension
-from methods import Compression
-from methods import OilTension
-from methods import Rheometer
-from methods import Muni
-from methods import AutoTension
-from methods import Treatment
-from methods import HeatResist
-from methods import Hardness
-from methods import Service
+import CollectFiles
+import CollectAutoTension
+import Compression
+import OilTension
+import Rheometer
+import Muni
+import AutoTension
+import Treatment
+import HeatResist
+import Hardness
+import Service
 import platform
 import pandas as pd
 

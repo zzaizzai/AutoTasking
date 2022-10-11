@@ -2,7 +2,7 @@ import pandas as pd
 import glob
 import shutil
 import os
-from . import Service
+import Service
 from multiprocessing.dummy import Pool as ThreadPool
 
 class hippari:

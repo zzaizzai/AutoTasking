@@ -1,5 +1,5 @@
 import pandas as pd
-from . import Service
+import Service
 import glob
 import os
 
