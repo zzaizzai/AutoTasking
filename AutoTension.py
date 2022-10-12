@@ -107,7 +107,7 @@ class Tension:
             print(df_part.iloc[[0]].values.tolist()[0])
 
             unit = ['MPa', 'MPa', 'MPa' ,'MPa', '%']
-            method = ['25%M', '50%M', '100%M','tension','elongation']
+            method = ['25%M', '50%M', '100%M','TS','EB']
             condition_name = df_part[0][1]
             condition = [condition_name] * 5
             name = ['auto tension'] * 5

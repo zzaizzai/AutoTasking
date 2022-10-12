@@ -1,7 +1,8 @@
+from operator import index
 import pandas as pd
 import Service
 import glob
-
+import os
 
 class Deruta:
 
@@ -11,7 +12,7 @@ class Deruta:
         self.target = target
         self.file_path = Service.data_dir(
             target) + rf'\{self.exp_name}*{target}*.xls*'
-
+        self.file_data = Service.data_dir(target) + fr'\{self.target} Data.xlsx'
         self.file_now = ''
 
     def FindFile(self):
@@ -47,6 +48,7 @@ class Deruta:
         new_col[4] = 'liquid'
         new_col[7] = 'condition_index'
         new_col[8] = 'condition'
+        new_col[9] = 'condition_time'
         df.columns = new_col
         print(df)
 
@@ -69,6 +71,7 @@ class Deruta:
         target_list = list(target_list_set)
         print(target_list)
 
+        # generate condition list
         conditions_list_index = df.query(
             "liquid_index in ['試験液']").index.to_list()
         print(conditions_list_index)
@@ -76,15 +79,18 @@ class Deruta:
         condition_list = []
         for i in conditions_list_index:
             condition_list.append(
-                str(df.loc[:, 'liquid'][i]) + " " + str(df.loc[:, 'condition'][i]))
+                str(df.loc[:, 'liquid'][i]) + " " + str(df.loc[:, 'condition'][i]) +"℃ x "+ str(df.loc[:, 'condition_time'][i]) + "H" )
         print(condition_list)
 
         df_all = pd.DataFrame()
         for i in range(len(condition_list)):
             df_all = pd.concat([df_all, self.ReadDataBlock(
                 condition_list[i], conditions_list_index[i], len(target_list))])
-
+        # df_all.iloc[:,4:] = df_all.iloc[:,4:].round(0)
+        print(df_all.iloc[:,4:].round(1))
         print(df_all)
+
+        self.writedata(df_all)
 
     def ReadDataBlock(self, condition_of_exp, conditions_list_index: int, numbers_target: int):
 
@@ -102,10 +108,18 @@ class Deruta:
                 index_temp[i+1] = index_temp[i]
         print(index_temp)
 
+        df.index = index_temp
+
+        # remove nan index
+        df = df.query("index == index")
+        index_temp = df.index.to_list()
+        print(df)
+
         index_target_temp = []
         for value in index_temp:
+            target_inddex = int(value) - int(self.target[3:])
             index_target_temp.append(
-                Service.target_number(value-1, self.target))
+                Service.target_number(target_inddex, self.target))
 
         print(index_target_temp)
 
@@ -122,15 +136,15 @@ class Deruta:
         df = df.query("mean in ['平均値']")
         print(df)
 
-        df = df.loc[:, ['⊿V']]
+        df = df.loc[:, ['△Ｖ']]
         print(df)
 
         df = df.transpose()
 
         condition = [condition_of_exp]
         method = ['oil']
-        unit = ['??']
-        type = ['dertua']
+        unit = ['%']
+        type = ['⊿V']
 
         df.insert(0, 'unit', unit)
         df.insert(0, 'type', type)
@@ -138,10 +152,24 @@ class Deruta:
         df.insert(0, 'method', method)
 
         df.reset_index(inplace=True, drop=True)
+
+        print(df.iloc[:,4:].round(1))
         print(df)
 
         return df
 
+    def writedata(self, df_input):
+        print('writing data')
+
+        is_file = os.path.isfile(self.file_data)
+
+        if is_file:
+            pass
+        else:
+            print('no data file')
+            return
+        
+        Service.save_to_data_excel(self.file_data, df_input)
 def DoIt(target: str):
     ruta = Deruta(target)
     ruta.FindFile()

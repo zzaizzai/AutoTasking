@@ -2,6 +2,7 @@ import time
 import CollectFiles
 import CollectAutoTension
 import Compression
+import Deruta
 import OilTension
 import Rheometer
 import Muni
@@ -12,6 +13,7 @@ import Hardness
 import Service
 import platform
 import pandas as pd
+import os
 
 
 
@@ -25,6 +27,7 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     Hardness.DoIt(target)
     HeatResist.DoIt(target)
     OilTension.DoIt(target)
+    Deruta.DoIt(target)
     Compression.DoIt(target)
     
     Treatment.DoIt(target)
@@ -56,8 +59,9 @@ if __name__ == '__main__':
 
     print(Service.rakuraku_hose)
 
-
+    print(f' save_dir : {os.path.expanduser("~/Desktop")}')
     print(f' path : {target_dir_path} {Color.RESET}')
+    
 
     print(f'{Color.BLUE}========================================================================================={Color.RESET}')
 
@@ -100,7 +104,7 @@ if __name__ == '__main__':
 
     # for exception
     if user_first == "EPDM":
-        user = 'EPDM'
+        user = '※※住化EPDM代替関連テーマ(FG〇～)※※'
     else:
         pass
 

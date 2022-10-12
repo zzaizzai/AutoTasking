@@ -109,8 +109,8 @@ class OilTension:
         print(df_data.iloc[:,mean_col_index])
         df_data = df_data.iloc[:,mean_col_index]
 
-        unit = ['Mpa', 'Mpa', '%','HA']
-        type = ['100%M', 'tension', 'elongation', 'HA(0s)']
+        unit = ['MPa', 'MPa', '%','HA']
+        type = ['100%M', 'TS', 'EB', 'HA(0s)']
         condition = [sheet]*4
         method =['oil']*4
 
