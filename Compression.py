@@ -116,7 +116,10 @@ class Compression:
 
 def DoIt(target: str):
     zumizumi = Compression(target)
-    zumizumi.FindFile()
+    try:
+        zumizumi.FindFile()
+    except Exception as e:
+        print(e)
 
 
 

@@ -145,14 +145,16 @@ class HeatResist:
 
         print('query')
         df_input = df_input.query("type in ['M 100%', '抗張力 ＭＰａ', '破断伸び％', '０秒']")
+        df_input = df_input.iloc[:,1:]
         print(df_input)
-
 
         # condition
         condition = [sheet]*4
         method = ['heat']*4
         unit = ['MPa','MPa','%','HA']
-        df_input.insert(1, 'unit', unit)
+        type = ['100%M','TS','EB','HA(0s)']
+        df_input.insert(0, 'unit', unit)
+        df_input.insert(0, 'type', type)
         df_input.insert(0, 'condition', condition)
         df_input.insert(0, 'method', method)
 

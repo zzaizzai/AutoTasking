@@ -111,8 +111,12 @@ def DoIt(target: str, user_family_name:str ):
 
 
     hip = hippari(target, file_auto_list, user_family_name)
-    hip.CheckDeaktopPath()
-    hip.ReadFile()
+
+    try:
+        hip.CheckDeaktopPath()
+        hip.ReadFile() 
+    except  Exception as e:
+        print(e)
 
 
 

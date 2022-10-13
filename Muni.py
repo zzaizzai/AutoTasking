@@ -1,7 +1,7 @@
 import os
 import glob
 import pandas as pd
-from . import Service
+import Service
 
 
 
@@ -114,7 +114,10 @@ class Muuni:
 
 def DoIt(target: str):
     muni = Muuni(target)
-    muni.FindFile()
+    try:
+        muni.FindFile()
+    except Exception as e:
+        print(e)
 
 
 

@@ -24,14 +24,16 @@ class CollectFiles:
         list = glob.glob(self.filePath, recursive=True)
         
         file_copy_num: int = 0
+        file_copy_failed_num: int = 0
         for file in list:
             if self.target in file:
                 try:
                     self.Copyfiles(file)
                 except OSError as e:
                     print(e)
+                    file_copy_failed_num += 1
                 file_copy_num = file_copy_num + 1
-        print(f'we found {file_copy_num} files!!')
+        print(f'we found {file_copy_num} files!! with {file_copy_failed_num} failed')
         print()
 
     def Copyfiles(self, targetFile: string):
@@ -41,7 +43,12 @@ class CollectFiles:
             if experiment in targetFile:
 
                 print(targetFile)
-                shutil.copy2(targetFile, self.data_dir + fr'\{experiment} {os.path.basename(targetFile)}')
+                try:
+                    shutil.copy2(targetFile, self.data_dir + fr'\{experiment} {os.path.basename(targetFile)}')
+                except Exception as e:
+                    print(e)
+                    
+
 
 
     def MakeDataExcel(self):
