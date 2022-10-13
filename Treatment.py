@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import Service
+import openpyxl
 
 class Treatment:
 
@@ -72,8 +73,8 @@ class Treatment:
 
         ## drop angles of autotension
         # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
-        print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
-        print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
+        # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
+        print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python'))
         index_drop = df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python').index
         df.drop(list(index_drop), inplace=True)
 
@@ -84,6 +85,18 @@ class Treatment:
         ## save
         df.to_excel(self.file, index=True, header=True, startcol=0)
         print(f'saved done {self.file}')
+
+
+    def CellWidth(self):
+        print('cell width...')
+        
+        wb = openpyxl.load_workbook(self.file)
+        ws = wb.worksheets[0]
+
+        ws.column_dimensions['B'].width = 20
+        ws.column_dimensions['C'].width = 15
+
+        wb.save(self.file)
 
 
     def Sorting(self):
@@ -103,6 +116,7 @@ def DoIt(target: str):
     # toritori.ChangeTitles()
     toritori.RoundData()
     # toritori.Sorting()
+    toritori.CellWidth()
 
 if __name__ == "__main__":
     print(pd.__version__)

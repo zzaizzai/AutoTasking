@@ -83,10 +83,12 @@ class Hardness:
 
         if file_name[0][-1] == 'S':
             condition = ['スチームJIS'] * len(df)
+        elif file_name[0][-1] == 'Q':
+            condition = ['Q'] * len(df)
         else:
             condition = ['NormalJIS'] * len(df)
 
-        method = ['auto tension'] * len(df)
+        method = ['Hardness'] * len(df)
 
         df.insert(0, 'unit', unit)
         df.insert(0, 'type', type)

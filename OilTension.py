@@ -140,7 +140,11 @@ class OilTension:
 
 def DoIt(target:str):
     oiru = OilTension(target)
-    oiru.FindFile()
+    try:
+        oiru.FindFile()
+    except Exception as e:
+        print(e)
+
 
 
 if __name__ == '__main__':

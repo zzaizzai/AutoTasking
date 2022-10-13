@@ -178,7 +178,10 @@ class HeatResist:
 
 def DoIt(target:str):
     heat = HeatResist(target)
-    heat.FindFile()
+    try:
+        heat.FindFile()
+    except Exception as e:
+        print(e)
 
 if __name__ == '__main__':
     # target = 'FJX001'

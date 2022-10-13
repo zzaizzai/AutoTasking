@@ -73,7 +73,14 @@ class Rheometer:
         # chart = openpyxl.chart.LineChart()
 
         # data titles
-        chart.title = '加硫曲線 150℃'
+        
+        temperature_cell = ws.cell(row=2, column=6)
+        print(temperature_cell)
+        print(temperature_cell.value)
+        temperature_title = str(int(float(temperature_cell.value[:-1]))) + '℃'
+        print(temperature_title)
+
+        chart.title = f'加硫曲線 {temperature_title}'
         font = Font(typeface='Calibri')
         size = 1600
         char_prop = CharacterProperties(latin=font, sz=size, b=True) 
@@ -82,7 +89,7 @@ class Rheometer:
 
 
         chart.x_axis.title = 'Time (min)'
-        chart.y_axis.title = 'torque'
+        chart.y_axis.title = 'Torque (kgf・cm)'
 
         
         font = Font(typeface='Calibri')
@@ -93,7 +100,7 @@ class Rheometer:
         chart.y_axis.title.tx.rich.p[0].pPr = para_prop
 
 
-        colors  = ['ff0000','ffaa00','00ff00' ,'0055ff','8000ff','00ff55','ff00d5']
+        colors  = ['ff0000','ffaa00','00ff00' ,'0055ff','8000ff','00ff55','ff00d5','ff00d5','ff00d5','ff00d5']
         # add series
         print('adding serials')
         for i in range(self.number_of_target):
@@ -133,16 +140,18 @@ class Rheometer:
         chart.x_axis.scaling.min = 0
         chart.x_axis.scaling.max = 30
 
-        chart.legend.position = 'tr'
+        chart.legend.position = 'r'
         # chart.layout = Layout(
         #     ManualLayout(
-        #     x=0.25, y=0.25,
+        #     x=0.5, y=0.5,
         #     h=0.5, w=0.5,
         #     xMode="edge",
         #     yMode="edge",
         #     )
         # )
-
+        # chart size
+        chart.height = 12
+        chart.width = 12
 
         def target_number(number: int):
             target = self.target
