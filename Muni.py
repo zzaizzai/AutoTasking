@@ -114,7 +114,10 @@ class Muuni:
 
 def DoIt(target: str):
     muni = Muuni(target)
-    muni.FindFile()
+    try:
+        muni.FindFile()
+    except Exception as e:
+        print(e)
 
 
 

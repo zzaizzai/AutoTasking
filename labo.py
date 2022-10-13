@@ -1,8 +1,12 @@
-num=31
-
-def test(num):
-
- return '%03d' % num
+from cmath import exp
+import pandas as pd
 
 
-print(test(22))
+def hello():
+    df = pd.read_excel("",index_col=0)
+    print("ddd")
+
+try:
+    hello()
+except Exception as e:
+    print(e)

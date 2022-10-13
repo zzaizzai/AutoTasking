@@ -39,7 +39,7 @@ class Deruta:
 
         print(self.file_now)
 
-        df = pd.read_excel(self.file_now, sheet_name='1')
+        df = pd.read_excel(self.file_now, sheet_name='1', index_col=0)
 
         new_col = df.columns.to_list()
         print(df.columns.to_list())
@@ -75,6 +75,8 @@ class Deruta:
         conditions_list_index = df.query(
             "liquid_index in ['試験液']").index.to_list()
         print(conditions_list_index)
+        print(df.loc[:,'condition_time'])
+        print(df.loc[:,'condition'])
 
         condition_list = []
         for i in conditions_list_index:
@@ -172,7 +174,10 @@ class Deruta:
         Service.save_to_data_excel(self.file_data, df_input)
 def DoIt(target: str):
     ruta = Deruta(target)
-    ruta.FindFile()
+    try:
+        ruta.FindFile()
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':
