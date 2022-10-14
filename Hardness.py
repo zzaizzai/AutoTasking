@@ -65,7 +65,7 @@ class Hardness:
         df.columns = titles_new
         df = df.drop('配合番号', axis=0)
         print(df)
-
+        
         print(self.file_now)
         file_name = os.path.splitext(os.path.basename(self.file_now))
         print(file_name)
@@ -88,7 +88,7 @@ class Hardness:
         else:
             condition = ['NormalJIS'] * len(df)
 
-        method = ['Hardness'] * len(df)
+        method = [file_name[0]] * len(df)
 
         df.insert(0, 'unit', unit)
         df.insert(0, 'type', type)
