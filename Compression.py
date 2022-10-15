@@ -86,12 +86,13 @@ class Compression:
         print(df)
 
         unit = ['%']
-        method = ['compression']
+        # method = ['compression']
+        method = [Service.file_name_without_target(self.file_now, self.target)]
         condition = [sheet]
-        type = ['distortion']
+        type_list = ['distortion']
 
         df.insert(0, 'unit', unit )
-        df.insert(0, 'type', type )
+        df.insert(0, 'type', type_list )
         df.insert(0, 'condition', condition )
         df.insert(0, 'method', method )
         df.reset_index(inplace=True, drop=True)

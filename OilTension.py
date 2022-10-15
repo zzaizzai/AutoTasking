@@ -62,8 +62,8 @@ class OilTension:
     def ReadDataSheet(self, sheet: str):
         print('read data shett')
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=1)
-        print(df)
-        print(df.iloc[:,[1,9,10, 11]])
+        # print(df)
+        # print(df.iloc[:,[1,9,10, 11]])
 
         df_data = df.iloc[:,[8,9,10, 11]]
 
@@ -72,7 +72,7 @@ class OilTension:
         # delete NaN
         df_data = df_data.query("EB == EB")
 
-        print(df_data)
+        # print(df_data)
 
         df_data.iloc[:,[-1]] = df_data.iloc[:,[-1]].ffill()
         
@@ -80,7 +80,7 @@ class OilTension:
         #  handle df titles
         df_data = df_data.transpose()
 
-        print(df_data.columns.to_list())
+        # print(df_data.columns.to_list())
 
         title_list = df_data.columns.to_list()
         title_new_list = ['nan']
@@ -93,29 +93,29 @@ class OilTension:
                 count = 0
                 target_index += 1
         df_data.columns = title_new_list
-        print(title_new_list)
+        # print(title_new_list)
 
         
         # find mean value
         mean_col_index = []
         for i in range(3, len(title_new_list)):
-            print(title_new_list[i])
+            # print(title_new_list[i])
             if title_new_list[i] != title_new_list[i-1]:
-                print('it is after mena data')
+                # print('it is after mena data')
                 mean_col_index.append(i-1)
-        print('mean_col_index', mean_col_index)
+        # print('mean_col_index', mean_col_index)
 
         
-        print(df_data.iloc[:,mean_col_index])
+        # print(df_data.iloc[:,mean_col_index])
         df_data = df_data.iloc[:,mean_col_index]
 
         unit = ['MPa', 'MPa', '%','HA']
-        type = ['100%M', 'TS', 'EB', 'HA(0s)']
+        type_list = ['100%M', 'TS', 'EB', 'HA(0s)']
         condition = [sheet]*4
         method =['oil']*4
 
         df_data.insert(0,'unit',unit)
-        df_data.insert(0,'type', type)
+        df_data.insert(0,'type', type_list)
         df_data.insert(0, 'condition', condition )
         df_data.insert(0, 'method', method)
 

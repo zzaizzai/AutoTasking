@@ -50,7 +50,7 @@ class Tension:
 
         df_all.reset_index(inplace= True, drop= True)
         df_all = df_all.T.reset_index(drop=True).T
-        print(df_all)
+        # print(df_all)
 
         # remove another targets with checking target number and data file lengh
         df_len = pd.read_excel(self.file_data, index_col=0)

@@ -18,6 +18,7 @@ class Rheometer:
         self.file_path_xls = self.file_dir + rf'\{self.exp_name}*{target}*.xlsx'
         self.file_xls = ''
         self.file_xlsx = ''
+        self.temperature = ''
 
     def FindFile(self):
         print('find file rheometer...')
@@ -78,6 +79,7 @@ class Rheometer:
         print(temperature_cell)
         print(temperature_cell.value)
         temperature_title = str(int(float(temperature_cell.value[:-1]))) + '℃'
+        self.temperature = temperature_title
         print(temperature_title)
 
         chart.title = f'加硫曲線 {temperature_title}'
@@ -163,9 +165,9 @@ class Rheometer:
         # change legend title
         print("legen title")
         for i in range(self.number_of_target):
-            print(ws.cell(row=standard_cell.row, column=2 + i*4).value)
+            # print(ws.cell(row=standard_cell.row, column=2 + i*4).value)
             ws.cell(row=standard_cell.row, column=2 + i*4).value = target_number(i)
-            print(target_number(i))
+            # print(target_number(i))
 
         ws.add_chart(chart, 'B8')
         wb.save(self.file_xlsx)
@@ -177,7 +179,7 @@ class Rheometer:
 
         num_target = 0
         row_init = 0
-        print(df)
+        # print(df)
         for i, value in enumerate(df[0]):
             if value == '特性値：':
                 num_target = df[0][i-1]
@@ -191,10 +193,10 @@ class Rheometer:
             df_input = df_input.append(df.loc[[row_init + 2*i]])
 
         df_input = df_input.transpose()
-        print(df_input)
+        # print(df_input)
         df_input = df_input.loc[[2, 3, 5, 6, 7, 8]]
 
-        print(df_input)
+        # print(df_input)
 
         print('target numbering')
         print(len(df_input.columns))
@@ -205,19 +207,19 @@ class Rheometer:
         df_input.columns = target_title
 
 
-        file_name = os.path.splitext(os.path.basename(self.file_xlsx))[0]
         unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min']
-        type = ['MH', 'ML', 't10', 't50', 't90', 'CR']
-        condition = ['none'] * 6
+        type_list = ['MH', 'ML', 't10', 't50', 't90', 'CR']
+        # condition = [Service.file_name_without_target_and_expname(self.file_xlsx, self.target, self.exp_name)] * 6
+        condition = [self.temperature] * 6
         # something is needed in condition.....
-        method_list = [file_name] * 6
+        method_list = [Service.file_name_without_target(self.file_xlsx, self.target)] * 6
 
-        for i, method in enumerate(method_list):
-            method_list[i] = method.split()[0]
+        # for i, method in enumerate(method_list):
+        #     method_list[i] = method.split()[0]
 
 
         df_input.insert(0, 'unit', unit)
-        df_input.insert(0, 'type', type)
+        df_input.insert(0, 'type', type_list)
         df_input.insert(0, 'condition', condition)
         df_input.insert(0, 'method', method_list)
 
@@ -251,7 +253,10 @@ class Rheometer:
 
 def DoIt(target: str):
     reo = Rheometer(target)
-    reo.FindFile()
+    try:
+        reo.FindFile()
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':

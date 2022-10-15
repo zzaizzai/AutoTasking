@@ -34,7 +34,6 @@ class CollectFiles:
                     file_copy_failed_num += 1
                 file_copy_num = file_copy_num + 1
         print(f'we found {file_copy_num} files!! with {file_copy_failed_num} failed')
-        print()
 
     def Copyfiles(self, targetFile: string):
         experiments = os.listdir(self.fileNamePath)
@@ -68,9 +67,9 @@ class CollectFiles:
             else:
                 print(f'translate... {file_xls} + x')
                 excel = win32.gencache.EnsureDispatch('Excel.Application')
-                wb = excel.Workbooks.Open(file_xls)
                 excel.DisplayAlerts = False
                 excel.Visible  = False
+                wb = excel.Workbooks.Open(file_xls)
                 wb.SaveAs(file_xls+"x", FileFormat = 51) #FileFormat = 51 is for .xlsx extension
                 wb.Close()
                 excel.Application.Quit()
@@ -80,9 +79,12 @@ class CollectFiles:
 
 def Check(user: str, target: str, destination_dir_path: str):
     ff = CollectFiles(user, target, destination_dir_path)
-    ff.FindFiles()
-    ff.MakeDataExcel()
-    ff.TranslateFromXlsToXlsx()
+    try:
+        ff.FindFiles()
+        ff.MakeDataExcel()
+        ff.TranslateFromXlsToXlsx()
+    except Exception as e:
+        print(e)
 
 if __name__ == '__main__':
     # xl = EnsureDispatch("Word.Application")

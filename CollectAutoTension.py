@@ -101,9 +101,16 @@ class hippari:
         
         file_path_list = list(pool.map(get_file_path ,files_list))
         # print(file_path_list)
+        copy_count = 0
+        copy_count_failed = 0
         for file_path in file_path_list:
-            shutil.copy2(file_path, dir_auto_tension)
-        print('copy done')
+            try:
+                shutil.copy2(file_path, dir_auto_tension)
+                copy_count += 1
+            except Exception as e:
+                print(e)
+                copy_count_failed
+        print(f'copy done {copy_count} files with {copy_count_failed} failed')
 
 def DoIt(target: str, user_family_name:str ):
 

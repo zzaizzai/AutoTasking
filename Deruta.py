@@ -145,11 +145,12 @@ class Deruta:
 
         condition = [condition_of_exp]
         method = ['oil']
+        # method = [Service.file_name_without_target(self.file_now, self.target)]
         unit = ['%']
-        type = ['⊿V']
+        type_list = ['⊿V']
 
         df.insert(0, 'unit', unit)
-        df.insert(0, 'type', type)
+        df.insert(0, 'type', type_list)
         df.insert(0, 'condition', condition)
         df.insert(0, 'method', method)
 

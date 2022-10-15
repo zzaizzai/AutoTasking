@@ -45,6 +45,8 @@ class Treatment:
 
         print('round data')
         df = pd.read_excel(self.file, index_col=0)
+        
+
         print(df)
 
         print('df lengh: ', len(df))
@@ -57,7 +59,10 @@ class Treatment:
 
         ## round\
         df = df.replace('******', 0)
-        print('rounding')
+        # print('rounding')
+
+        df = df.astype('float', errors='ignore')
+        
         df = df.round(1)
         print(df)
 
@@ -113,10 +118,13 @@ class Treatment:
         
 def DoIt(target: str):
     toritori = Treatment(target)
-    # toritori.ChangeTitles()
-    toritori.RoundData()
-    # toritori.Sorting()
-    toritori.CellWidth()
+    try:
+        # toritori.ChangeTitles()
+        toritori.RoundData()
+        # toritori.Sorting()
+        toritori.CellWidth()
+    except Exception as e:
+        print(e)
 
 if __name__ == "__main__":
     print(pd.__version__)

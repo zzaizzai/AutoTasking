@@ -34,11 +34,10 @@ class Muuni:
             return
 
     def ReadFile(self):
-        print('read file...')
-        print(self.file_xlsx)
+        print('read file...', self.file_xlsx)
 
         df = pd.read_excel(self.file_xlsx, header=None)
-        print(df)
+        # print(df)
         for i, value in enumerate(df[0]):
             if value == '特性値：':
                 num_target = df[0][i-1]
@@ -51,43 +50,43 @@ class Muuni:
         for i in range(1, num_target):
             df_input = df_input.append(df.loc[[row_init + 2*i]])
 
-        print('translate row and col')
+        # print('translate row and col')
         df_input = df_input.transpose()
-        print(df_input)
+        # print(df_input)
 
-        print('')
+        # print('')
         df_input = df_input.loc[[2,3,4]]
-        print(df_input)
+        # print(df_input)
 
 
         # target numbers
-        print('target numbering')
-        print(len(df_input.columns))
+        # print('target numbering')
+        # print(len(df_input.columns))
         target_titles = []
         for i in range(len(df_input.columns)):
             target_titles.append(Service.target_number(i, self.target))
-        print(target_titles)
+        # print(target_titles)
         df_input.columns = target_titles
 
-        print(df_input)
+        # print(df_input)
         
         # insert unit, method.. else
         file_name = os.path.splitext(os.path.basename(self.file_xlsx))[0]
         print(file_name)
         unit = ['M', 'M', 'min' ]
-        type = ['M1', 'Vm', 'T1']
-        condition_list = []
-        method_list = [file_name]*3
-        for i, method in enumerate(method_list):
-            print(method.split()[-1])
-            condition_list.append(method.split()[-1])
-            method_list[i] = method.split()[0][:4]
+        type_list = ['M1', 'Vm', 'T1']
+        condition_list = [Service.file_name_without_target_and_expname(self.file_xlsx, self.target, self.exp_name)]*len(df_input)
+        method_list = [Service.file_name_without_target(self.file_xlsx, self.target)]*3
+        # for i, method in enumerate(method_list):
+        #     print(method.split()[-1])
+        #     condition_list.append(method.split()[-1])
+        #     method_list[i] = method.split()[0][:4]
 
-        print(method_list)
-        print(condition_list)
+        # print(method_list)
+        # print(condition_list)
 
         df_input.insert(0, 'unit', unit)
-        df_input.insert(0, 'type', type)
+        df_input.insert(0, 'type', type_list)
         df_input.insert(0, 'condition', condition_list)
         df_input.insert(0, 'method', method_list)
 
@@ -126,12 +125,3 @@ if __name__ == '__main__':
     DoIt(target)
 
 
-
-
-"""to the setting json with ctrl shift p
-    "workbench.colorCustomizations": {
-        "editorCursor.foreground": "#15ff00",
-        "terminalCursor.foreground": "#15ff00"
-    }
-    
-    """

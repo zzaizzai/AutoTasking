@@ -54,8 +54,8 @@ class HeatResist:
         for sheet in sheet_list:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
         
-        print('all od input data')
-
+        # print('all od input data')
+        print('heat Resist Data')
         print(df_all)
 
         self.WriteData(df_all)
@@ -66,51 +66,51 @@ class HeatResist:
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=1)
         df = df.transpose()
         df.reset_index(inplace= True, drop= True)
-        print(df.index)
+        # print(df.index)
 
 
-        print(df)
+        # print(df)
 
 
         ## title
-        print(df.loc[[3]].values.tolist()[0])
+        # print(df.loc[[3]].values.tolist()[0])
         col_index = []
         for i, value in enumerate(df.loc[[4]].values.tolist()[0]):
-            print(i, value)
+            # print(i, value)
             if not 'nan' in str(value):
-                print('not nan')
+                # print('not nan')
                 col_index.append(i)
 
-        print(col_index)
-        print(df.iloc[:,col_index])
+        # print(col_index)
+        # print(df.iloc[:,col_index])
 
         df = df.iloc[:,col_index]
 
         title_index =  df.columns.values.tolist()
         for i, value in enumerate(title_index):
             if 'nan' in str(value):
-                print('nan',i)
+                # print('nan',i)
                 title_index[i] = title_index[i-1]
-        print(title_index)
+        # print(title_index)
         df.columns = title_index
-        print(df)
+        # print(df)
 
 
 
         
         mean_col_index = [0]
         row_mean_str = df.loc[[2]].values.tolist()[0]
-        print(row_mean_str)
+        # print(row_mean_str)
         for i, value in enumerate(row_mean_str):
-            print(value)
+            # print(value)
             if '中央値' in str(value):
-                print('mean str', i)
+                # print('mean str', i)
                 mean_col_index.append(i)
         
         #  0s 
         zero_col_index = [0]
         row_zero = df.loc[[12]].values.tolist()[0]
-        print(row_zero)
+        # print(row_zero)
         
         for i in range(10):
             print(row_zero[1+ i*4])
@@ -119,34 +119,34 @@ class HeatResist:
             else:
                 break
             
-        print(row_zero)
+        # print(row_zero)
         df.loc[[12]] = row_zero
-        print(df)
+        # print(df)
 
 
-        for i, value in enumerate(row_zero):
-            print(value)
-            if str(value) != 'nan' and str(value) != '０秒' and i < len(row_zero) -3:
-                print('it is zero hardness', i)
-                # row_zero[i+ 3] = row_zero[i]
+        # for i, value in enumerate(row_zero):
+        #     # print(value)
+        #     if str(value) != 'nan' and str(value) != '０秒' and i < len(row_zero) -3:
+        #         print('it is zero hardness', i)
+        #         # row_zero[i+ 3] = row_zero[i]
 
-        print(mean_col_index)
+        # print(mean_col_index)
 
         df_input = df.iloc[:,mean_col_index]
         # df_input = df_input.dropna()
-        print(df_input)
+        # print(df_input)
 
         # change unit title
         unit_list = df_input.columns.tolist()
         unit_list[0] = 'type'
-        print(unit_list)
+        # print(unit_list)
         df_input.columns = unit_list
 
 
-        print('query')
+        # print('query')
         df_input = df_input.query("type in ['M 100%', '抗張力 ＭＰａ', '破断伸び％', '０秒']")
         df_input = df_input.iloc[:,1:]
-        print(df_input)
+        # print(df_input)
 
         # condition
         condition = [sheet]*4
@@ -159,6 +159,7 @@ class HeatResist:
         df_input.insert(0, 'method', method)
 
 
+        # print(df_input)
         return df_input
 
 

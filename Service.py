@@ -47,15 +47,37 @@ def data_dir(target: str) -> str:
     return desktop + rf'\{target} Data'
 
 
+def file_name_without_target(file_path: str, target: str) -> str:
+    result_name = ""
+    file_name = os.path.splitext(os.path.basename(file_path))[0]
+    for text in file_name.split():
+        if target not in text:
+            result_name += text + " "
+    if result_name == "":
+        result_name = "none"
+    return result_name
+
+
+def file_name_without_target_and_expname(file_path: str, target: str, ex_name: str):
+    condition_name = ""
+    file_name = os.path.splitext(os.path.basename(file_path))[0]
+    for text in file_name.split():
+        if target not in text and ex_name not in text:
+            condition_name += text + " "
+    if condition_name == "":
+        condition_name = "none"
+    return condition_name
+
+
 def save_to_data_excel(file_data: str, df_input):
     """
     save df to data file as merged df
     """
     df = pd.read_excel(file_data, index_col=0)
-    print(df)
+    # print(df)
 
     df_merge = pd.concat([df, df_input], sort=False)
-    print(df_merge)
+    # print(df_merge)
 
     df_merge.reset_index(inplace=True, drop=True)
 
@@ -64,9 +86,7 @@ def save_to_data_excel(file_data: str, df_input):
     print(f'saved data file in {file_data}')
 
 
-
-
-rakuraku_hose ="""
+rakuraku_hose = """
 ██╗░░██╗███████╗██╗░░░░░██╗░░░░░░█████╗░  ░██╗░░░░░░░██╗░█████╗░██████╗░██╗░░░░░██████╗░
 ██║░░██║██╔════╝██║░░░░░██║░░░░░██╔══██╗  ░██║░░██╗░░██║██╔══██╗██╔══██╗██║░░░░░██╔══██╗
 ███████║█████╗░░██║░░░░░██║░░░░░██║░░██║  ░╚██╗████╗██╔╝██║░░██║██████╔╝██║░░░░░██║░░██║
