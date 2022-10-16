@@ -50,10 +50,10 @@ class Deruta:
         new_col[8] = 'condition'
         new_col[9] = 'condition_time'
         df.columns = new_col
-        print(df)
+        # print(df)
 
         df = df.iloc[:, 2:]
-        print(df)
+        # print(df)
 
         # count number of target
         target_list = df['配合番号'].values.tolist()
@@ -74,9 +74,9 @@ class Deruta:
         # generate condition list
         conditions_list_index = df.query(
             "liquid_index in ['試験液']").index.to_list()
-        print(conditions_list_index)
-        print(df.loc[:,'condition_time'])
-        print(df.loc[:,'condition'])
+        # print(conditions_list_index)
+        # print(df.loc[:,'condition_time'])
+        # print(df.loc[:,'condition'])
 
         condition_list = []
         for i in conditions_list_index:
@@ -89,8 +89,8 @@ class Deruta:
             df_all = pd.concat([df_all, self.ReadDataBlock(
                 condition_list[i], conditions_list_index[i], len(target_list))])
         # df_all.iloc[:,4:] = df_all.iloc[:,4:].round(0)
-        print(df_all.iloc[:,4:].round(1))
-        print(df_all)
+        # print(df_all.iloc[:,4:].round(1))
+        # print(df_all)
 
         self.writedata(df_all)
 
@@ -108,14 +108,14 @@ class Deruta:
             if str(index_temp[i]) != 'nan' and str(index_temp[i-1]) == 'nan' and str(index_temp[i+1]) == 'nan':
                 index_temp[i-1] = index_temp[i]
                 index_temp[i+1] = index_temp[i]
-        print(index_temp)
+        # print(index_temp)
 
         df.index = index_temp
 
         # remove nan index
         df = df.query("index == index")
         index_temp = df.index.to_list()
-        print(df)
+        # print(df)
 
         index_target_temp = []
         for value in index_temp:
@@ -123,23 +123,23 @@ class Deruta:
             index_target_temp.append(
                 Service.target_number(target_inddex, self.target))
 
-        print(index_target_temp)
+        # print(index_target_temp)
 
         df.index = index_target_temp
-        print(df)
+        # print(df)
 
         # change col titles
         print('change col titles')
         titles_temp = df.columns.values.tolist()
         titles_temp[2] = 'mean'
         df.columns = titles_temp
-        print(df)
+        # print(df)
 
         df = df.query("mean in ['平均値']")
-        print(df)
+        # print(df)
 
         df = df.loc[:, ['△Ｖ']]
-        print(df)
+        # print(df)
 
         df = df.transpose()
 
@@ -156,7 +156,7 @@ class Deruta:
 
         df.reset_index(inplace=True, drop=True)
 
-        print(df.iloc[:,4:].round(1))
+        # print(df.iloc[:,4:].round(1))
         print(df)
 
         return df

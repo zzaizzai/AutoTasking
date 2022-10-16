@@ -112,7 +112,7 @@ class OilTension:
         unit = ['MPa', 'MPa', '%','HA']
         type_list = ['100%M', 'TS', 'EB', 'HA(0s)']
         condition = [sheet]*4
-        method =['oil']*4
+        method =[Service.file_name_without_target(self.file_now, self.target)]*4
 
         df_data.insert(0,'unit',unit)
         df_data.insert(0,'type', type_list)

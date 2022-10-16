@@ -210,9 +210,9 @@ class Rheometer:
         unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min']
         type_list = ['MH', 'ML', 't10', 't50', 't90', 'CR']
         # condition = [Service.file_name_without_target_and_expname(self.file_xlsx, self.target, self.exp_name)] * 6
-        condition = [self.temperature] * 6
+        condition = [self.temperature] * len(df_input)
         # something is needed in condition.....
-        method_list = [Service.file_name_without_target(self.file_xlsx, self.target)] * 6
+        method_list = [Service.file_name_without_target(self.file_xlsx, self.target)] * len(df_input)
 
         # for i, method in enumerate(method_list):
         #     method_list[i] = method.split()[0]

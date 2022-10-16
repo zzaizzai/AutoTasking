@@ -40,11 +40,12 @@ class Compression:
         df_all = pd.DataFrame()
 
         for sheet in sheet_list:
+            print(sheet)
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
 
-        print('all input data')
+        # print('all input data')
 
-        print(df_all)
+        # print(df_all)
 
         self.WriteData(df_all)
 
@@ -58,7 +59,7 @@ class Compression:
         df.columns = title
         df['配合番号'] = df['配合番号'].ffill()
 
-        print(df)
+        # print(df)
 
         target_list = df['配合番号'].to_list()
 
@@ -83,7 +84,7 @@ class Compression:
         df =  df.transpose()
         df.columns = df.loc['配合番号']
         df.drop(index=['配合番号'], inplace=True)
-        print(df)
+        # print(df)
 
         unit = ['%']
         # method = ['compression']

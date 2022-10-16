@@ -109,15 +109,13 @@ class Tension:
             unit = ['MPa', 'MPa', 'MPa' ,'MPa', '%']
             method = ['25%M', '50%M', '100%M','TS','EB']
             condition_name = df_part[0][1]
-            condition = [condition_name] * 5
-            name = ['auto tension'] * 5
+            condition = [condition_name] * len(df_part)
+            name = ['auto tension'] * len(df_part)
             df_part = df_part.loc[[2,3,4,5,6]]
             
             df_part.columns = target_titles
             # print(df_part)
-            
-
-
+        
             df_part.insert(loc=0, column='unit', value=unit)
             df_part.insert(loc=0, column='type', value=method)
             df_part.insert(loc=0, column='condition', value=condition)
@@ -135,8 +133,6 @@ class Tension:
 
         # print(df_all)
         print('merge done')
-
-
 
     def WriteData(self, df_input):
         print('writing data...')

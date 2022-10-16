@@ -64,7 +64,7 @@ if __name__ == '__main__':
     
 
     print(f'{Color.BLUE}========================================================================================={Color.RESET}')
-    print('fixed 10/14 layout')
+    print('fixed 10/17 remove prints')
     print('python version: ' , platform.python_version())
     print('pandas version: '  , pd.__version__)
 

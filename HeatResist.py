@@ -152,9 +152,9 @@ class HeatResist:
         condition = [sheet]*4
         method = ['heat']*4
         unit = ['MPa','MPa','%','HA']
-        type = ['100%M','TS','EB','HA(0s)']
+        type_list = ['100%M','TS','EB','HA(0s)']
         df_input.insert(0, 'unit', unit)
-        df_input.insert(0, 'type', type)
+        df_input.insert(0, 'type', type_list)
         df_input.insert(0, 'condition', condition)
         df_input.insert(0, 'method', method)
 
