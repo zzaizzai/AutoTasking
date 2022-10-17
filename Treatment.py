@@ -20,7 +20,7 @@ class Treatment:
             return
 
         df = pd.read_excel(self.file, index_col=0)
-        print(df)
+        # print(df)
 
         titles = ['method', 'condition', 'type', 'unit']
 
@@ -29,7 +29,7 @@ class Treatment:
 
         df.columns = titles
 
-        print(df)
+        # print(df)
         df.to_excel(self.file, index=True, header=True, startcol=0)
         print(f'saved done {self.file}')
 
@@ -47,7 +47,7 @@ class Treatment:
         df = pd.read_excel(self.file, index_col=0)
         
 
-        print(df)
+        # print(df)
 
         print('df lengh: ', len(df))
 
@@ -58,6 +58,7 @@ class Treatment:
             pass
 
         ## round\
+        print('replace some strangers')
         df = df.replace('******', 0)
         # print('rounding')
 
@@ -74,12 +75,12 @@ class Treatment:
         df[(df['type'] == '3秒')] = df[(df['type'] == '3秒')].round(0)
         df[(df['type'] == 'HA(0s)')] = df[(df['type'] == 'HA(0s)')].round(0)
         df[(df['type'] == '⊿V')] = df[(df['type'] == '⊿V')].round(0)
-        print(df)
+        # print(df)
 
         ## drop angles of autotension
         # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
         # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
-        print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python'))
+        # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python'))
         index_drop = df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python').index
         df.drop(list(index_drop), inplace=True)
 
