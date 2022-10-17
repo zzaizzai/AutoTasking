@@ -109,8 +109,8 @@ class Tension:
             unit = ['MPa', 'MPa', 'MPa' ,'MPa', '%']
             method = ['25%M', '50%M', '100%M','TS','EB']
             condition_name = df_part[0][1]
-            condition = [condition_name] * len(df_part)
-            name = ['auto tension'] * len(df_part)
+            condition = [condition_name] * 5
+            name = ['auto tension'] * 5
             df_part = df_part.loc[[2,3,4,5,6]]
             
             df_part.columns = target_titles
