@@ -38,22 +38,22 @@ class Deruta:
 
         print(self.file_now)
 
-        df = pd.read_excel(self.file_now, sheet_name='1', index_col=0)
+        df = pd.read_excel(self.file_now, sheet_name='1', index_col=0, header=0)
         print(df)
         new_col = df.columns.to_list()
         print(df.columns.to_list())
-        new_col[2] = '配合番号'
-        new_col[3] = 'liquid_index'
-        new_col[4] = 'liquid'
+        new_col[1] = '配合番号'
+        new_col[2] = 'liquid_index'
+        new_col[3] = 'liquid'
         new_col[7] = 'condition_index'
-        new_col[8] = 'condition'
-        new_col[9] = 'condition_time'
+        new_col[7] = 'condition'
+        new_col[8] = 'condition_time'
         df.columns = new_col
 
         print('after rename of title')
         print(df)
 
-        df = df.iloc[:, 2:]
+        df = df.iloc[:, 1:]
         print(df)
 
         # count number of target
@@ -64,36 +64,41 @@ class Deruta:
         target_list_temp = []
         for i in range(len(target_list)):
             # print(target_list[i])
-            if str(target_list[i]).isdigit():
+            if not str(target_list[i]).isalpha() and str(target_list[i]) != 'nan':
+                # print(target_list[i])
                 target_list_temp.append(int(target_list[i]))
+        print('target temp',target_list_temp)
 
         target_list = target_list_temp
         target_list_set = set(target_list)
         target_list = list(target_list_set)
-        print(target_list)
+        print('target list',target_list)
 
         # generate condition list
         
         # print(df.query("配合番号 in ['試験液']"))
         # return
         conditions_list_index = []
-        print(df['配合番号'])
-        for i, value in enumerate(df['配合番号']):
+        print(df['liquid_index'])
+        for i, value in enumerate(df['liquid_index']):
             if value == "試験液":
-                conditions_list_index.append(i)
-        print(conditions_list_index)
+                conditions_list_index.append(int(i))
+        print('condition list index',conditions_list_index)
 
         # return
-        conditions_list_index = df.query("配合番号 in ['試験液']", engine='python').index.to_list()
-        print( 'condition list',conditions_list_index)
+        # conditions_list_index = df.query("配合番号 in ['試験液']", engine='python').index.to_list()
+        # print( 'condition list',conditions_list_index)
         # print(df.loc[:,'condition_time'])
         # print(df.loc[:,'condition'])
-
+        # print(df['liquid'][2])
+        # return
+        print('??')
         condition_list = []
-        for i in conditions_list_index:
-            condition_list.append(
-                str(df.loc[:, 'liquid'][i]) + " " + str(df.loc[:, 'condition'][i]) +"℃ x "+ str(df.loc[:, 'condition_time'][i]) + "H" )
-        print(condition_list)
+        for index_liquid in conditions_list_index:
+            print('index of liquid',index_liquid)
+            print(df.at['liquid',index_liquid])
+
+        print('condition_list',condition_list)
 
         df_all = pd.DataFrame()
         for i in range(len(condition_list)):
@@ -101,6 +106,7 @@ class Deruta:
                 condition_list[i], conditions_list_index[i], len(target_list))])
         # df_all.iloc[:,4:] = df_all.iloc[:,4:].round(0)
         # print(df_all.iloc[:,4:].round(1))
+        print('???')
         print(df_all)
 
         self.writedata(df_all)
