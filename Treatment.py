@@ -20,7 +20,7 @@ class Treatment:
             return
 
         df = pd.read_excel(self.file, index_col=0)
-        print(df)
+        # print(df)
 
         titles = ['method', 'condition', 'type', 'unit']
 
@@ -29,7 +29,7 @@ class Treatment:
 
         df.columns = titles
 
-        print(df)
+        # print(df)
         df.to_excel(self.file, index=True, header=True, startcol=0)
         print(f'saved done {self.file}')
 
@@ -47,7 +47,8 @@ class Treatment:
         df = pd.read_excel(self.file, index_col=0)
         
 
-        # print(df)
+        print(df)
+        print('before rounding')
 
         print('df lengh: ', len(df))
 
@@ -58,13 +59,14 @@ class Treatment:
             pass
 
         ## round\
+        print('replace some strangers')
         df = df.replace('******', 0)
         # print('rounding')
 
         df = df.astype('float', errors='ignore')
         
         df = Service.normal_round(df, 1)
-        print(df)
+        # print(df)
 
         print(Service.normal_round(df[(df['type'] == 'EB')], -2))
         print('rouding')
@@ -82,6 +84,7 @@ class Treatment:
         # print(df)
 
         print('rounding done')
+        print(df)
 
         ## drop angles of autotension
         # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))

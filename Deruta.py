@@ -1,4 +1,3 @@
-from operator import index
 import pandas as pd
 import Service
 import glob
@@ -40,7 +39,7 @@ class Deruta:
         print(self.file_now)
 
         df = pd.read_excel(self.file_now, sheet_name='1', index_col=0)
-
+        print(df)
         new_col = df.columns.to_list()
         print(df.columns.to_list())
         new_col[2] = '配合番号'
@@ -50,21 +49,23 @@ class Deruta:
         new_col[8] = 'condition'
         new_col[9] = 'condition_time'
         df.columns = new_col
-        # print(df)
+
+        print('after rename of title')
+        print(df)
 
         df = df.iloc[:, 2:]
-        # print(df)
+        print(df)
 
         # count number of target
         target_list = df['配合番号'].values.tolist()
-        print(target_list)
+        print('target list',target_list)
 
         # get targets
         target_list_temp = []
         for i in range(len(target_list)):
             # print(target_list[i])
-            if str(target_list[i]) != 'nan':
-                target_list_temp.append(target_list[i])
+            if str(target_list[i]).isdigit():
+                target_list_temp.append(int(target_list[i]))
 
         target_list = target_list_temp
         target_list_set = set(target_list)
@@ -72,9 +73,19 @@ class Deruta:
         print(target_list)
 
         # generate condition list
-        conditions_list_index = df.query(
-            "liquid_index in ['試験液']").index.to_list()
-        # print(conditions_list_index)
+        
+        # print(df.query("配合番号 in ['試験液']"))
+        # return
+        conditions_list_index = []
+        print(df['配合番号'])
+        for i, value in enumerate(df['配合番号']):
+            if value == "試験液":
+                conditions_list_index.append(i)
+        print(conditions_list_index)
+
+        # return
+        conditions_list_index = df.query("配合番号 in ['試験液']", engine='python').index.to_list()
+        print( 'condition list',conditions_list_index)
         # print(df.loc[:,'condition_time'])
         # print(df.loc[:,'condition'])
 
@@ -90,7 +101,7 @@ class Deruta:
                 condition_list[i], conditions_list_index[i], len(target_list))])
         # df_all.iloc[:,4:] = df_all.iloc[:,4:].round(0)
         # print(df_all.iloc[:,4:].round(1))
-        # print(df_all)
+        print(df_all)
 
         self.writedata(df_all)
 
@@ -172,7 +183,7 @@ class Deruta:
             print('no data file')
             return
         
-        Service.save_to_data_excel(self.file_data, df_input)
+        # Service.save_to_data_excel(self.file_data, df_input)
 def DoIt(target: str):
     ruta = Deruta(target)
     try:

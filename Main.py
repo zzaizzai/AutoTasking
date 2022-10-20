@@ -40,31 +40,23 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
 
 if __name__ == '__main__':
 
-    class Color:
-        YELLOW = '\033[33m'
-        RESET  = '\033[0m'
-        BLUE   = '\033[34m'
-        BG_BLUE     = '\033[44m'
-
     
-    
-    
-    print(f'{Color.BLUE}========================================================================================={Color.RESET}')
-    print(f'{Color.BLUE} Hello!! this is Auto Handling Data System made by K.J.  ver 0.2 \n ')
+    print(f'=========================================================================================')
+    print(f' Hello!! this is Auto Handling Data System made by K.J.  ver 0.2 \n ')
     display_time = time.localtime() 
-    print(f' Current time is {display_time.tm_year}/ {display_time.tm_mon}/ {display_time.tm_mday}   {display_time.tm_hour}:{display_time.tm_min}  \n')
+    print(f' Current time : {display_time.tm_year}/ {display_time.tm_mon}/ {display_time.tm_mday}   {display_time.tm_hour}:{display_time.tm_min}  \n')
     # for company
     target_dir_path = r'\\kfs03a\labo\9101-NVH_DATA\ホース'
     # target_dir_path = r'C:\Users\junsa\Desktop'
 
-    print(Service.rakuraku_hose)
+    # print(Service.rakuraku_hose)
 
     print(f' save_dir : {os.path.expanduser("~/Desktop")}')
-    print(f' path : {target_dir_path} {Color.RESET}')
+    print(f' path : {target_dir_path}')
     
 
-    print(f'{Color.BLUE}========================================================================================={Color.RESET}')
-    print('fixed 10/17 remove prints')
+    print(f'=========================================================================================')
+    print('fixed 10/18 rounding issue')
     print('python version: ' , platform.python_version())
     print('pandas version: '  , pd.__version__)
 
