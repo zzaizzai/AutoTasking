@@ -47,7 +47,8 @@ class Treatment:
         df = pd.read_excel(self.file, index_col=0)
         
 
-        # print(df)
+        print(df)
+        print('before rounding')
 
         print('df lengh: ', len(df))
 
@@ -64,18 +65,26 @@ class Treatment:
 
         df = df.astype('float', errors='ignore')
         
-        df = df.round(1)
-        print(df)
-
-        print(df[(df['type'] == 'elongation')])
-        df[(df['type'] == 'elongation')] = df[(df['type'] == 'elongation')].round(-1)
-        df[(df['type'] == 'EB')] = df[(df['type'] == 'EB')].round(-1)
-        df[(df['type'] == '破断伸び％')] = df[(df['type'] == '破断伸び％')].round(-1)
-        df[(df['type'] == '０秒')] = df[(df['type'] == '０秒')].round(0)
-        df[(df['type'] == '3秒')] = df[(df['type'] == '3秒')].round(0)
-        df[(df['type'] == 'HA(0s)')] = df[(df['type'] == 'HA(0s)')].round(0)
-        df[(df['type'] == '⊿V')] = df[(df['type'] == '⊿V')].round(0)
+        df = Service.normal_round(df, 1)
         # print(df)
+
+        print(Service.normal_round(df[(df['type'] == 'EB')], -2))
+        print('rouding')
+        # return
+        # # return
+        df[(df['type'] == '破断伸び％')] = Service.normal_round(df[(df['type'] == '破断伸び％')], -1)
+        df[(df['type'] == 'EB')] = Service.normal_round(df[(df['type'] == 'EB')], -1)
+        df[(df['type'] == 'elongation')] = Service.normal_round(df[(df['type'] == 'elongation')], -1)
+
+
+        df[(df['type'] == '０秒')] = Service.normal_round(df[(df['type'] == '０秒')],0)
+        df[(df['type'] == '3秒')] = Service.normal_round(df[(df['type'] == '3秒')],0)
+        df[(df['type'] == 'HA(0s)')]= Service.normal_round(df[(df['type'] == 'HA(0s)')],0)
+        df[(df['type'] == '⊿V')]= Service.normal_round(df[(df['type'] == '⊿V')],0)
+        # print(df)
+
+        print('rounding done')
+        print(df)
 
         ## drop angles of autotension
         # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
@@ -84,7 +93,7 @@ class Treatment:
         index_drop = df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python').index
         df.drop(list(index_drop), inplace=True)
 
-        print(df)
+        # print(df)
 
 
 
