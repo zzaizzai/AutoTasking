@@ -64,7 +64,9 @@ class OilTension:
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=1)
         # print(df)
         # print(df.iloc[:,[1,9,10, 11]])
-
+        # df = df.iloc[:80,:]
+        # df = df.iloc[:80,:]
+        # print(df)
         df_data = df.iloc[:,[8,9,10, 11]]
 
         # print(df_data[['JIS A']])
@@ -98,14 +100,15 @@ class OilTension:
         
         # find mean value
         mean_col_index = []
-        for i in range(3, len(title_new_list)):
+        for i in range(3, len(title_new_list) -1):
             # print(title_new_list[i])
+            # print
             if title_new_list[i] != title_new_list[i-1]:
                 # print('it is after mena data')
                 mean_col_index.append(i-1)
-        # print('mean_col_index', mean_col_index)
+        print('mean_col_index', mean_col_index)
 
-        
+        print(df_data)
         # print(df_data.iloc[:,mean_col_index])
         df_data = df_data.iloc[:,mean_col_index]
 
