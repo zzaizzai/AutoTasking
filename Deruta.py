@@ -96,7 +96,7 @@ class Deruta:
         condition_list = []
         for index_liquid in conditions_list_index:
             print('index of liquid',index_liquid)
-            condition_name = str(df.iat[index_liquid,3]) + str(df.iat[index_liquid,7]) + '  ℃×' + str(df.iat[index_liquid,8])
+            condition_name = str(df.iat[index_liquid,3]) + ' '+ str(df.iat[index_liquid,7]) + '℃×' + str(df.iat[index_liquid,8])
             condition_list.append(condition_name)
         print('condition list' ,condition_list)
 
@@ -161,8 +161,8 @@ class Deruta:
         df = df.transpose()
 
         condition = [condition_of_exp]
-        method = ['oil']
-        # method = [Service.file_name_without_target(self.file_now, self.target)]
+        # method = ['oil']
+        method = [Service.file_name_without_target(self.file_now, self.target)]
         unit = ['%']
         type_list = ['⊿V']
 
