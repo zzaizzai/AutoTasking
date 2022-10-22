@@ -53,8 +53,8 @@ class Deruta:
         print('after rename of title')
         print(df)
 
-        df = df.iloc[:, 1:]
-        print(df)
+        # df = df.iloc[:, 1:]
+        # print(df)
 
         # count number of target
         target_list = df['配合番号'].values.tolist()
@@ -96,9 +96,9 @@ class Deruta:
         condition_list = []
         for index_liquid in conditions_list_index:
             print('index of liquid',index_liquid)
-            print(df.at['liquid',index_liquid])
-
-        print('condition_list',condition_list)
+            condition_name = str(df.iat[index_liquid,3]) + ' '+ str(df.iat[index_liquid,7]) + '℃×' + str(df.iat[index_liquid,8])
+            condition_list.append(condition_name)
+        print('condition list' ,condition_list)
 
         df_all = pd.DataFrame()
         for i in range(len(condition_list)):
@@ -161,8 +161,8 @@ class Deruta:
         df = df.transpose()
 
         condition = [condition_of_exp]
-        method = ['oil']
-        # method = [Service.file_name_without_target(self.file_now, self.target)]
+        # method = ['oil']
+        method = [Service.file_name_without_target(self.file_now, self.target)]
         unit = ['%']
         type_list = ['⊿V']
 
@@ -189,7 +189,7 @@ class Deruta:
             print('no data file')
             return
         
-        # Service.save_to_data_excel(self.file_data, df_input)
+        Service.save_to_data_excel(self.file_data, df_input)
 def DoIt(target: str):
     ruta = Deruta(target)
     try:
