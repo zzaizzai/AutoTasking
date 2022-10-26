@@ -58,30 +58,29 @@ class Treatment:
         else:
             pass
 
-        ## round\
-        print('replace some strangers')
-        df = df.replace('******', 0)
-        # print('rounding')
+        ## round
+        # df = df.replace('******', 0)
+        # print('replaced ****** to 0')
 
-        df = df.astype('float', errors='ignore')
+        # df = df.astype('float', errors='ignore')
         
-        df = Service.normal_round(df, 1)
+        # df = Service.normal_round(df, 1)
+
+        # df[(df['type'] == '破断伸び％')] = Service.normal_round(df[(df['type'] == '破断伸び％')], -1)
+        # df[(df['type'] == 'EB')] = Service.normal_round(df[(df['type'] == 'EB')], -1)
+        # df[(df['type'] == 'elongation')] = Service.normal_round(df[(df['type'] == 'elongation')], -1)
+
+        df = Service.round_by_check_eachone(df, 1, ['T1','MH','t10','t50','t90','CR','25%M','50%M','100%M','TS'])
+        df = Service.round_by_check_eachone(df, 0, ['０秒','3秒','HA(0s)','⊿V'])
+        df = Service.round_by_check_eachone(df, -1, ['elongation','EB','破断伸び％'])
+
+        # df[(df['type'] == '０秒')] = Service.normal_round(df[(df['type'] == '０秒')],0)
+        # df[(df['type'] == '3秒')] = Service.normal_round(df[(df['type'] == '3秒')],0)
+        # df[(df['type'] == 'HA(0s)')]= Service.normal_round(df[(df['type'] == 'HA(0s)')],0)
+        # df[(df['type'] == '⊿V')]= Service.normal_round(df[(df['type'] == '⊿V')],0)
         # print(df)
 
-        print(Service.normal_round(df[(df['type'] == 'EB')], -2))
-        print('rouding')
-        # return
-        # # return
-        df[(df['type'] == '破断伸び％')] = Service.normal_round(df[(df['type'] == '破断伸び％')], -1)
-        df[(df['type'] == 'EB')] = Service.normal_round(df[(df['type'] == 'EB')], -1)
-        df[(df['type'] == 'elongation')] = Service.normal_round(df[(df['type'] == 'elongation')], -1)
-
-
-        df[(df['type'] == '０秒')] = Service.normal_round(df[(df['type'] == '０秒')],0)
-        df[(df['type'] == '3秒')] = Service.normal_round(df[(df['type'] == '3秒')],0)
-        df[(df['type'] == 'HA(0s)')]= Service.normal_round(df[(df['type'] == 'HA(0s)')],0)
-        df[(df['type'] == '⊿V')]= Service.normal_round(df[(df['type'] == '⊿V')],0)
-        # print(df)
+        
 
         print('rounding done')
         print(df)
@@ -103,13 +102,13 @@ class Treatment:
 
 
     def CellWidth(self):
-        print('cell width...')
+        print('fixing cell width')
         
         wb = openpyxl.load_workbook(self.file)
         ws = wb.worksheets[0]
 
-        ws.column_dimensions['B'].width = 20
-        ws.column_dimensions['C'].width = 15
+        ws.column_dimensions['B'].width = 30
+        ws.column_dimensions['C'].width = 20
 
         wb.save(self.file)
 
