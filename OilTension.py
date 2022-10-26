@@ -68,6 +68,16 @@ class OilTension:
         # df = df.iloc[:80,:]
         # print(df)
         df_data = df.iloc[:,[8,9,10, 11]]
+        print('datadata', sheet)
+        print(df_data)
+
+        list_index = df_data.index.to_list()
+        if str(list_index[1]) == 'nan':
+            list_index[1] = str(self.target)
+        
+        df_data.index = list_index    
+        print(df_data)
+        
 
         # print(df_data[['JIS A']])
 
@@ -109,6 +119,7 @@ class OilTension:
         print('mean_col_index', mean_col_index)
 
         print(df_data)
+        return
         # print(df_data.iloc[:,mean_col_index])
         df_data = df_data.iloc[:,mean_col_index]
 
