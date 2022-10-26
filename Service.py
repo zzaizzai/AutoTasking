@@ -60,13 +60,11 @@ def file_name_without_target(file_path: str, target: str) -> str:
 def round_by_check_eachone(df_round ,demical:int, list_of_round:list):
     for i in range(len(df_round)):
         for j in range(len(df_round.columns)):
-            # print(df_round.iat[3,j] , df_round.iat[i,j])
-            # print(df_round.index.to_list()[i], df_round.columns.to_list()[j])
             if type(df_round.iat[i,j]) == float or type(df_round.iat[i,j]) == int:
                 if df_round.iat[i,2] in list_of_round:
-                    df_round.iat[i,j] = round(df_round.iat[i,j] + 0.001, demical)
+                    df_round.iat[i,j] = round(df_round.iat[i,j] + 0.00001, demical)
                 else:
-                    df_round.iat[i,j] = round(df_round.iat[i,j] + 0.001, 2)
+                    df_round.iat[i,j] = round(df_round.iat[i,j] + 0.00001, 2)
     return df_round
 
 def file_name_without_target_and_expname(file_path: str, target: str, ex_name: str):
