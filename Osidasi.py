@@ -40,17 +40,17 @@ class Osidasi:
 
         
         df = pd.read_excel(self.file_now, header=16, index_col=1)
-        print(df)
-        print(df.index.to_list())
+        # print(df)
+        # print(df.index.to_list())
 
         target_list = df.index.to_list()
-        print(len(target_list))
+        # print(len(target_list))
         index_target_init = []
         for i, value in enumerate(target_list):
-            print(i , value)
+            # print(i , value)
             if str(value) != 'nan' and len(value) == 6:
                 index_target_init.append(i)
-        print(index_target_init)
+        # print(index_target_init)
 
         for index in index_target_init:
             target_list[index-1] = target_list[index]
@@ -58,24 +58,24 @@ class Osidasi:
             target_list[index+2] = target_list[index]
 
         df.index = target_list
-        print(df)
+        # print(df)
 
         target_list_numbers = Service.remove_dufulicant(target_list)
 
         # without nan
         number_of_target:int = len(target_list_numbers) - 1
-        print('number_of_target',number_of_target)
+        # print('number_of_target',number_of_target)
 
         df = df.iloc[:number_of_target*4+1,:]
-        print(df)
+        # print(df)
 
 
 
-        print(df.columns.to_list())
+        # print(df.columns.to_list())
         titles = df.columns.to_list()
         titles[0] = 'mean'
         df.columns = titles
-        print(len(df))
+        # print(len(df))
         
         # mean data 
         # print(target_list)
@@ -94,62 +94,62 @@ class Osidasi:
                     index_tempa.append(i-3)
                 if count_for_mean > number_of_target*4:
                     break
-        print('index_mean',index_mean)
-        print('index_eval',index_eval)
-        print('index_tempa',index_tempa)
+        # print('index_mean',index_mean)
+        # print('index_eval',index_eval)
+        # print('index_tempa',index_tempa)
 
         # get only mean data
         df_mean = df.iloc[index_mean,:]
         df_mean = df_mean.loc[:,['L','W','Swell','Swell.1']]
-        print(df_mean)
+        # print(df_mean)
 
 
         # get evaluations data
         df_eval = df.iloc[index_eval,:]
         df_eval = df_eval.loc[:,['H.1','Sc','R.F']]
-        print(df_eval)
+        # print(df_eval)
 
 
         # get temp data
         df_tempa = df.iloc[index_tempa,:]
         df_tempa = df_tempa.loc[:,['D','R']]
-        print(df_tempa)
+        # print(df_tempa)
 
         # 
         df_sulf = df.iloc[index_mean,:]
         df_sulf = df_sulf.loc[:,['加硫前','加硫後']]
-        print(df_sulf)
+        # print(df_sulf)
 
-        print(df.loc[:,'C.H'].to_list()[1:])
+        # print(df.loc[:,'C.H'].to_list()[1:])
         values_pressure_CH = df.loc[:,'C.H'].to_list()[1:]
         values_pressure_H = df.loc[:,'H'].to_list()[1:]
 
         count_pressure = 0
         list_pressure_H = []
         for i, value in enumerate(values_pressure_H):
-            print(i, value)
+            # print(i, value)
             if str(value) != 'nan':
                 count_pressure += 1
                 if count_pressure % 2 == 0:
                     list_pressure_H.append(str(values_pressure_H[i-1]) + ' → ' +  str(values_pressure_H[i]))
-        print(list_pressure_H)
+        # print(list_pressure_H)
 
         count_pressure_CH = 0
         list_pressure_CH = []
         for i, value in enumerate(values_pressure_CH):
-            print(i, value)
+            # print(i, value)
             if str(value) != 'nan':
                 count_pressure_CH += 1
                 if count_pressure_CH % 2 == 0:
                     list_pressure_CH.append(str(values_pressure_CH[i-1]) + ' → ' +  str(values_pressure_CH[i]))
-        print(list_pressure_CH)
+        # print(list_pressure_CH)
                 
         df_pressrue = df.iloc[index_eval,:]
         df_pressrue = df_pressrue.loc[:,['H','C.H']]
 
         df_pressrue.loc[:,'H'] = list_pressure_H
         df_pressrue.loc[:,'C.H'] = list_pressure_CH
-        print(df_pressrue)
+        # print(df_pressrue)
 
         df_all = pd.DataFrame()
 
@@ -165,15 +165,14 @@ class Osidasi:
         df_all = pd.concat([df_all, df_mean])
         df_all = pd.concat([df_all, df_sulf])
 
-        print(df_all.loc[['L','W','Swell.1'],:])
+        # print(df_all.loc[['L','W','Swell.1'],:])
 
-        print(df_all)
+        # print(df_all)
 
         self.Treat(df_all)
 
     def Treat(self, df_all: pd.DataFrame):
-        print()
-        print()
+
         condition = ['none']*len(df_all)
         method = ['osidashi(beta)']*len(df_all)
         unit = ['ss']*len(df_all)

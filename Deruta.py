@@ -39,9 +39,9 @@ class Deruta:
         print(self.file_now)
 
         df = pd.read_excel(self.file_now, sheet_name='1', index_col=0, header=0)
-        print(df)
+        # print(df)
         new_col = df.columns.to_list()
-        print(df.columns.to_list())
+        # print(df.columns.to_list())
         new_col[1] = '配合番号'
         new_col[2] = 'liquid_index'
         new_col[3] = 'liquid'
@@ -51,7 +51,7 @@ class Deruta:
         df.columns = new_col
 
         print('after rename of title')
-        print(df)
+        # print(df)
 
         # df = df.iloc[:, 1:]
         # print(df)
@@ -95,7 +95,7 @@ class Deruta:
         print('??')
         condition_list = []
         for index_liquid in conditions_list_index:
-            print('index of liquid',index_liquid)
+            # print('index of liquid',index_liquid)
             condition_name = str(df.iat[index_liquid,3]) + ' '+ str(df.iat[index_liquid,7]) + '℃×' + str(df.iat[index_liquid,8])
             condition_list.append(condition_name)
         print('condition list' ,condition_list)
@@ -119,7 +119,7 @@ class Deruta:
         df = pd.read_excel(self.file_now, sheet_name='1',
                            header=conditions_list_index+4, index_col=2)
         df = df.iloc[:3*numbers_target, :]
-        print(df)
+        # print(df)
         index_temp = df.index.to_list()
         for i in range(1, len(index_temp) - 1):
             if str(index_temp[i]) != 'nan' and str(index_temp[i-1]) == 'nan' and str(index_temp[i+1]) == 'nan':

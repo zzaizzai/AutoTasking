@@ -43,12 +43,13 @@ class Treatment:
             print('no data file')
             return
 
-        print('round data')
+        print('rounding data')
         df = pd.read_excel(self.file, index_col=0)
         
 
-        print(df)
+        
         print('before rounding')
+        print(df)
 
         print('df lengh: ', len(df))
 
@@ -71,7 +72,7 @@ class Treatment:
         # df[(df['type'] == 'elongation')] = Service.normal_round(df[(df['type'] == 'elongation')], -1)
 
         df = Service.round_by_check_eachone(df, 1, ['T1','MH','t10','t50','t90','CR','25%M','50%M','100%M','TS'])
-        df = Service.round_by_check_eachone(df, 0, ['０秒','3秒','HA(0s)','⊿V'])
+        df = Service.round_by_check_eachone(df, 0, ['０秒','3秒','HA(0s)','HA(3s)','⊿V'])
         df = Service.round_by_check_eachone(df, -1, ['elongation','EB','破断伸び％'])
 
         # df[(df['type'] == '０秒')] = Service.normal_round(df[(df['type'] == '０秒')],0)

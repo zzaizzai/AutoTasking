@@ -27,7 +27,7 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
     AutoTension.DoIt(target)
     Hardness.DoIt(target)
     HeatResist.DoIt(target)
-    # OilTension.DoIt(target)
+    OilTension.DoIt(target)
     Deruta.DoIt(target)
     Compression.DoIt(target)
 
@@ -59,8 +59,8 @@ if __name__ == '__main__':
     
 
     print(f'=========================================================================================')
-    print('oil tension stopped for bug issue and added osidasi(beta)')
-    print('レオメーターのMHが0位まで四捨五入されてしまうの確認')
+    print('10/24 Oil tension fixed, added Heat Resist with 3s hardness.')
+    print('some rounding issure.')
     print('python version: ' , platform.python_version())
     print('pandas version: '  , pd.__version__)
 
