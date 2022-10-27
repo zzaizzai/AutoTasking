@@ -125,7 +125,9 @@ class Tension:
             df_part.reset_index(inplace= True, drop= True)
 
             print(df_part)
-            
+            # df_part = df_part.duplicated(keep='last', axis=1)
+            df_part = df_part.loc[:,~df_part.columns.duplicated(keep = "last")]
+            print(df_part)
             # return
             self.WriteData(df_part)
 
@@ -138,6 +140,7 @@ class Tension:
         print('writing data...')
 
         
+
         df = pd.read_excel(self.file_data, index_col=0)
 
         df_merge = pd.concat([df, df_input],axis=0, sort=False)
@@ -146,7 +149,7 @@ class Tension:
 
         df_merge.reset_index(inplace= True, drop= True)
 
-        df_merge.to_excel(self.file_data, index=True, header=True, startcol=0)
+        df_merge.to_excel(self.file_data, header=True, startcol=0)
 
         # print(df_merge)
         print(f'saved data file in {self.file_data}')

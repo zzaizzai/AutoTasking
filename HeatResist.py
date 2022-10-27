@@ -110,17 +110,26 @@ class HeatResist:
         #  0s 
         zero_col_index = [0]
         row_zero = df.loc[[12]].values.tolist()[0]
-        # print(row_zero)
-        
+        row_three = df.loc[[13]].values.tolist()[0]
+        print(row_zero)
+        print(row_three)
+
         for i in range(10):
             print(row_zero[1+ i*4])
             if str(row_zero[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_zero) :
                 row_zero[1+i*4 + 3] = row_zero[1+i*4] 
             else:
                 break
+        for i in range(10):
+            print(row_three[1+ i*4])
+            if str(row_three[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_three) :
+                row_three[1+i*4 + 3] = row_three[1+i*4] 
+            else:
+                break
             
         # print(row_zero)
         df.loc[[12]] = row_zero
+        df.loc[[13]] = row_three
         # print(df)
 
 
@@ -144,15 +153,19 @@ class HeatResist:
 
 
         # print('query')
-        df_input = df_input.query("type in ['M 100%', '抗張力 ＭＰａ', '破断伸び％', '０秒']")
+        print('before query')
+        print(df_input)
+        df_input = df_input.query("type in ['M 100%', '抗張力 ＭＰａ', '破断伸び％', '０秒','3秒']")
         df_input = df_input.iloc[:,1:]
-        # print(df_input)
+        print('after query')
+        print(df_input)
+
 
         # condition
-        condition = [sheet]*4
-        method = ['heat']*4
-        unit = ['MPa','MPa','%','HA']
-        type_list = ['100%M','TS','EB','HA(0s)']
+        condition = [sheet]*len(df_input)
+        method = ['heat']*len(df_input)
+        unit = ['MPa','MPa','%','HA','HA']
+        type_list = ['100%M','TS','EB','HA(0s)','HA(3s)']
         df_input.insert(0, 'unit', unit)
         df_input.insert(0, 'type', type_list)
         df_input.insert(0, 'condition', condition)

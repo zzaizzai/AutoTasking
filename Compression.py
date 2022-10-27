@@ -40,7 +40,7 @@ class Compression:
         df_all = pd.DataFrame()
 
         for sheet in sheet_list:
-            print(sheet)
+            # print(sheet)
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
 
         # print('all input data')
@@ -52,7 +52,7 @@ class Compression:
     def ReadDataSheet(self, sheet: str):
         print(sheet)
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9)
-        print(df)
+        # print(df)
         df = df.iloc[:,[1,7]]
 
         title = ['配合番号','歪率']
