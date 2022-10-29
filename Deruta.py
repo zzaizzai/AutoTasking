@@ -61,9 +61,6 @@ class Deruta:
         print('after rename of title')
         # print(df)
 
-        # df = df.iloc[:, 1:]
-        # print(df)
-
         # count number of target
         target_list = df['配合番号'].values.tolist()
         print('target list', target_list)
@@ -84,7 +81,6 @@ class Deruta:
 
         # generate condition list
 
-        # print(df.query("配合番号 in ['試験液']"))
         # return
         conditions_list_index = []
         print(df['liquid_index'])
@@ -93,13 +89,6 @@ class Deruta:
                 conditions_list_index.append(int(i))
         print('condition list index', conditions_list_index)
 
-        # return
-        # conditions_list_index = df.query("配合番号 in ['試験液']", engine='python').index.to_list()
-        # print( 'condition list',conditions_list_index)
-        # print(df.loc[:,'condition_time'])
-        # print(df.loc[:,'condition'])
-        # print(df['liquid'][2])
-        # return
         print('??')
         condition_list = []
         for index_liquid in conditions_list_index:
@@ -183,7 +172,8 @@ class Deruta:
         df.reset_index(inplace=True, drop=True)
 
         # print(df.iloc[:,4:].round(1))
-        print(df)
+        if self.test_mode:
+            print(df)
 
         return df
 
@@ -198,7 +188,7 @@ class Deruta:
             print('no data file')
             return
 
-        Service.save_to_data_excel(self.file_data, df_input)
+        Service.save_to_data_excel(self.file_data, df_input, self.exp_name)
 
 
 def DoIt(target: str, test_mode=False):
@@ -214,4 +204,4 @@ def DoIt(target: str, test_mode=False):
 if __name__ == '__main__':
     target = input('target: ')
 
-    DoIt(target)
+    DoIt(target, test_mode=True)

@@ -70,8 +70,10 @@ class Tension:
         remove_row_list = []
 
         # get range like df
-        print('all df')
-        print(df_all)
+        if self.test_mode:
+            print('all df')
+            print(df_all)
+
         for i, value in enumerate(df_all[0]):
             # print(int(value[3:]))
             if int(value[3:]) < int(self.target[3:]):
@@ -196,7 +198,8 @@ class Tension:
         # select titles
         df_data = df_data[[1, 2, 9, 10, 11, 14, 15]]
 
-        print(df_data)
+        if self.test_mode:
+            print(df_data)
 
         # return
         return df_data

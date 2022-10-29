@@ -8,6 +8,11 @@ from multiprocessing.dummy import Pool as ThreadPool
 
 class hippari:
 
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
+
     def __init__(self, target: str, file_auto_list: list, user_family_name: str):
         self.file_auto_list = file_auto_list
         self.target = target
@@ -110,12 +115,13 @@ class hippari:
         print(f'copy done {copy_count} files with {copy_count_failed} failed')
 
 
-def DoIt(target: str, user_family_name: str):
+def DoIt(target: str, user_family_name: str, test_mode = False):
 
     file_auto_list = [
         r'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\全自動引張り試験共通リスト2022年.xlsx']
 
     hip = hippari(target, file_auto_list, user_family_name)
+    hip.TestMode(mode=test_mode)
 
     try:
         hip.CheckDeaktopPath()
@@ -131,4 +137,4 @@ if __name__ == '__main__':
     # user_family_name = '小暮'
     # target = 'FJX001'
 
-    DoIt(target, user_family_name)
+    DoIt(target, user_family_name, test_mode=True)

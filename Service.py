@@ -92,7 +92,7 @@ def remove_dufulicant(duful_list: list):
     return list(target_list_set)
 
 
-def save_to_data_excel(file_data: str, df_input):
+def save_to_data_excel(file_data: str, df_input, file_name:str):
     """
     save df to data file as merged df
     """
@@ -104,9 +104,11 @@ def save_to_data_excel(file_data: str, df_input):
 
     df_merge.reset_index(inplace=True, drop=True)
 
-    df_merge.to_excel(file_data, index=True, header=True, startcol=0)
-
-    print(f'saved data file in {file_data}')
+    try:
+        df_merge.to_excel(file_data, index=True, header=True, startcol=0)
+        print(f'{file_name} saved data file in {file_data}')
+    except Exception as e:
+        print(e)
 
 
 rakuraku_hose = """

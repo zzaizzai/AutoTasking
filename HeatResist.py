@@ -59,10 +59,6 @@ class HeatResist:
         for sheet in sheet_list:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
 
-        # print('all od input data')
-        # print('heat Resist Data')
-        # print(df_all)
-
         self.WriteData(df_all)
 
     def ReadDataSheet(self, sheet: str):
@@ -77,7 +73,6 @@ class HeatResist:
         # print(df)
 
         # title
-        # print(df.loc[[3]].values.tolist()[0])
         col_index = []
         for i, value in enumerate(df.loc[[4]].values.tolist()[0]):
             # print(i, value)
@@ -85,8 +80,6 @@ class HeatResist:
                 # print('not nan')
                 col_index.append(i)
 
-        # print(col_index)
-        # print(df.iloc[:,col_index])
 
         df = df.iloc[:, col_index]
 
@@ -133,13 +126,6 @@ class HeatResist:
         df.loc[[13]] = row_three
         # print(df)
 
-        # for i, value in enumerate(row_zero):
-        #     # print(value)
-        #     if str(value) != 'nan' and str(value) != '０秒' and i < len(row_zero) -3:
-        #         print('it is zero hardness', i)
-        #         # row_zero[i+ 3] = row_zero[i]
-
-        # print(mean_col_index)
 
         df_input = df.iloc[:, mean_col_index]
         # df_input = df_input.dropna()
@@ -151,9 +137,6 @@ class HeatResist:
         # print(unit_list)
         df_input.columns = unit_list
 
-        # print('query')
-        # print('before query')
-        # print(df_input)
         df_input = df_input.query(
             "type in ['M 100%', '抗張力 ＭＰａ', '破断伸び％', '０秒','3秒']")
         df_input = df_input.iloc[:, 1:]
@@ -186,7 +169,7 @@ class HeatResist:
             # or you can make a data file
             return
 
-        Service.save_to_data_excel(file_data, df_input)
+        Service.save_to_data_excel(file_data, df_input, self.exp_name)
 
 
 def DoIt(target: str, test_mode=False):

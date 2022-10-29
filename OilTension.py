@@ -83,13 +83,9 @@ class OilTension:
         df_data.index = list_index
         # print(df_data)
 
-        # print('index list')
-        # print(df.index.to_list())
 
         index_list = df_data.index.to_list()
         index_values = Service.remove_dufulicant(index_list)
-        # print('removed deful')
-        # print(index_values)
 
         number_target = len(index_values) - 1
 
@@ -143,15 +139,13 @@ class OilTension:
     def WriteData(self, df_input):
         print('writing data')
 
-        is_file = os.path.isfile(self.file_data)
-
-        if is_file:
+        if os.path.isfile(self.file_data):
             pass
         else:
             print('no data file')
             return
 
-        Service.save_to_data_excel(self.file_data, df_input)
+        Service.save_to_data_excel(self.file_data, df_input, self.exp_name)
 
 
 def DoIt(target: str, test_mode=False):

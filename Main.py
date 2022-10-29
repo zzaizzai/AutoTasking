@@ -19,15 +19,15 @@ import Osidasi
 
 def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, test_mode=False):
     CollectFiles.Check(user, target, target_dir_path)
-    CollectAutoTension.DoIt(target, user_family)
+    CollectAutoTension.DoIt(target, user_family, test_mode=test_mode)
     Muni.DoIt(target)
     Rheometer.DoIt(target)
-    AutoTension.DoIt(target)
-    Hardness.DoIt(target)
+    AutoTension.DoIt(target, test_mode=test_mode)
+    Hardness.DoIt(target, test_mode=test_mode)
     HeatResist.DoIt(target, test_mode=test_mode)
     OilTension.DoIt(target, test_mode=test_mode)
     Deruta.DoIt(target, test_mode=test_mode)
-    Compression.DoIt(target)
+    Compression.DoIt(target, test_mode=test_mode)
 
     Osidasi.DoIt(target, test_mode=test_mode)
 
@@ -75,6 +75,12 @@ if __name__ == '__main__':
             user_first = '準才'
             is_ok_family_name = True
             if_ok_first_name = True
+
+        elif user_family == 'qqq':
+            user_family = '小暮'
+            user_first = '準才'
+            is_ok_family_name = True
+            if_ok_first_name = True
             test_mode = True
             print('test mode on')
 
@@ -109,7 +115,10 @@ if __name__ == '__main__':
     else:
         pass
 
-    print(f'Hello {user}!')
+    if user == '小暮準才':
+        print('Hello my lord')
+    else:
+        print(f'Hello {user}!')
 
     while True:
         target = input(' what is your target (ex: ABC001) or say "bye" : ')

@@ -12,7 +12,7 @@ class Muuni:
         self.target = target
         self.path_xlsx = Service.data_dir(
             target) + rf'\{self.exp_name} {target}*.xlsx'
-        self.file_xlsx = ''
+        self.file_now = ''
         self.index_name = ''
 
     def FindFile(self):
@@ -27,16 +27,16 @@ class Muuni:
             print(f'found {len(file_list)} {self.exp_name} file(s) ')
 
             for file in file_list:
-                self.file_xlsx = file
+                self.file_now = file
                 self.ReadFile()
         else:
             print(f'No {self.exp_name}')
             return
 
     def ReadFile(self):
-        print('read file...', self.file_xlsx)
+        print('read file...', self.file_now)
 
-        df = pd.read_excel(self.file_xlsx, header=None)
+        df = pd.read_excel(self.file_now, header=None)
         # print(df)
         for i, value in enumerate(df[0]):
             if value == '特性値：':
@@ -70,18 +70,14 @@ class Muuni:
         # print(df_input)
 
         # insert unit, method.. else
-        file_name = os.path.splitext(os.path.basename(self.file_xlsx))[0]
+        file_name = os.path.splitext(os.path.basename(self.file_now))[0]
         print(file_name)
         unit = ['M', 'M', 'min']
         type_list = ['M1', 'Vm', 'T1']
         condition_list = [Service.file_name_without_target_and_expname(
-            self.file_xlsx, self.target, self.exp_name)]*len(df_input)
+            self.file_now, self.target, self.exp_name)]*len(df_input)
         method_list = [Service.file_name_without_target(
-            self.file_xlsx, self.target)]*3
-        # for i, method in enumerate(method_list):
-        #     print(method.split()[-1])
-        #     condition_list.append(method.split()[-1])
-        #     method_list[i] = method.split()[0][:4]
+            self.file_now, self.target)]*3
 
         # print(method_list)
         # print(condition_list)
@@ -111,7 +107,7 @@ class Muuni:
             # or you can make a data file
             return
 
-        Service.save_to_data_excel(file_data, df_input)
+        Service.save_to_data_excel(file_data, df_input, self.exp_name)
 
 
 def DoIt(target: str):

@@ -6,6 +6,11 @@ import glob
 
 class Hardness:
 
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
+
     def __init__(self, target):
 
         self.target = target
@@ -123,10 +128,6 @@ class Hardness:
         df_merge = pd.concat([df_data, df_input], sort=False)
         df_merge.reset_index(inplace=True, drop=True)
 
-        # print(df_merge)
-
-        # print(df_merge.query("condition.str.contains('NormalJIS') and type.str.contains('elongation')", engine='python' ).index.to_list())
-        # print(df_merge.index.to_list())
 
         df_merge.to_excel(file_data, index=True, header=True)
         # print(df_merge)
@@ -134,8 +135,9 @@ class Hardness:
         print(f'saved data file in {file_data}')
 
 
-def DoIt(target: str):
+def DoIt(target: str, test_mode = False):
     hado = Hardness(target)
+    hado.TestMode(mode=test_mode)
     try:
         hado.FindFile()
     except Exception as e:

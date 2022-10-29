@@ -44,8 +44,6 @@ class Osidasi:
         print('Read file')
 
         df = pd.read_excel(self.file_now, header=16, index_col=1)
-        # print(df)
-        # print(df.index.to_list())
 
         target_list = df.index.to_list()
         # print(len(target_list))
@@ -62,7 +60,6 @@ class Osidasi:
             target_list[index+2] = target_list[index]
 
         df.index = target_list
-        # print(df)
 
         target_list_numbers = Service.remove_dufulicant(target_list)
 
@@ -71,7 +68,6 @@ class Osidasi:
         # print('number_of_target',number_of_target)
 
         df = df.iloc[:number_of_target*4+1, :]
-        # print(df)
 
         # print(df.columns.to_list())
         titles = df.columns.to_list()
@@ -100,58 +96,49 @@ class Osidasi:
         # get only mean data
         df_mean = df.iloc[index_mean, :]
         df_mean = df_mean.loc[:, ['L', 'W', 'Swell', 'Swell.1']]
-        # print(df_mean)
 
         # get evaluations data
         df_eval = df.iloc[index_eval, :]
         df_eval = df_eval.loc[:, ['H.1', 'Sc', 'R.F']]
-        # print(df_eval)
 
         # get temp data
         df_tempa = df.iloc[index_tempa, :]
         df_tempa = df_tempa.loc[:, ['D', 'R']]
-        # print(df_tempa)
 
         # get Sulfurization data
         df_sulf = df.iloc[index_mean, :]
         df_sulf = df_sulf.loc[:, ['加硫前', '加硫後']]
-        # print(df_sulf)
 
-        # print(df.loc[:,'C.H'].to_list()[1:])
         values_pressure_CH = df.loc[:, 'C.H'].to_list()[1:]
         values_pressure_H = df.loc[:, 'H'].to_list()[1:]
 
         count_pressure = 0
         list_pressure_H = []
         for i, value in enumerate(values_pressure_H):
-            # print(i, value)
             if str(value) != 'nan':
                 count_pressure += 1
                 if count_pressure % 2 == 0:
                     list_pressure_H.append(
                         str(values_pressure_H[i-1]) + ' → ' + str(values_pressure_H[i]))
-        # print(list_pressure_H)
 
         count_pressure_CH = 0
         list_pressure_CH = []
         for i, value in enumerate(values_pressure_CH):
-            # print(i, value)
             if str(value) != 'nan':
                 count_pressure_CH += 1
                 if count_pressure_CH % 2 == 0:
                     list_pressure_CH.append(
                         str(values_pressure_CH[i-1]) + ' → ' + str(values_pressure_CH[i]))
-        # print(list_pressure_CH)
 
         df_pressrue = df.iloc[index_eval, :]
         df_pressrue = df_pressrue.loc[:, ['H', 'C.H']]
 
         df_pressrue.loc[:, 'H'] = list_pressure_H
         df_pressrue.loc[:, 'C.H'] = list_pressure_CH
-        # print(df_pressrue)
 
         df_all = pd.DataFrame()
 
+        # translate row and col
         df_mean = df_mean.transpose()
         df_eval = df_eval.transpose()
         df_tempa = df_tempa.transpose()
@@ -164,9 +151,6 @@ class Osidasi:
         df_all = pd.concat([df_all, df_mean])
         df_all = pd.concat([df_all, df_sulf])
 
-        # print(df_all.loc[['L','W','Swell.1'],:])
-
-        # print(df_all)
 
         self.Treat(df_all)
 
@@ -189,7 +173,8 @@ class Osidasi:
 
         df_all = Service.round_by_check_eachone(df_all, 0, ['L'])
 
-        print(df_all)
+        if self.testMode:
+            print(df_all)
 
         self.Write(df_all)
 
@@ -207,7 +192,7 @@ class Osidasi:
             # or you can make a data file
             return
 
-        Service.save_to_data_excel(file_data, df_input)
+        Service.save_to_data_excel(file_data, df_input, self.exp_name)
 
 
 def DoIt(target: str, testMode=False):
