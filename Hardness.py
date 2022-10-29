@@ -66,7 +66,7 @@ class Hardness:
         df = df.drop('配合番号', axis=0)
         # print(df)
         
-        print(self.file_now)
+        # print(self.file_now)
         file_name = os.path.splitext(os.path.basename(self.file_now))
         print(file_name)
 

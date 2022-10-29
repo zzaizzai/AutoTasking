@@ -6,6 +6,11 @@ import os
 
 class Osidasi:
 
+    testMode = False
+
+    def TestMode(self, mode:bool):
+        self.TestMode = mode
+
     def __init__(self, target: str):
         self.exp_name = '押出し '
         self.target = target
@@ -94,9 +99,6 @@ class Osidasi:
                     index_tempa.append(i-3)
                 if count_for_mean > number_of_target*4:
                     break
-        # print('index_mean',index_mean)
-        # print('index_eval',index_eval)
-        # print('index_tempa',index_tempa)
 
         # get only mean data
         df_mean = df.iloc[index_mean,:]
@@ -115,7 +117,7 @@ class Osidasi:
         df_tempa = df_tempa.loc[:,['D','R']]
         # print(df_tempa)
 
-        # 
+        # get Sulfurization data
         df_sulf = df.iloc[index_mean,:]
         df_sulf = df_sulf.loc[:,['加硫前','加硫後']]
         # print(df_sulf)
@@ -208,8 +210,9 @@ class Osidasi:
 
         Service.save_to_data_excel(file_data, df_input)
 
-def DoIt(target:str):
+def DoIt(target:str, testMode = False):
     osiosi = Osidasi(target)
+    osiosi.TestMode(testMode)
     try:
         osiosi.StartProcess()
     except Exception as e:
@@ -218,4 +221,4 @@ def DoIt(target:str):
 
 if __name__ == "__main__":
     target = input('target: ')
-    DoIt(target)
+    DoIt(target, testMode=True)

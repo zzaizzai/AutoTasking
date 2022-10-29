@@ -6,6 +6,11 @@ import os
 
 class OilTension:
 
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
+
     def __init__(self, target:str):
         self.exp_name = '耐油引張り '
 
@@ -15,7 +20,7 @@ class OilTension:
         self.file_data = Service.data_dir(target) + fr'\{self.target} Data.xlsx'
         self.file_now = ''
 
-    def FindFile(self):
+    def StartProcess(self):
         print('Find file')
         print(self.file_path)
         
@@ -53,20 +58,20 @@ class OilTension:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)], sort=False)
         
         
-        print('all df input data')
-        print(df_all)
+        # print('all df input data')
+        # print(df_all)
 
         self.WriteData(df_all)
 
         
     def ReadDataSheet(self, sheet: str):
-        print('read data shett')
+        print(f'reading data of {sheet}')
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9, index_col=1)
 
         df_data = df.iloc[:,[8,9,10, 11]]
         # df_data = df.iloc[:,[8,9,10]]
-        print('datadata', sheet)
-        print(df_data)
+        print(sheet)
+        # print(df_data)
 
         # set init target name for not written in first cell
         list_index = df_data.index.to_list()
@@ -74,19 +79,19 @@ class OilTension:
             list_index[1] = str(self.target)
         
         df_data.index = list_index    
-        print(df_data)
+        # print(df_data)
         
-        print('index list')
-        print(df.index.to_list())
+        # print('index list')
+        # print(df.index.to_list())
 
         index_list = df_data.index.to_list()
         index_values = Service.remove_dufulicant(index_list)
-        print('removed deful')
-        print(index_values)
+        # print('removed deful')
+        # print(index_values)
 
         number_target = len(index_values) - 1
 
-        # set all target names
+        # set all target names, sometimes there is no name in target cells.... becuz of mistakes..?
         for i in range(number_target):
             index_for_target = i*4 + 1
             index_list[index_for_target] = Service.target_number(i, self.target)
@@ -95,7 +100,7 @@ class OilTension:
             index_list[index_for_target + 3] = Service.target_number(i, self.target)
         
         df_data.index = index_list
-        print(df_data)
+        # print(df_data)
 
         # mean data
         index_mean = []
@@ -104,19 +109,15 @@ class OilTension:
         print(index_mean)
         df_mean = df_data.iloc[index_mean,:]
         print('mean data')
-        print(df_mean)
+
 
         # get hardness data
         index_mean_hardness = list(map(lambda x: x-3, index_mean))
         df_hardness = df_data.iloc[index_mean_hardness,:]
-        print(df_hardness)
         df_mean.loc[:,'HS'] = df_hardness.loc[:,'HS']
-        print(df_mean)
 
 
         df_data = df_mean.transpose()
-        print(df_data)
-
 
         unit = ['MPa', 'MPa', '%','HA']
         type_list = ['100%M', 'TS', 'EB', 'HA(0s)']
@@ -147,10 +148,11 @@ class OilTension:
 
         Service.save_to_data_excel(self.file_data, df_input)
 
-def DoIt(target:str):
+def DoIt(target:str, test_mode = False):
     oiru = OilTension(target)
+    oiru.TestMode(mode=test_mode)
     try:
-        oiru.FindFile()
+        oiru.StartProcess()
     except Exception as e:
         print(e)
 
@@ -159,4 +161,4 @@ def DoIt(target:str):
 if __name__ == '__main__':
     target = input('target: ')
     print('Oil Tension')
-    DoIt(target)
+    DoIt(target, test_mode=True)

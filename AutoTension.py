@@ -62,12 +62,18 @@ class Tension:
             return
 
         remove_row_list = []
+
+        # get range like df
+        print('all df')
+        print(df_all)
         for i, value in enumerate(df_all[0]):
             # print(int(value[3:])) 
             if int(value[3:]) < int(self.target[3:]):
+                print(int(value[3:])) 
                 print('below range ')
                 remove_row_list.append(i)
             if int(value[3:]) >=  self.len_df_col + int(self.target[3:]):
+                print(int(value[3:])) 
                 print('over range')
                 remove_row_list.append(i)
         # print(remove_row_list)
@@ -108,8 +114,10 @@ class Tension:
 
             unit = ['MPa', 'MPa', 'MPa' ,'MPa', '%']
             method = ['25%M', '50%M', '100%M','TS','EB']
+
             condition_name = df_part[0][1]
             condition = [condition_name] * 5
+
             name = ['auto tension'] * 5
             df_part = df_part.loc[[2,3,4,5,6]]
             
@@ -124,16 +132,16 @@ class Tension:
             # df_part = df_part.T.reset_index(drop=True).T
             df_part.reset_index(inplace= True, drop= True)
 
-            print(df_part)
+
+            # print(df_part)
             # df_part = df_part.duplicated(keep='last', axis=1)
             df_part = df_part.loc[:,~df_part.columns.duplicated(keep = "last")]
-            print(df_part)
-            # return
+
+            # print(df_part)
+
             self.WriteData(df_part)
 
-            # df_all = pd.concat([df_all, df_part],axis=0, sort=False)
 
-        # print(df_all)
         print('merge done')
 
     def WriteData(self, df_input):
@@ -144,8 +152,6 @@ class Tension:
         df = pd.read_excel(self.file_data, index_col=0)
 
         df_merge = pd.concat([df, df_input],axis=0, sort=False)
-        # print(df_merge)
-        # return
 
         df_merge.reset_index(inplace= True, drop= True)
 
@@ -158,7 +164,6 @@ class Tension:
     def GetData(self, auto_file)-> (any):
 
         df = pd.read_excel(auto_file , header=None)
-        # print(df)
 
         df[2] = df[2].fillna('Normal')
         df[2] = df[2] + df[3]
@@ -178,9 +183,6 @@ class Tension:
                 df_data = df_data.append(df.loc[[row_num]], ignore_index=True)
 
 
-        # print('..df only average values...')
-        # print(df_data)
-        # print(self.target[:2])
         target_list_row = []
         for i, value in enumerate(df_data[1]):
             # print(i)
@@ -189,17 +191,11 @@ class Tension:
                 # print(f'include {self.target[0:2]} at {value}')
                 target_list_row.append(i)
 
-        # print(target_list_row)
-        # print(df.loc[[1],:])
-        # df_data.columns = df.loc[[1],:].values.tolist()
-        # print(df_data)
         df_data = df_data.loc[target_list_row]
         # print(df_data)
 
         # select titles
         df_data = df_data[[1,2,9,10,11,14,15]]
-        # df_data = df_data.loc[:,['配合番号','加硫条件','0.25','0.5','1.0','抗張力(MPa)',' 破断伸び(%)']]
-        # df_data = df_data.loc[:,['配合番号','加硫条件試験片形状','抗張力(MPa)']]
 
         print(df_data)
 

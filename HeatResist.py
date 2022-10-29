@@ -5,6 +5,11 @@ import Service
 
 class HeatResist:
 
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
+
     def __init__(self, target: str):
 
         self.target = target
@@ -15,7 +20,7 @@ class HeatResist:
 
         self.file_now = ''
     
-    def FindFile(self):
+    def StartProcess(self):
         print('find files...')
         print(self.file_path)
 
@@ -55,8 +60,8 @@ class HeatResist:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
         
         # print('all od input data')
-        print('heat Resist Data')
-        print(df_all)
+        # print('heat Resist Data')
+        # print(df_all)
 
         self.WriteData(df_all)
 
@@ -111,17 +116,17 @@ class HeatResist:
         zero_col_index = [0]
         row_zero = df.loc[[12]].values.tolist()[0]
         row_three = df.loc[[13]].values.tolist()[0]
-        print(row_zero)
-        print(row_three)
+        # print(row_zero)
+        # print(row_three)
 
         for i in range(10):
-            print(row_zero[1+ i*4])
+            # print(row_zero[1+ i*4])
             if str(row_zero[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_zero) :
                 row_zero[1+i*4 + 3] = row_zero[1+i*4] 
             else:
                 break
         for i in range(10):
-            print(row_three[1+ i*4])
+            # print(row_three[1+ i*4])
             if str(row_three[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_three) :
                 row_three[1+i*4 + 3] = row_three[1+i*4] 
             else:
@@ -153,12 +158,12 @@ class HeatResist:
 
 
         # print('query')
-        print('before query')
-        print(df_input)
+        # print('before query')
+        # print(df_input)
         df_input = df_input.query("type in ['M 100%', '抗張力 ＭＰａ', '破断伸び％', '０秒','3秒']")
         df_input = df_input.iloc[:,1:]
-        print('after query')
-        print(df_input)
+        # print('after query')
+        # print(df_input)
 
 
         # condition
@@ -190,10 +195,11 @@ class HeatResist:
 
         Service.save_to_data_excel(file_data, df_input)
 
-def DoIt(target:str):
+def DoIt(target:str, test_mode = False):
     heat = HeatResist(target)
+    heat.TestMode(mode= test_mode)
     try:
-        heat.FindFile()
+        heat.StartProcess()
     except Exception as e:
         print(e)
 

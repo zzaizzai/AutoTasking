@@ -19,19 +19,19 @@ import Osidasi
 
 
 
-def DoProcess(user:str, user_family:str,target: str, target_dir_path:str):
+def DoProcess(user:str, user_family:str,target: str, target_dir_path:str, test_mode = False):
     CollectFiles.Check(user, target, target_dir_path)
     CollectAutoTension.DoIt(target, user_family)
     Muni.DoIt(target)
     Rheometer.DoIt(target)
     AutoTension.DoIt(target)
     Hardness.DoIt(target)
-    HeatResist.DoIt(target)
-    OilTension.DoIt(target)
+    HeatResist.DoIt(target, test_mode=test_mode)
+    OilTension.DoIt(target, test_mode=test_mode)
     Deruta.DoIt(target)
     Compression.DoIt(target)
 
-    Osidasi.DoIt(target)
+    Osidasi.DoIt(target, test_mode=test_mode)
 
     Treatment.DoIt(target)
     print('\n=========================================================')
@@ -66,6 +66,7 @@ if __name__ == '__main__':
 
     is_ok_family_name = False
     if_ok_first_name = False
+    test_mode = False
 
     # checking family name
     while not is_ok_family_name:
@@ -77,10 +78,18 @@ if __name__ == '__main__':
             user_first = '準才'
             is_ok_family_name = True
             if_ok_first_name = True
+            test_mode = True
+            print('test mode on')
 
 
         elif Service.check_user_name(user_family):
-            is_ok_family_name = True
+            if user_family == 'test':
+                test_mode = True
+                print('test mode on')
+                pass
+            else:
+                is_ok_family_name = True
+
         else:
             print()
             pass
@@ -115,8 +124,11 @@ if __name__ == '__main__':
         else:
             if Service.check_target(target):
                 print(f'target is {target}')
+                print(f'test mode: {test_mode}')
                 time.sleep(1)
-                DoProcess(user, user_family, target, target_dir_path)
+                
+                DoProcess(user, user_family, target, target_dir_path, test_mode=test_mode)
+
             else:
                 print()
                 pass
