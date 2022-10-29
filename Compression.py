@@ -3,19 +3,27 @@ import Service
 import glob
 import os
 
+
 class Compression:
+
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
+
     def __init__(self, target):
         self.target = target
         self.exp_name = '圧縮永久歪み_自動集積'
-        self.file_path = Service.data_dir(target) + rf'\{self.exp_name}*{target}*.xls*'
+        self.file_path = Service.data_dir(
+            target) + rf'\{self.exp_name}*{target}*.xls*'
         self.file_now = ''
 
     def FindFile(self):
         print('find file')
         print(self.file_path)
-        
+
         file_list = glob.glob(self.file_path)
-        file_list = sorted(file_list,key=len)
+        file_list = sorted(file_list, key=len)
         print(file_list)
 
         if len(file_list) > 0:
@@ -36,7 +44,6 @@ class Compression:
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
         print(sheet_list)
 
-
         df_all = pd.DataFrame()
 
         for sheet in sheet_list:
@@ -53,9 +60,9 @@ class Compression:
         print(sheet)
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9)
         # print(df)
-        df = df.iloc[:,[1,7]]
+        df = df.iloc[:, [1, 7]]
 
-        title = ['配合番号','歪率']
+        title = ['配合番号', '歪率']
         df.columns = title
         df['配合番号'] = df['配合番号'].ffill()
 
@@ -81,7 +88,7 @@ class Compression:
         # rounding to int
         df = df.round(0)
 
-        df =  df.transpose()
+        df = df.transpose()
         df.columns = df.loc['配合番号']
         df.drop(index=['配合番号'], inplace=True)
         # print(df)
@@ -92,10 +99,10 @@ class Compression:
         condition = [sheet]
         type_list = ['distortion']
 
-        df.insert(0, 'unit', unit )
-        df.insert(0, 'type', type_list )
-        df.insert(0, 'condition', condition )
-        df.insert(0, 'method', method )
+        df.insert(0, 'unit', unit)
+        df.insert(0, 'type', type_list)
+        df.insert(0, 'condition', condition)
+        df.insert(0, 'method', method)
         df.reset_index(inplace=True, drop=True)
 
         print(df)
@@ -105,7 +112,8 @@ class Compression:
     def WriteData(self, df_input):
         print('merging data...')
 
-        file_data = Service.data_dir(self.target)  + fr'\{self.target} Data.xlsx'
+        file_data = Service.data_dir(
+            self.target) + fr'\{self.target} Data.xlsx'
         is_file = os.path.isfile(file_data)
 
         if is_file:
@@ -113,19 +121,19 @@ class Compression:
         else:
             print('no data file')
             return
-            
+
         Service.save_to_data_excel(file_data, df_input)
 
-def DoIt(target: str):
+
+def DoIt(target: str, test_mode=False):
     zumizumi = Compression(target)
+    zumizumi.TestMode(test_mode)
     try:
         zumizumi.FindFile()
     except Exception as e:
         print(e)
 
 
-
 if __name__ == '__main__':
     target = input('target: ')
-    DoIt(target)
-    
+    DoIt(target, test_mode=True)

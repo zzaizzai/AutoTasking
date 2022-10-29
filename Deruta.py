@@ -3,7 +3,13 @@ import Service
 import glob
 import os
 
+
 class Deruta:
+
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
 
     def __init__(self, target):
         self.exp_name = '⊿Ｖ'
@@ -11,7 +17,8 @@ class Deruta:
         self.target = target
         self.file_path = Service.data_dir(
             target) + rf'\{self.exp_name}*{target}*.xls*'
-        self.file_data = Service.data_dir(target) + fr'\{self.target} Data.xlsx'
+        self.file_data = Service.data_dir(
+            target) + fr'\{self.target} Data.xlsx'
         self.file_now = ''
 
     def FindFile(self):
@@ -38,7 +45,8 @@ class Deruta:
 
         print(self.file_now)
 
-        df = pd.read_excel(self.file_now, sheet_name='1', index_col=0, header=0)
+        df = pd.read_excel(self.file_now, sheet_name='1',
+                           index_col=0, header=0)
         # print(df)
         new_col = df.columns.to_list()
         # print(df.columns.to_list())
@@ -58,7 +66,7 @@ class Deruta:
 
         # count number of target
         target_list = df['配合番号'].values.tolist()
-        print('target list',target_list)
+        print('target list', target_list)
 
         # get targets
         target_list_temp = []
@@ -67,15 +75,15 @@ class Deruta:
             if not str(target_list[i]).isalpha() and str(target_list[i]) != 'nan':
                 # print(target_list[i])
                 target_list_temp.append(int(target_list[i]))
-        print('target temp',target_list_temp)
+        print('target temp', target_list_temp)
 
         target_list = target_list_temp
         target_list_set = set(target_list)
         target_list = list(target_list_set)
-        print('target list',target_list)
+        print('target list', target_list)
 
         # generate condition list
-        
+
         # print(df.query("配合番号 in ['試験液']"))
         # return
         conditions_list_index = []
@@ -83,7 +91,7 @@ class Deruta:
         for i, value in enumerate(df['liquid_index']):
             if value == "試験液":
                 conditions_list_index.append(int(i))
-        print('condition list index',conditions_list_index)
+        print('condition list index', conditions_list_index)
 
         # return
         # conditions_list_index = df.query("配合番号 in ['試験液']", engine='python').index.to_list()
@@ -96,9 +104,10 @@ class Deruta:
         condition_list = []
         for index_liquid in conditions_list_index:
             # print('index of liquid',index_liquid)
-            condition_name = str(df.iat[index_liquid,3]) + ' '+ str(df.iat[index_liquid,7]) + '℃×' + str(df.iat[index_liquid,8])
+            condition_name = str(df.iat[index_liquid, 3]) + ' ' + str(
+                df.iat[index_liquid, 7]) + '℃×' + str(df.iat[index_liquid, 8])
             condition_list.append(condition_name)
-        print('condition list' ,condition_list)
+        print('condition list', condition_list)
 
         df_all = pd.DataFrame()
         for i in range(len(condition_list)):
@@ -188,10 +197,14 @@ class Deruta:
         else:
             print('no data file')
             return
-        
+
         Service.save_to_data_excel(self.file_data, df_input)
-def DoIt(target: str):
+
+
+def DoIt(target: str, test_mode=False):
     ruta = Deruta(target)
+    ruta.TestMode(mode=test_mode)
+
     try:
         ruta.FindFile()
     except Exception as e:

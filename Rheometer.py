@@ -8,6 +8,7 @@ from openpyxl.drawing.text import ParagraphProperties, CharacterProperties, Font
 from openpyxl.chart.layout import Layout, ManualLayout
 import Service
 
+
 class Rheometer:
 
     def __init__(self, target):
@@ -15,7 +16,8 @@ class Rheometer:
 
         self.file_dir = Service.data_dir(target)
         self.target = target
-        self.file_path_xls = self.file_dir + rf'\{self.exp_name}*{target}*.xlsx'
+        self.file_path_xls = self.file_dir + \
+            rf'\{self.exp_name}*{target}*.xlsx'
         self.file_xls = ''
         self.file_xlsx = ''
         self.temperature = ''
@@ -68,13 +70,12 @@ class Rheometer:
 
         print(f'standard postion cell: {standard_cell}')
 
-
         # create a graph
         chart = openpyxl.chart.ScatterChart('marker')
         # chart = openpyxl.chart.LineChart()
 
         # data titles
-        
+
         temperature_cell = ws.cell(row=2, column=6)
         print(temperature_cell)
         print(temperature_cell.value)
@@ -85,24 +86,22 @@ class Rheometer:
         chart.title = f'加硫曲線 {temperature_title}'
         font = Font(typeface='Calibri')
         size = 1600
-        char_prop = CharacterProperties(latin=font, sz=size, b=True) 
+        char_prop = CharacterProperties(latin=font, sz=size, b=True)
         para_prop = ParagraphProperties(defRPr=char_prop)
         chart.title.tx.rich.p[0].pPr = para_prop
-
 
         chart.x_axis.title = 'Time (min)'
         chart.y_axis.title = 'Torque (kgf・cm)'
 
-        
         font = Font(typeface='Calibri')
-        size = 1200 # 14 point size 
-        char_prop = CharacterProperties(latin=font, sz=size, b=False) 
+        size = 1200  # 14 point size
+        char_prop = CharacterProperties(latin=font, sz=size, b=False)
         para_prop = ParagraphProperties(defRPr=char_prop)
         chart.x_axis.title.tx.rich.p[0].pPr = para_prop
         chart.y_axis.title.tx.rich.p[0].pPr = para_prop
 
-
-        colors  = ['ff0000','ffaa00','00ff00' ,'0055ff','8000ff','00ff55','ff00d5','ff00d5','ff00d5','ff00d5']
+        colors = ['ff0000', 'ffaa00', '00ff00', '0055ff', '8000ff',
+                  '00ff55', 'ff00d5', 'ff00d5', 'ff00d5', 'ff00d5']
         # add series
         print('adding serials')
         for i in range(self.number_of_target):
@@ -117,9 +116,8 @@ class Rheometer:
                 series = openpyxl.chart.Series(
                     data, times, title_from_data=True)
                 # series.graphicalProperties.line.noFill = True
-                
-                series.graphicalProperties.line.solidFill = colors[i]
 
+                series.graphicalProperties.line.solidFill = colors[i]
 
                 # series.marker.symbol = "circle"
                 # series.marker.size = 0
@@ -166,7 +164,8 @@ class Rheometer:
         print("legen title")
         for i in range(self.number_of_target):
             # print(ws.cell(row=standard_cell.row, column=2 + i*4).value)
-            ws.cell(row=standard_cell.row, column=2 + i*4).value = target_number(i)
+            ws.cell(row=standard_cell.row, column=2 +
+                    i*4).value = target_number(i)
             # print(target_number(i))
 
         ws.add_chart(chart, 'B8')
@@ -206,17 +205,16 @@ class Rheometer:
         print(target_title)
         df_input.columns = target_title
 
-
         unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min']
         type_list = ['MH', 'ML', 't10', 't50', 't90', 'CR']
         # condition = [Service.file_name_without_target_and_expname(self.file_xlsx, self.target, self.exp_name)] * 6
         condition = [self.temperature] * len(df_input)
         # something is needed in condition.....
-        method_list = [Service.file_name_without_target(self.file_xlsx, self.target)] * len(df_input)
+        method_list = [Service.file_name_without_target(
+            self.file_xlsx, self.target)] * len(df_input)
 
         # for i, method in enumerate(method_list):
         #     method_list[i] = method.split()[0]
-
 
         df_input.insert(0, 'unit', unit)
         df_input.insert(0, 'type', type_list)

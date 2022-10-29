@@ -17,9 +17,7 @@ import os
 import Osidasi
 
 
-
-
-def DoProcess(user:str, user_family:str,target: str, target_dir_path:str, test_mode = False):
+def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, test_mode=False):
     CollectFiles.Check(user, target, target_dir_path)
     CollectAutoTension.DoIt(target, user_family)
     Muni.DoIt(target)
@@ -28,7 +26,7 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str, test_m
     Hardness.DoIt(target)
     HeatResist.DoIt(target, test_mode=test_mode)
     OilTension.DoIt(target, test_mode=test_mode)
-    Deruta.DoIt(target)
+    Deruta.DoIt(target, test_mode=test_mode)
     Compression.DoIt(target)
 
     Osidasi.DoIt(target, test_mode=test_mode)
@@ -38,16 +36,15 @@ def DoProcess(user:str, user_family:str,target: str, target_dir_path:str, test_m
     # print('   process done   ')
     print(Service.work_done)
     print('=========================================================\n')
-    
 
 
 if __name__ == '__main__':
 
-    
     print(f'=========================================================================================')
     print(f' Hello!! this is Auto Handling Data System made by K.J.  ver 0.2 \n ')
-    display_time = time.localtime() 
-    print(f' Current time : {display_time.tm_year}/ {display_time.tm_mon}/ {display_time.tm_mday}   {display_time.tm_hour}:{display_time.tm_min}  \n')
+    display_time = time.localtime()
+    print(
+        f' Current time : {display_time.tm_year}/ {display_time.tm_mon}/ {display_time.tm_mday}   {display_time.tm_hour}:{display_time.tm_min}  \n')
     # for company
     target_dir_path = r'\\kfs03a\labo\9101-NVH_DATA\ホース'
     # target_dir_path = r'C:\Users\junsa\Desktop'
@@ -56,13 +53,12 @@ if __name__ == '__main__':
 
     print(f' save_dir : {os.path.expanduser("~/Desktop")}')
     print(f' path : {target_dir_path}')
-    
 
     print(f'=========================================================================================')
     print('10/24 Oil tension fixed, added Heat Resist with 3s hardness.')
     print('some rounding issure.')
-    print('python version: ' , platform.python_version())
-    print('pandas version: '  , pd.__version__)
+    print('python version: ', platform.python_version())
+    print('pandas version: ', pd.__version__)
 
     is_ok_family_name = False
     if_ok_first_name = False
@@ -70,6 +66,7 @@ if __name__ == '__main__':
 
     # checking family name
     while not is_ok_family_name:
+        print(f' test mode: {test_mode}')
         user_family = input(' input your family name (ex: 田中) : ')
 
         # admin special
@@ -80,7 +77,6 @@ if __name__ == '__main__':
             if_ok_first_name = True
             test_mode = True
             print('test mode on')
-
 
         elif Service.check_user_name(user_family):
             if user_family == 'test':
@@ -94,11 +90,11 @@ if __name__ == '__main__':
             print()
             pass
 
-
     # checking first name
     while not if_ok_first_name:
-        user_first = input('\n ※ if you want EPDM data, please input EPDM \n input your first name (ex: 花子) :  ')
-        
+        user_first = input(
+            '\n ※ if you want EPDM data, please input EPDM \n input your first name (ex: 花子) :  ')
+
         if Service.check_user_name(user_first):
             if_ok_first_name = True
         else:
@@ -126,8 +122,9 @@ if __name__ == '__main__':
                 print(f'target is {target}')
                 print(f'test mode: {test_mode}')
                 time.sleep(1)
-                
-                DoProcess(user, user_family, target, target_dir_path, test_mode=test_mode)
+
+                DoProcess(user, user_family, target,
+                          target_dir_path, test_mode=test_mode)
 
             else:
                 print()

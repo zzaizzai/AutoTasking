@@ -4,14 +4,14 @@ import pandas as pd
 import Service
 
 
-
 class Muuni:
 
     def __init__(self, target):
         self.exp_name = 'ムーニー_ロータ_自動集積'
 
         self.target = target
-        self.path_xlsx = Service.data_dir(target)  + rf'\{self.exp_name} {target}*.xlsx'
+        self.path_xlsx = Service.data_dir(
+            target) + rf'\{self.exp_name} {target}*.xlsx'
         self.file_xlsx = ''
         self.index_name = ''
 
@@ -23,7 +23,7 @@ class Muuni:
         file_list = sorted(file_list, key=len)
         print(file_list)
 
-        if len(file_list) > 0 :
+        if len(file_list) > 0:
             print(f'found {len(file_list)} {self.exp_name} file(s) ')
 
             for file in file_list:
@@ -42,7 +42,7 @@ class Muuni:
             if value == '特性値：':
                 num_target = df[0][i-1]
                 row_init = i + 4
-        
+
         print(f'number of target: {num_target}')
         print(f'samples start row: {row_init}')
 
@@ -55,9 +55,8 @@ class Muuni:
         # print(df_input)
 
         # print('')
-        df_input = df_input.loc[[2,3,4]]
+        df_input = df_input.loc[[2, 3, 4]]
         # print(df_input)
-
 
         # target numbers
         # print('target numbering')
@@ -69,14 +68,16 @@ class Muuni:
         df_input.columns = target_titles
 
         # print(df_input)
-        
+
         # insert unit, method.. else
         file_name = os.path.splitext(os.path.basename(self.file_xlsx))[0]
         print(file_name)
-        unit = ['M', 'M', 'min' ]
+        unit = ['M', 'M', 'min']
         type_list = ['M1', 'Vm', 'T1']
-        condition_list = [Service.file_name_without_target_and_expname(self.file_xlsx, self.target, self.exp_name)]*len(df_input)
-        method_list = [Service.file_name_without_target(self.file_xlsx, self.target)]*3
+        condition_list = [Service.file_name_without_target_and_expname(
+            self.file_xlsx, self.target, self.exp_name)]*len(df_input)
+        method_list = [Service.file_name_without_target(
+            self.file_xlsx, self.target)]*3
         # for i, method in enumerate(method_list):
         #     print(method.split()[-1])
         #     condition_list.append(method.split()[-1])
@@ -91,14 +92,15 @@ class Muuni:
         df_input.insert(0, 'method', method_list)
 
         print(df_input)
-        
+
         # return
         self.WriteData(df_input)
 
-    def WriteData(self, df_input) :
+    def WriteData(self, df_input):
         print('writing data...')
 
-        file_data = Service.data_dir(self.target) + fr'\{self.target} Data.xlsx'
+        file_data = Service.data_dir(
+            self.target) + fr'\{self.target} Data.xlsx'
 
         is_file = os.path.isfile(file_data)
 
@@ -108,8 +110,9 @@ class Muuni:
             print('no data file')
             # or you can make a data file
             return
-        
+
         Service.save_to_data_excel(file_data, df_input)
+
 
 def DoIt(target: str):
     muni = Muuni(target)
@@ -119,9 +122,6 @@ def DoIt(target: str):
         print(e)
 
 
-
 if __name__ == '__main__':
     target = target = input('target number (ex: ABC001): ')
     DoIt(target)
-
-

@@ -4,14 +4,15 @@ import numpy as np
 import Service
 import openpyxl
 
+
 class Treatment:
 
     def __init__(self, target):
         self.target = target
-        self.file = Service.data_dir(target) +  rf'\{self.target} Data.xlsx'
+        self.file = Service.data_dir(target) + rf'\{self.target} Data.xlsx'
 
     def ChangeTitles(self):
-        
+
         is_file = os.path.isfile(self.file)
         if is_file:
             pass
@@ -36,7 +37,7 @@ class Treatment:
     def RoundData(self):
 
         is_file = os.path.isfile(self.file)
-        
+
         if is_file:
             pass
         else:
@@ -45,9 +46,7 @@ class Treatment:
 
         print('rounding data')
         df = pd.read_excel(self.file, index_col=0)
-        
 
-        
         print('before rounding')
         print(df)
 
@@ -59,21 +58,24 @@ class Treatment:
         else:
             pass
 
-        ## round
+        # round
         # df = df.replace('******', 0)
         # print('replaced ****** to 0')
 
         # df = df.astype('float', errors='ignore')
-        
+
         # df = Service.normal_round(df, 1)
 
         # df[(df['type'] == '破断伸び％')] = Service.normal_round(df[(df['type'] == '破断伸び％')], -1)
         # df[(df['type'] == 'EB')] = Service.normal_round(df[(df['type'] == 'EB')], -1)
         # df[(df['type'] == 'elongation')] = Service.normal_round(df[(df['type'] == 'elongation')], -1)
 
-        df = Service.round_by_check_eachone(df, 1, ['T1','MH','t10','t50','t90','CR','25%M','50%M','100%M','TS'])
-        df = Service.round_by_check_eachone(df, 0, ['０秒','3秒','HA(0s)','HA(3s)','⊿V'])
-        df = Service.round_by_check_eachone(df, -1, ['elongation','EB','破断伸び％'])
+        df = Service.round_by_check_eachone(
+            df, 1, ['T1', 'MH', 't10', 't50', 't90', 'CR', '25%M', '50%M', '100%M', 'TS'])
+        df = Service.round_by_check_eachone(
+            df, 0, ['０秒', '3秒', 'HA(0s)', 'HA(3s)', '⊿V'])
+        df = Service.round_by_check_eachone(
+            df, -1, ['elongation', 'EB', '破断伸び％'])
 
         # df[(df['type'] == '０秒')] = Service.normal_round(df[(df['type'] == '０秒')],0)
         # df[(df['type'] == '3秒')] = Service.normal_round(df[(df['type'] == '3秒')],0)
@@ -81,30 +83,26 @@ class Treatment:
         # df[(df['type'] == '⊿V')]= Service.normal_round(df[(df['type'] == '⊿V')],0)
         # print(df)
 
-        
-
         print('rounding done')
         print(df)
 
-        ## drop angles of autotension
+        # drop angles of autotension
         # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
         # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
         # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python'))
-        index_drop = df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python').index
+        index_drop = df.query(
+            "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']", engine='python').index
         df.drop(list(index_drop), inplace=True)
 
         # print(df)
 
-
-
-        ## save
+        # save
         df.to_excel(self.file, index=True, header=True, startcol=0)
         print(f'saved done {self.file}')
 
-
     def CellWidth(self):
         print('fixing cell width')
-        
+
         wb = openpyxl.load_workbook(self.file)
         ws = wb.worksheets[0]
 
@@ -113,19 +111,19 @@ class Treatment:
 
         wb.save(self.file)
 
-
     def Sorting(self):
         print('sorting')
-        
+
         is_file = os.path.isfile(self.file)
-        
+
         if is_file:
             pass
         else:
             print('no data file')
             return
         df = pd.read_excel(self.file, index_col=0)
-        
+
+
 def DoIt(target: str):
     toritori = Treatment(target)
     try:
@@ -135,6 +133,7 @@ def DoIt(target: str):
         toritori.CellWidth()
     except Exception as e:
         print(e)
+
 
 if __name__ == "__main__":
     print(pd.__version__)
