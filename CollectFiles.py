@@ -4,7 +4,7 @@ import os
 import shutil
 import string
 import openpyxl
-# import win32com.client as win32
+import win32com.client as win32
 import Service
 import pyexcel as p
 
@@ -53,26 +53,26 @@ class CollectFiles:
         wb = openpyxl.Workbook()
         wb.save(self.data_dir + fr'\{self.target} Data.xlsx')
 
-    # def TranslateFromXlsToXlsx(self):
-    #     print('translating xls files to xlsx file....')
-    #     file_list = glob.glob(self.data_dir + r'\*.xls')
-    #     print(file_list)
+    def TranslateFromXlsToXlsx(self):
+        print('translating xls files to xlsx file....')
+        file_list = glob.glob(self.data_dir + r'\*.xls')
+        print(file_list)
 
-    #     for file_xls in file_list:
-    #         is_file = os.path.isfile(file_xls + 'x')
-    #         if is_file:
-    #             print(f'xlsx is already exist {file_xls}')
-    #         else:
-    #             print(f'translate... {file_xls} + x')
-    #             excel = win32.gencache.EnsureDispatch('Excel.Application')
-    #             excel.DisplayAlerts = False
-    #             excel.Visible = False
-    #             wb = excel.Workbooks.Open(file_xls)
-    #             # FileFormat = 51 is for .xlsx extension
-    #             wb.SaveAs(file_xls+"x", FileFormat=51)
-    #             wb.Close()
-    #             excel.Application.Quit()
-    #             os.remove(file_xls)
+        for file_xls in file_list:
+            is_file = os.path.isfile(file_xls + 'x')
+            if is_file:
+                print(f'xlsx is already exist {file_xls}')
+            else:
+                print(f'translate... {file_xls} + x')
+                excel = win32.gencache.EnsureDispatch('Excel.Application')
+                excel.DisplayAlerts = False
+                excel.Visible = False
+                wb = excel.Workbooks.Open(file_xls)
+                # FileFormat = 51 is for .xlsx extension
+                wb.SaveAs(file_xls+"x", FileFormat=51)
+                wb.Close()
+                excel.Application.Quit()
+                os.remove(file_xls)
 
     def conver_xls_to_xlsx(self):
         print('convert xls files to xlsx file...')
@@ -96,8 +96,8 @@ def Check(user: str, target: str, destination_dir_path: str):
     try:
         ff.FindFiles()
         ff.MakeDataExcel()
-        # ff.TranslateFromXlsToXlsx()
-        ff.conver_xls_to_xlsx()
+        ff.TranslateFromXlsToXlsx()
+        # ff.conver_xls_to_xlsx()
     except Exception as e:
         print(e)
 

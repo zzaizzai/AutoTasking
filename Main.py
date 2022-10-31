@@ -15,6 +15,9 @@ import platform
 import pandas as pd
 import os
 import Osidasi
+from dotenv import load_dotenv
+
+
 
 
 def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, test_mode=False):
@@ -29,7 +32,7 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
     Deruta.DoIt(target, test_mode=test_mode)
     Compression.DoIt(target, test_mode=test_mode)
 
-    Osidasi.DoIt(target, test_mode=test_mode)
+    Osidasi.DoIt(target, testMode=test_mode)
 
     Treatment.DoIt(target)
     print('\n=========================================================')
@@ -39,14 +42,14 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
 
 
 if __name__ == '__main__':
-
+    load_dotenv()
     print(f'=========================================================================================')
     print(f' Hello!! this is Auto Handling Data System made by K.J.  ver 0.2 \n ')
     display_time = time.localtime()
     print(
         f' Current time : {display_time.tm_year}/ {display_time.tm_mon}/ {display_time.tm_mday}   {display_time.tm_hour}:{display_time.tm_min}  \n')
     # for company
-    target_dir_path = r'\\kfs03a\labo\9101-NVH_DATA\ホース'
+    target_dir_path = str(os.environ.get('HOSE_DIR'))
     # target_dir_path = r'C:\Users\junsa\Desktop'
 
     # print(Service.rakuraku_hose)

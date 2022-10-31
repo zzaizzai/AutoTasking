@@ -107,7 +107,10 @@ class Hardness:
         print(method[0] + " df")
         print(df)
 
-        self.WriteDate(df)
+        try:
+            self.WriteDate(df)
+        except Exception as e:
+            print(e)
 
     def WriteDate(self, df_input):
         print('writing data...')
@@ -129,7 +132,10 @@ class Hardness:
         df_merge.reset_index(inplace=True, drop=True)
 
 
-        df_merge.to_excel(file_data, index=True, header=True)
+        try:
+            df_merge.to_excel(file_data, index=True, header=True)
+        except Exception as e:
+            print(e)
         # print(df_merge)
 
         print(f'saved data file in {file_data}')

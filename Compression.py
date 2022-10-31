@@ -15,7 +15,7 @@ class Compression:
         self.target = target
         self.exp_name = '圧縮永久歪み_自動集積'
         self.file_path = Service.data_dir(
-            target) + rf'\{self.exp_name}*{target}*.xls*'
+            target) + rf'\{self.exp_name} {target}*.xls*'
         self.file_now = ''
 
     def FindFile(self):
@@ -25,17 +25,25 @@ class Compression:
         file_list = glob.glob(self.file_path)
         file_list = sorted(file_list, key=len)
         print(file_list)
-
         if len(file_list) > 0:
             print(f'found {len(file_list)} {self.exp_name} file(s)')
-
-            for file in file_list:
-                self.file_now = file
-                self.ReadFile()
-
+            pass
         else:
             print(f'No {self.exp_name}')
-            return
+            print('search as 圧縮永久歪')
+            self.exp_name = '圧縮永久歪'
+            file_list = glob.glob(self.file_path)
+            file_list = sorted(file_list, key=len)
+            if len(file_list) > 0:
+                pass
+            else:
+                return
+
+        for file in file_list:
+            self.file_now = file
+            self.ReadFile()
+                
+            
 
     def ReadFile(self):
         print('read File')

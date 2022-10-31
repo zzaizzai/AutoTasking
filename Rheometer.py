@@ -246,7 +246,7 @@ class Rheometer:
             # or you can make a data file
             return
 
-        Service.save_to_data_excel(file_data, df_input)
+        Service.save_to_data_excel(file_data, df_input, self.exp_name)
 
 
 def DoIt(target: str):
