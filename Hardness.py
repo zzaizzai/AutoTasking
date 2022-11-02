@@ -57,7 +57,7 @@ class Hardness:
         # print(df)
 
         titles = df.columns.to_list()
-        print(titles)
+        # print(titles)
         titles = ['配合番号', '０秒', '3秒']
         df.columns = titles
 

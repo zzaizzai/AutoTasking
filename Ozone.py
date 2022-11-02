@@ -46,13 +46,10 @@ class Ozone:
 
         if '設定シート' in sheet_list:
             sheet_list.remove('設定シート')
-        else:
-            pass
-        
+
         if 'きれつ表' in sheet_list:
             sheet_list.remove('きれつ表')
-        else:
-            pass
+
 
         df_all = pd.DataFrame()
 
@@ -78,6 +75,12 @@ class Ozone:
         print(target_list)
         df_sheet.index = target_list
         print(df_sheet)
+
+        df_n1 =  df_sheet.loc[:, ~df_sheet.columns.duplicated(keep="frist")]
+        df_n2 =  df_sheet.loc[:, ~df_sheet.columns.duplicated(keep="last")]
+
+        print(df_n1)
+        print(df_n2)
 
 
 def ozozo(target:str, test_mode =False):
