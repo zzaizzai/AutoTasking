@@ -157,8 +157,12 @@ class Osidasi:
     def Treat(self, df_all: pd.DataFrame):
 
         condition = ['none']*len(df_all)
-        method = ['osidashi(beta)']*len(df_all)
+        method = [Service.file_name_without_target(self.file_now, self.target)]*len(df_all)
         unit = ['ss']*len(df_all)
+
+        unit_names = ['eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm','g', 'ratio', 'ratio', 'mm' ,'mm']
+        if len(df_all) == len(unit_names):
+            unit = unit_names
         type_list = df_all.index.to_list()
 
         type_list[type_list.index('Swell')] = 'swell dia.'

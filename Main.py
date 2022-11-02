@@ -24,7 +24,7 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
     CollectFiles.Check(user, target, target_dir_path)
     CollectAutoTension.DoIt(target, user_family, test_mode=test_mode)
     Muni.DoIt(target)
-    Rheometer.DoIt(target)
+    Rheometer.DoIt(target, test_mode=test_mode)
     AutoTension.DoIt(target, test_mode=test_mode)
     Hardness.DoIt(target, test_mode=test_mode)
     HeatResist.DoIt(target, test_mode=test_mode)
@@ -34,7 +34,7 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
 
     Osidasi.DoIt(target, testMode=test_mode)
 
-    Treatment.DoIt(target)
+    Treatment.DoIt(target, test_mode=test_mode)
     print('\n=========================================================')
     # print('   process done   ')
     print(Service.work_done)
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     print(f' path : {target_dir_path}')
 
     print(f'=========================================================================================')
-    print('10/24 Oil tension fixed, added Heat Resist with 3s hardness.')
+    print('11/2 Oshidashi added + some bug issue fixed')
     print('some rounding issure.')
     print('python version: ', platform.python_version())
     print('pandas version: ', pd.__version__)

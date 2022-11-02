@@ -1,6 +1,5 @@
 import os
 import glob
-from numpy import number
 import win32com.client as win32
 import pandas as pd
 import openpyxl
@@ -10,6 +9,11 @@ import Service
 
 
 class Rheometer:
+
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
 
     def __init__(self, target):
         self.exp_name = 'レオメータ'
@@ -22,7 +26,7 @@ class Rheometer:
         self.file_xlsx = ''
         self.temperature = ''
 
-    def FindFile(self):
+    def StartProcess(self):
         print('find file rheometer...')
         print(self.file_path_xls)
 
@@ -77,11 +81,11 @@ class Rheometer:
         # data titles
 
         temperature_cell = ws.cell(row=2, column=6)
-        print(temperature_cell)
-        print(temperature_cell.value)
+        # print(temperature_cell)
+        # print(temperature_cell.value)
         temperature_title = str(int(float(temperature_cell.value[:-1]))) + '℃'
         self.temperature = temperature_title
-        print(temperature_title)
+        # print(temperature_title)
 
         chart.title = f'加硫曲線 {temperature_title}'
         font = Font(typeface='Calibri')
@@ -103,11 +107,16 @@ class Rheometer:
         colors = ['ff0000', 'ffaa00', '00ff00', '0055ff', '8000ff',
                   '00ff55', 'ff00d5', 'ff00d5', 'ff00d5', 'ff00d5']
         # add series
-        print('adding serials')
+        if self.test_mode:
+            print('adding serials')
+
         for i in range(self.number_of_target):
             serial_name = ws.cell(row=21, column=2 + 4*i).value
             if serial_name != None:
-                print(serial_name)
+
+                if self.test_mode:
+                    print(serial_name)
+
                 data = openpyxl.chart.Reference(
                     ws, min_col=2 + i*4, min_row=standard_cell.row, max_row=1000)
                 times = openpyxl.chart.Reference(
@@ -131,7 +140,8 @@ class Rheometer:
 
                 chart.series.append(series)
 
-        print(f'number of series: {len(chart.series)}')
+        if self.test_mode:
+            print(f'number of series: {len(chart.series)}')
 
         # # data scail
         # chart.y_axis.scaling.min = 0
@@ -161,7 +171,7 @@ class Rheometer:
             return alphabet_num
 
         # change legend title
-        print("legen title")
+        # print("legen title")
         for i in range(self.number_of_target):
             # print(ws.cell(row=standard_cell.row, column=2 + i*4).value)
             ws.cell(row=standard_cell.row, column=2 +
@@ -184,8 +194,9 @@ class Rheometer:
                 num_target = df[0][i-1]
                 row_init = i + 4
 
-        print(f'number of target: {num_target}')
-        print(f'samples start row: {row_init}')
+        if self.test_mode:
+            print(f'number of target: {num_target}')
+            print(f'samples start row: {row_init}')
 
         df_input = df.loc[[row_init]]
         for i in range(1, num_target):
@@ -197,8 +208,8 @@ class Rheometer:
 
         # print(df_input)
 
-        print('target numbering')
-        print(len(df_input.columns))
+        print('changing target numbers')
+        # print(len(df_input.columns))
         target_title = []
         for i in range(len(df_input.columns)):
             target_title.append(Service.target_number(i, self.target))
@@ -227,7 +238,7 @@ class Rheometer:
         # df_input.reset_index(inplace=True, drop=True)
         # df_input = df_input.T.reset_index(drop=True).T
 
-        print(df_input)
+        # print(df_input)
 
         # return
         self.WriteData(df_input)
@@ -249,10 +260,11 @@ class Rheometer:
         Service.save_to_data_excel(file_data, df_input, self.exp_name)
 
 
-def DoIt(target: str):
+def DoIt(target: str, test_mode=False):
     reo = Rheometer(target)
+    reo.TestMode(test_mode)
     try:
-        reo.FindFile()
+        reo.StartProcess()
     except Exception as e:
         print(e)
 

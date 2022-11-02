@@ -7,6 +7,11 @@ import openpyxl
 
 class Treatment:
 
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
+
     def __init__(self, target):
         self.target = target
         self.file = Service.data_dir(target) + rf'\{self.target} Data.xlsx'
@@ -47,10 +52,12 @@ class Treatment:
         print('rounding data')
         df = pd.read_excel(self.file, index_col=0)
 
-        print('before rounding')
-        print(df)
 
-        print('df lengh: ', len(df))
+        if self.test_mode:
+            print('before rounding')
+            print(df)
+
+        # print('df lengh: ', len(df))
 
         if len(df) < 1:
             print('no df')
@@ -83,8 +90,9 @@ class Treatment:
         # df[(df['type'] == '⊿V')]= Service.normal_round(df[(df['type'] == '⊿V')],0)
         # print(df)
 
-        print('rounding done')
-        print(df)
+        if self.test_mode:
+            print('rounding done')
+            print(df)
 
         # drop angles of autotension
         # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
@@ -98,6 +106,7 @@ class Treatment:
 
         # save
         df.to_excel(self.file, index=True, header=True, startcol=0)
+        print('data rounding done')
         print(f'saved done {self.file}')
 
     def CellWidth(self):
@@ -124,8 +133,9 @@ class Treatment:
         df = pd.read_excel(self.file, index_col=0)
 
 
-def DoIt(target: str):
+def DoIt(target: str, test_mode = False):
     toritori = Treatment(target)
+    toritori.TestMode(test_mode)
     try:
         # toritori.ChangeTitles()
         toritori.RoundData()

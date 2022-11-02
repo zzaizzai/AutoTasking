@@ -46,8 +46,7 @@ class Compression:
             
 
     def ReadFile(self):
-        print('read File')
-        print(self.file_now)
+        print('read File ', os.path.basename(self.file_now))
 
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
         print(sheet_list)
@@ -81,14 +80,14 @@ class Compression:
         target_list_set = set(target_list)
         target_list = list(target_list_set)
 
-        print(target_list)
+        # print(target_list)
 
         # find mean data
 
         mean_data_index = []
         for i in range(len(target_list)):
             mean_index = 3 + 4*i
-            print(mean_index, df['配合番号'][mean_index])
+            # print(mean_index, df['配合番号'][mean_index])
             mean_data_index.append(mean_index)
 
         df = df.loc[mean_data_index]
@@ -105,7 +104,7 @@ class Compression:
         # method = ['compression']
         method = [Service.file_name_without_target(self.file_now, self.target)]
         condition = [sheet]
-        type_list = ['distortion']
+        type_list = ['CS']
 
         df.insert(0, 'unit', unit)
         df.insert(0, 'type', type_list)
@@ -113,7 +112,7 @@ class Compression:
         df.insert(0, 'method', method)
         df.reset_index(inplace=True, drop=True)
 
-        print(df)
+        # print(df)
 
         return df
 

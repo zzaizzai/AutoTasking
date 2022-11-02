@@ -24,11 +24,11 @@ class Deruta:
     def FindFile(self):
         print('find files....')
 
-        print(self.file_path)
+        # print(self.file_path)
 
         file_list = glob.glob(self.file_path)
         file_list = sorted(file_list, key=len)
-        print(file_list)
+        # print(file_list)
 
         if len(file_list) > 0:
             print(f'found {len(file_list) } {self.exp_name} file(s)')
@@ -41,9 +41,7 @@ class Deruta:
             return
 
     def ReadFile(self):
-        print('read file...')
-
-        print(self.file_now)
+        print('read file ', os.path.basename(self.file_now))
 
         df = pd.read_excel(self.file_now, sheet_name='1',
                            index_col=0, header=0)
@@ -58,12 +56,12 @@ class Deruta:
         new_col[8] = 'condition_time'
         df.columns = new_col
 
-        print('after rename of title')
+        # print('after rename of title')
         # print(df)
 
         # count number of target
         target_list = df['配合番号'].values.tolist()
-        print('target list', target_list)
+        # print('target list', target_list)
 
         # get targets
         target_list_temp = []
@@ -72,24 +70,27 @@ class Deruta:
             if not str(target_list[i]).isalpha() and str(target_list[i]) != 'nan':
                 # print(target_list[i])
                 target_list_temp.append(int(target_list[i]))
-        print('target temp', target_list_temp)
+        if self.test_mode:
+            print('target temp', target_list_temp)
 
         target_list = target_list_temp
         target_list_set = set(target_list)
         target_list = list(target_list_set)
-        print('target list', target_list)
+        if self.test_mode:
+            print('target list', target_list)
 
         # generate condition list
 
         # return
         conditions_list_index = []
-        print(df['liquid_index'])
+        # print(df['liquid_index'])
         for i, value in enumerate(df['liquid_index']):
             if value == "試験液":
                 conditions_list_index.append(int(i))
-        print('condition list index', conditions_list_index)
+        if self.test_mode:
+            print('condition list index', conditions_list_index)
 
-        print('??')
+        # print('??')
         condition_list = []
         for index_liquid in conditions_list_index:
             # print('index of liquid',index_liquid)
@@ -104,8 +105,8 @@ class Deruta:
                 condition_list[i], conditions_list_index[i], len(target_list))])
         # df_all.iloc[:,4:] = df_all.iloc[:,4:].round(0)
         # print(df_all.iloc[:,4:].round(1))
-        print('???')
-        print(df_all)
+        # print('???')
+        # print(df_all)
 
         self.writedata(df_all)
 
@@ -144,7 +145,6 @@ class Deruta:
         # print(df)
 
         # change col titles
-        print('change col titles')
         titles_temp = df.columns.values.tolist()
         titles_temp[2] = 'mean'
         df.columns = titles_temp

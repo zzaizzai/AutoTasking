@@ -33,9 +33,10 @@ class Tension:
             return
 
         auto_file_path = self.auto_file_dir + r'\*.xlsm'
-        print(auto_file_path)
+        # print(auto_file_path)
         auto_file_list = glob.glob(auto_file_path)
-        print(auto_file_list)
+        
+        # print(auto_file_list)
 
         if len(auto_file_list) == 0:
             print('no auto tesnion data file')
@@ -44,7 +45,7 @@ class Tension:
         df_all = pd.DataFrame()
 
         for auto_file in auto_file_list:
-            print(auto_file)
+            print(os.path.basename(auto_file))
             df_all = pd.concat([df_all, self.GetData(auto_file)])
 
         # print(df_all)
@@ -77,12 +78,14 @@ class Tension:
         for i, value in enumerate(df_all[0]):
             # print(int(value[3:]))
             if int(value[3:]) < int(self.target[3:]):
-                print(int(value[3:]))
-                print('below range ')
+                if self.test_mode:
+                    print(int(value[3:]))
+                    print('below range ')
                 remove_row_list.append(i)
             if int(value[3:]) >= self.len_df_col + int(self.target[3:]):
-                print(int(value[3:]))
-                print('over range')
+                if self.test_mode:
+                    print(int(value[3:]))
+                    print('over range')
                 remove_row_list.append(i)
         # print(remove_row_list)
         df_all = df_all.drop(remove_row_list)

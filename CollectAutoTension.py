@@ -4,9 +4,12 @@ import shutil
 import os
 import Service
 from multiprocessing.dummy import Pool as ThreadPool
+from dotenv import load_dotenv
 
 
 class hippari:
+    
+    load_dotenv()
 
     test_mode = False
 
@@ -34,7 +37,7 @@ class hippari:
         files_list = []
 
         def getData(file_auto: str):
-            print(file_auto)
+            print(os.path.basename(file_auto))
             is_file = os.path.isfile(file_auto)
             if is_file:
                 pass
@@ -51,7 +54,8 @@ class hippari:
             for date in target_rows['測定日']:
                 file_date_list.append(date)
 
-            print(file_date_list)
+            if self.test_mode:
+                print(file_date_list)
 
             myname_rows = df.query(f'依頼者名 == "{self.user_family_name}"')
             for date in file_date_list:
@@ -71,13 +75,13 @@ class hippari:
             getData(file_auto)
 
         # remove duplication
-        files_list_set = set(files_list)
-        files_list = list(files_list_set)
+        files_list = list(set(files_list))
 
-        print('target files')
-        print(files_list)
+        if self.test_mode:
+            print('target files')
+            print(files_list)
 
-        print('collecting wait a minute.......')
+        # print('collecting wait a minute.......')
 
         self.CopyFiles(files_list)
 
@@ -96,6 +100,7 @@ class hippari:
                     rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\{month}*\{file[0:8]}\**\{file}*', recursive=True)
                 print(files_path)
                 file_path = files_path[0]
+                print(os.path.basename(file_path))
             return file_path
 
         # multi Thread

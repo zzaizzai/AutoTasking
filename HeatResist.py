@@ -45,14 +45,14 @@ class HeatResist:
         print('read file...')
         print(self.file_now)
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
-        print(sheet_list)
+        # print(sheet_list)
 
         if '設定シート' in sheet_list:
             sheet_list.remove('設定シート')
         else:
             pass
 
-        print(sheet_list)
+        # print(sheet_list)
 
         df_all = pd.DataFrame()
 
@@ -63,7 +63,7 @@ class HeatResist:
 
     def ReadDataSheet(self, sheet: str):
 
-        print(sheet)
+        print('reading sheet: ', sheet)
         df = pd.read_excel(self.file_now, sheet_name=sheet,
                            header=9, index_col=1)
         df = df.transpose()

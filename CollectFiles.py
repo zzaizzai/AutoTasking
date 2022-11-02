@@ -56,7 +56,7 @@ class CollectFiles:
     def TranslateFromXlsToXlsx(self):
         print('translating xls files to xlsx file....')
         file_list = glob.glob(self.data_dir + r'\*.xls')
-        print(file_list)
+        # print(file_list)
 
         for file_xls in file_list:
             is_file = os.path.isfile(file_xls + 'x')

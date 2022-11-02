@@ -23,13 +23,12 @@ class OilTension:
         self.file_now = ''
 
     def StartProcess(self):
-        print('Find file')
-        print(self.file_path)
+        print('Find files')
 
         file_list = glob.glob(self.file_path)
         file_list = sorted(file_list, key=len)
 
-        print(file_list)
+        # print(file_list)
 
         if len(file_list) > 0:
             print(f'found {len(file_list)} {self.exp_name} file(s) ')
@@ -42,8 +41,7 @@ class OilTension:
             return
 
     def ReadFile(self):
-        print('ReadFile')
-        print('read file...')
+        print('read file...', os.path.basename(self.file_now))
 
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
         print(sheet_list)
@@ -108,9 +106,9 @@ class OilTension:
         index_mean = []
         for i in range(number_target):
             index_mean.append(3 + 4*i + 1)
-        print(index_mean)
+        # print(index_mean)
         df_mean = df_data.iloc[index_mean, :]
-        print('mean data')
+        # print('mean data')
 
         # get hardness data
         index_mean_hardness = list(map(lambda x: x-3, index_mean))
@@ -132,7 +130,8 @@ class OilTension:
 
         df_data.reset_index(inplace=True, drop=True)
 
-        print(df_data)
+        if self.test_mode:
+            print(df_data)
 
         return df_data
 

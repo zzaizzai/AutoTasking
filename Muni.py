@@ -16,12 +16,12 @@ class Muuni:
         self.index_name = ''
 
     def FindFile(self):
-        print('find files...')
-        print(self.path_xlsx)
+        print('find files as ', os.path.basename(self.path_xlsx))
+        # print(self.path_xlsx)
 
         file_list = glob.glob(self.path_xlsx)
         file_list = sorted(file_list, key=len)
-        print(file_list)
+        # print(file_list)
 
         if len(file_list) > 0:
             print(f'found {len(file_list)} {self.exp_name} file(s) ')
