@@ -15,6 +15,7 @@ import platform
 import pandas as pd
 import os
 import Osidasi
+import Ozone
 from dotenv import load_dotenv
 
 
@@ -31,7 +32,7 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
     OilTension.DoIt(target, test_mode=test_mode)
     Deruta.DoIt(target, test_mode=test_mode)
     Compression.DoIt(target, test_mode=test_mode)
-
+    Ozone.DoIt(target, test_mode=test_mode)
     Osidasi.DoIt(target, testMode=test_mode)
 
     Treatment.DoIt(target, test_mode=test_mode)
@@ -58,7 +59,7 @@ if __name__ == '__main__':
     print(f' path : {target_dir_path}')
 
     print(f'=========================================================================================')
-    print('11/2 Oshidashi added + some bug issue fixed')
+    print('11/2 Oshidashi added + some bug issue fixed 11/3 Ozone added')
     print('some rounding issure.')
     print('python version: ', platform.python_version())
     print('pandas version: ', pd.__version__)

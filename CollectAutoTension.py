@@ -122,8 +122,7 @@ class hippari:
 
 def DoIt(target: str, user_family_name: str, test_mode = False):
 
-    file_auto_list = [
-        r'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\全自動引張り試験共通リスト2022年.xlsx']
+    file_auto_list = [str(os.environ.get('AUTO_TENSION_ALL_XLSX_1'))]
 
     hip = hippari(target, file_auto_list, user_family_name)
     hip.TestMode(mode=test_mode)
