@@ -106,18 +106,23 @@ class Ozone:
 
         # print(target_list)
         df_sheet.index = target_list
-        print(df_sheet)
+
+        if self.test_mode:
+            print(df_sheet)
 
 
         df_press = df_sheet.iloc[:index_steam_start, :]    
-        print('df_press')
-        print(df_press)
+        if self.test_mode:
+            print('df_press')
+            print(df_press)
         df_steam = pd.DataFrame()
         if index_steam_start != 0:
             print(index_steam_start)
             df_steam = df_sheet.iloc[index_steam_start:, :]
-        print('df_steam')
-        print(df_steam)
+
+        if self.test_mode:
+            print('df_steam')
+            print(df_steam)
         
 
         df_press_n1 = df_press[~df_press.index.duplicated(keep='first')]
@@ -174,7 +179,8 @@ class Ozone:
                 df_input = pd.concat([df_input, df_steam_n2])
         except Exception as e:
             print(e)
-        print(df_input)
+        if self.test_mode:
+            print(df_input)
         return df_input
 
     def WriteData(self, df_input):

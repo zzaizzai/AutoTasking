@@ -106,7 +106,7 @@ def save_to_data_excel(file_data: str, df_input, file_name:str):
 
     try:
         df_merge.to_excel(file_data, index=True, header=True, startcol=0)
-        print(f'{file_name} saved data file in {file_data}')
+        print(f'{file_name} saved data file in {os.path.basename(file_data)}')
     except Exception as e:
         print(e)
 

@@ -6,6 +6,11 @@ import Service
 
 class Muuni:
 
+    test_mode = False
+
+    def TestMode(self, mode: bool):
+        self.TestMode = mode
+
     def __init__(self, target):
         self.exp_name = 'ムーニー_ロータ_自動集積'
 
@@ -34,7 +39,7 @@ class Muuni:
             return
 
     def ReadFile(self):
-        print('read file...', self.file_now)
+        print('read file...', os.path.basename(self.file_now))
 
         df = pd.read_excel(self.file_now, header=None)
         # print(df)
@@ -43,8 +48,9 @@ class Muuni:
                 num_target = df[0][i-1]
                 row_init = i + 4
 
-        print(f'number of target: {num_target}')
-        print(f'samples start row: {row_init}')
+        if self.test_mode:
+            print(f'number of target: {num_target}')
+            print(f'samples start row: {row_init}')
 
         df_input = df.loc[[row_init]]
         for i in range(1, num_target):
@@ -71,7 +77,7 @@ class Muuni:
 
         # insert unit, method.. else
         file_name = os.path.splitext(os.path.basename(self.file_now))[0]
-        print(file_name)
+        # print(file_name)
         unit = ['M', 'M', 'min']
         type_list = ['M1', 'Vm', 'T1']
         condition_list = [Service.file_name_without_target_and_expname(
@@ -87,7 +93,8 @@ class Muuni:
         df_input.insert(0, 'condition', condition_list)
         df_input.insert(0, 'method', method_list)
 
-        print(df_input)
+        if self.test_mode:
+           print(df_input)
 
         # return
         self.WriteData(df_input)
@@ -110,8 +117,10 @@ class Muuni:
         Service.save_to_data_excel(file_data, df_input, self.exp_name)
 
 
-def DoIt(target: str):
+def DoIt(target: str, test_mode = False):
     muni = Muuni(target)
+    muni.TestMode(test_mode)
+
     try:
         muni.FindFile()
     except Exception as e:
@@ -120,4 +129,4 @@ def DoIt(target: str):
 
 if __name__ == '__main__':
     target = target = input('target number (ex: ABC001): ')
-    DoIt(target)
+    DoIt(target, test_mode = True)

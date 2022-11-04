@@ -108,6 +108,8 @@ class Osidasi:
         # get Sulfurization data
         df_sulf = df.iloc[index_mean, :]
         df_sulf = df_sulf.loc[:, ['加硫前', '加硫後']]
+        df_sulf['収縮率'] = df_sulf['加硫前'] / df_sulf['加硫後']
+
 
         values_pressure_CH = df.loc[:, 'C.H'].to_list()[1:]
         values_pressure_H = df.loc[:, 'H'].to_list()[1:]
@@ -160,7 +162,7 @@ class Osidasi:
         method = [Service.file_name_without_target(self.file_now, self.target)]*len(df_all)
         unit = ['ss']*len(df_all)
 
-        unit_names = ['eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm','g', 'ratio', 'ratio', 'mm' ,'mm']
+        unit_names = ['eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', 'ratio', 'ratio', 'mm' ,'mm', 'ratio']
         if len(df_all) == len(unit_names):
             unit = unit_names
         type_list = df_all.index.to_list()

@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, test_mode=False):
     CollectFiles.Check(user, target, target_dir_path)
     CollectAutoTension.DoIt(target, user_family, test_mode=test_mode)
-    Muni.DoIt(target)
+    Muni.DoIt(target, test_mode=test_mode)
     Rheometer.DoIt(target, test_mode=test_mode)
     AutoTension.DoIt(target, test_mode=test_mode)
     Hardness.DoIt(target, test_mode=test_mode)

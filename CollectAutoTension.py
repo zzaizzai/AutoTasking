@@ -98,7 +98,7 @@ class hippari:
             while len(file_path) < 1:
                 files_path = glob.glob(
                     rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\{month}*\{file[0:8]}\**\{file}*', recursive=True)
-                print(files_path)
+                # print(files_path)
                 file_path = files_path[0]
                 print(os.path.basename(file_path))
             return file_path

@@ -58,22 +58,25 @@ class CollectFiles:
         file_list = glob.glob(self.data_dir + r'\*.xls')
         # print(file_list)
 
+        excel = win32.gencache.EnsureDispatch('Excel.Application')
         for file_xls in file_list:
             is_file = os.path.isfile(file_xls + 'x')
             if is_file:
                 print(f'xlsx is already exist {file_xls}')
             else:
                 print(f'translate... {file_xls} + x')
-                excel = win32.gencache.EnsureDispatch('Excel.Application')
-                excel.DisplayAlerts = False
-                excel.Visible = False
-                wb = excel.Workbooks.Open(file_xls)
-                # FileFormat = 51 is for .xlsx extension
-                wb.SaveAs(file_xls+"x", FileFormat=51)
-                wb.Close()
-                excel.Application.Quit()
-                os.remove(file_xls)
-
+                try:
+                    excel.DisplayAlerts = False
+                    excel.Visible = False
+                    wb = excel.Workbooks.Open(file_xls)
+                    # FileFormat = 51 is for .xlsx extension
+                    wb.SaveAs(file_xls+"x", FileFormat=51)
+                    wb.Close()
+                except Exception as e:
+                    print(e)
+                finally:
+                    os.remove(file_xls)
+        excel.Application.Quit()
     def conver_xls_to_xlsx(self):
         print('convert xls files to xlsx file...')
         xls_list = glob.glob(self.data_dir + r'\*.xls' )
