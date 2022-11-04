@@ -17,11 +17,13 @@ import os
 import Osidasi
 import Ozone
 from dotenv import load_dotenv
+import SaveLog
 
 
 
 
 def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, test_mode=False):
+    SaveLog.Save_Data(user, target)
     CollectFiles.Check(user, target, target_dir_path)
     CollectAutoTension.DoIt(target, user_family, test_mode=test_mode)
     Muni.DoIt(target, test_mode=test_mode)
