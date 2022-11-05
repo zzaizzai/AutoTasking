@@ -1,5 +1,7 @@
-import datetime
 import json
+import datetime
+import os
+
 
 def Save_Data(name:str, target: str):
     data = {
@@ -7,12 +9,18 @@ def Save_Data(name:str, target: str):
         'target': target,
         'date': str(datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')),
          }
-    f = './log.txt'
-    json_file = open(f, mode='a')
-    json.dump(data, json_file, indent=2, ensure_ascii=False)
-    # f.write(data)
-    json_file.close()
+         
+    log_json = []
+    if os.path.exists('./log.json'):
+        json_file = open('./log.json', 'r')
+        log_json = json.load(json_file)
+        json_file.close()
 
+    log_json.append(data)
+    json_write = open('./log.json', 'w')
+    json.dump(log_json, json_write, indent=4,  separators=(',',': '))
+
+    json_write.close()
 
 if __name__ == '__main__':
     user_name = input('input user name:')
