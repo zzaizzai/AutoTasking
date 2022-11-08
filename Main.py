@@ -18,6 +18,7 @@ import Osidasi
 import Ozone
 from dotenv import load_dotenv
 import SaveLog
+import MakeDataSheet
 
 
 
@@ -38,6 +39,9 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
     Osidasi.DoIt(target, testMode=test_mode)
 
     Treatment.DoIt(target, test_mode=test_mode)
+    MakeDataSheet.Doit(target)
+
+    
     print('\n=========================================================')
     # print('   process done   ')
     print(Service.work_done)

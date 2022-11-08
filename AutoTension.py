@@ -128,7 +128,7 @@ class Tension:
             condition_name = df_part[0][1]
             condition = [condition_name] * 5
 
-            name = ['auto tension'] * 5
+            name = ['初期物性'] * 5
             df_part = df_part.loc[[2, 3, 4, 5, 6]]
 
             df_part.columns = target_titles

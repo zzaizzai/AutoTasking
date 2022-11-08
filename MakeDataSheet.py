@@ -1,17 +1,25 @@
 import pandas as pd
 import os
 import openpyxl
+import Service
 
 
-Data_path = r"C:\Users\junsa\Desktop\CBA001\CBA001 Data.xlsx"
-Data_sheet_paht = r"C:\Users\junsa\Desktop\CBA001\CBA001 Data Sheet.xlsx"
+# Data_path = r"C:\Users\junsa\Desktop\CBA001\CBA001 Data.xlsx"
+# Data_path = r"C:\Users\1010020990\Desktop\FJX012 Data\FJX012 Data.xlsx"
+# Data_sheet_paht = r"C:\Users\junsa\Desktop\CBA001\CBA001 Data Sheet.xlsx"
+# Data_sheet_path = r"C:\Users\1010020990\Desktop\FJX012 Data\FJX012 Data Sheet.xlsx"
 
+def make_data_sheet(target:str):
 
-def make_data_sheet():
+    Data_sheet_path = Service.data_dir(target) + fr'\{target} Data Sheet.xlsx'
+    Data_path = Service.data_dir(target) + fr'\{target} Data.xlsx'
+
     if os.path.isfile(Data_path):
-        print('file exist')
+        print('data file exist')
+
     else:
-        print("no file ")
+        print("no data file ")
+        return
 
     df = pd.read_excel(Data_path, index_col=False)
     target_list = [x for x in df.columns.to_list() if x[3:].isdigit()]
@@ -38,7 +46,7 @@ def make_data_sheet():
 
     condition_now = "123"
     row_index = row_start + 1
-    for method in ["oil", "レオメータ ", "耐油引張り "]:
+    for method in ["ムーニー_ロータ_自動集積", "レオメータ", "初期物性", "硬度_自動集積 ","熱老化","耐油引張り", "⊿Ｖ ", "圧縮永久歪", "押出し", "オゾン"]:
         method_count = 0
         # print(method)
         for i, value in enumerate(df["method"].str.contains(method)):
@@ -69,8 +77,14 @@ def make_data_sheet():
                 row_index += 1
 
     # print(df["method"].str.contains("レオメータ"))
-    wb.save(Data_sheet_paht)
+    wb.save(Data_sheet_path)
+def Doit(target:str):
+    try:
+        make_data_sheet(target)
+    except Exception as e:
+        print(e)
 
 if __name__ == "__main__":
     print("make data sheet")
-    make_data_sheet()
+    target = input("input your target: ")
+    Doit(target)

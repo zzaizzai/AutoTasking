@@ -28,21 +28,61 @@ class Muuni:
         file_list = sorted(file_list, key=len)
         # print(file_list)
 
+        df_all = pd.DataFrame()
         if len(file_list) > 0:
             print(f'found {len(file_list)} {self.exp_name} file(s) ')
 
             for file in file_list:
                 self.file_now = file
-                self.ReadFile()
+                df_all = pd.concat([df_all, self.ReadFile()])
         else:
             print(f'No {self.exp_name}')
             return
+        # print(df_all)
+
+        df_all = self.RemoveOtherInfo(df_all)
+        df_all = self.ChangeConditionName(df_all)
+        
+
+
+        self.WriteData(df_all)
+
+    def RemoveOtherInfo(self, df_all):
+        print(df_all)
+
+        df_all = df_all.reset_index(drop=True)
+        df_all_temp_condition = df_all["condition"]
+
+        index_remove = []
+        for i, value in enumerate(df_all_temp_condition):
+            if ("121C" not in str(value)) and ("Vm" in df_all["type"][i] or "5p" in df_all["type"][i]):
+                print(value)
+                index_remove.append(i)
+        df_all = df_all.drop(index=index_remove )
+        return df_all
+
+
+
+
+
+    def ChangeConditionName(self, df_all):
+
+        df_all = df_all.reset_index(drop=True)
+        # print(df_all)
+        df_all_temp_condition = df_all["condition"]
+
+        for i, value in enumerate(df_all_temp_condition):
+            df_all_temp_condition[i] = value.replace('C','℃')
+
+        df_all["condition"] = df_all_temp_condition
+        # print(df_all)
+        return df_all
 
     def ReadFile(self):
         print('read file...', os.path.basename(self.file_now))
 
         df = pd.read_excel(self.file_now, header=None)
-        # print(df)
+
         for i, value in enumerate(df[0]):
             if value == '特性値：':
                 num_target = df[0][i-1]
@@ -56,37 +96,29 @@ class Muuni:
         for i in range(1, num_target):
             df_input = df_input.append(df.loc[[row_init + 2*i]])
 
-        # print('translate row and col')
+
         df_input = df_input.transpose()
-        # print(df_input)
 
-        # print('')
         df_input = df_input.loc[[2, 3, 4]]
-        # print(df_input)
 
-        # target numbers
-        # print('target numbering')
-        # print(len(df_input.columns))
+
         target_titles = []
         for i in range(len(df_input.columns)):
             target_titles.append(Service.target_number(i, self.target))
         # print(target_titles)
         df_input.columns = target_titles
 
-        # print(df_input)
 
-        # insert unit, method.. else
         file_name = os.path.splitext(os.path.basename(self.file_now))[0]
-        # print(file_name)
+
         unit = ['M', 'M', 'min']
-        type_list = ['M1', 'Vm', 'T1']
+        type_list = ['MV', 'Vm', '5p']
         condition_list = [Service.file_name_without_target_and_expname(
             self.file_now, self.target, self.exp_name)]*len(df_input)
         method_list = [Service.file_name_without_target(
             self.file_now, self.target)]*3
 
-        # print(method_list)
-        # print(condition_list)
+
 
         df_input.insert(0, 'unit', unit)
         df_input.insert(0, 'type', type_list)
@@ -97,7 +129,8 @@ class Muuni:
            print(df_input)
 
         # return
-        self.WriteData(df_input)
+        return df_input
+        # self.WriteData(df_input)
 
     def WriteData(self, df_input):
         print('writing data...')

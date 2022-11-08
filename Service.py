@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy
 
 
 def target_number(number: int, target: str) -> str:
@@ -61,7 +62,8 @@ def file_name_without_target(file_path: str, target: str) -> str:
 def round_by_check_eachone(df_round, demical: int, list_of_round: list):
     for i in range(len(df_round)):
         for j in range(len(df_round.columns)):
-            if type(df_round.iat[i, j]) == float or type(df_round.iat[i, j]) == int:
+            # print(i, j, df_round.iat[i, j], type(df_round.iat[i, j]))
+            if type(df_round.iat[i, j]) == float or type(df_round.iat[i, j]) == int or type(df_round.iat[i, j]) == numpy.float64 :
                 if df_round.iat[i, 2] in list_of_round:
                     df_round.iat[i, j] = round(
                         df_round.iat[i, j] + 0.00001, demical)

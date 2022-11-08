@@ -59,7 +59,51 @@ class HeatResist:
         for sheet in sheet_list:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
 
+        df_all = self.SortByTemperature(df_all)
+
+        df_all = self.ChangeConditionName(df_all)
+
         self.WriteData(df_all)
+    def ChangeConditionName(self, df_all):
+        df_all = df_all.reset_index(drop=True)
+        
+        df_all_temp_condition = df_all["condition"]
+        # print(df_all)
+        for i, value in enumerate(df_all_temp_condition):
+            # print(value.split("℃×"))
+            temperature_value = value.split("℃×")[0]
+            housr_value = value.split("℃×")[1].split("H")[0]
+            # print(temperature_value, housr_value)
+            df_all_temp_condition[i] = temperature_value +  "℃×" + housr_value + "H"
+        df_all["condition"] = df_all_temp_condition
+        # print(df_all)
+        return df_all
+        
+    def SortByTemperature(self, df_all):
+        # print(df_all)
+
+        df_all = df_all.reset_index(drop=True)
+
+        df_all_tem = df_all
+        df_all_tem["temperature"] = df_all_tem["condition"]
+        df_all_tem["hours"] = df_all_tem["condition"]
+
+        for i, value in enumerate(df_all_tem["condition"]):
+            condition_split = value.split("℃×")
+            temperature =  condition_split[0]
+            hours = condition_split[1].split("Hｒ")[0]
+
+            df_all_tem["temperature"][i] = temperature
+            df_all_tem["hours"][i] = hours
+        # # df_all["temperature"] = df_all_temperature
+        # # df_all["hour"] = df_all_hours
+        df_all_tem.sort_values(by = ["temperature", "hours"], ascending=[True,False], inplace=True)
+        df_all_tem.drop(columns=["temperature", "hours"], inplace = True)
+        # print(df_all_tem)
+
+        df_all = df_all_tem
+
+        return df_all
 
     def ReadDataSheet(self, sheet: str):
 
@@ -105,8 +149,6 @@ class HeatResist:
         zero_col_index = [0]
         row_zero = df.loc[[12]].values.tolist()[0]
         row_three = df.loc[[13]].values.tolist()[0]
-        # print(row_zero)
-        # print(row_three)
 
         for i in range(10):
             # print(row_zero[1+ i*4])
@@ -128,8 +170,6 @@ class HeatResist:
 
 
         df_input = df.iloc[:, mean_col_index]
-        # df_input = df_input.dropna()
-        # print(df_input)
 
         # change unit title
         unit_list = df_input.columns.tolist()
@@ -145,7 +185,7 @@ class HeatResist:
 
         # condition
         condition = [sheet]*len(df_input)
-        method = ['heat']*len(df_input)
+        method = ['熱老化']*len(df_input)
         unit = ['MPa', 'MPa', '%', 'HA', 'HA']
         type_list = ['100%M', 'TS', 'EB', 'HA(0s)', 'HA(3s)']
         df_input.insert(0, 'unit', unit)

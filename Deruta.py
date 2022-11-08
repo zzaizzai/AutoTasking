@@ -95,7 +95,7 @@ class Deruta:
         for index_liquid in conditions_list_index:
             # print('index of liquid',index_liquid)
             condition_name = str(df.iat[index_liquid, 3]) + ' ' + str(
-                df.iat[index_liquid, 7]) + '℃×' + str(df.iat[index_liquid, 8])
+                df.iat[index_liquid, 7]) + '℃×' + str(df.iat[index_liquid, 8]) + 'H'
             condition_list.append(condition_name)
         print('condition list', condition_list)
 
