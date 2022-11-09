@@ -23,7 +23,7 @@ class Rheometer:
         self.file_path_xls = self.file_dir + \
             rf'\{self.exp_name}*{target}*.xlsx'
         self.file_xls = ''
-        self.file_xlsx = ''
+        self.file_now = ''
         self.temperature = ''
 
     def StartProcess(self):
@@ -38,7 +38,7 @@ class Rheometer:
             print(f'found {len(file_list)} {self.exp_name} file(s) ')
 
             for file in file_list:
-                self.file_xlsx = file
+                self.file_now = file
                 self.MakeXlsmFile()
         else:
             print(f'No {self.exp_name}')
@@ -51,7 +51,7 @@ class Rheometer:
 
     def CreateGraph(self):
         print('creating graph')
-        wb = openpyxl.load_workbook(self.file_xlsx)
+        wb = openpyxl.load_workbook(self.file_now)
         ws = wb.worksheets[0]
 
         standard_cell = ws.cell(row=1, column=1)
@@ -179,12 +179,12 @@ class Rheometer:
             # print(target_number(i))
 
         ws.add_chart(chart, 'B8')
-        wb.save(self.file_xlsx)
+        wb.save(self.file_now)
 
         print('graph save done!!')
 
     def ReadFile(self):
-        df = pd.read_excel(self.file_xlsx, header=None)
+        df = pd.read_excel(self.file_now, header=None)
 
         num_target = 0
         row_init = 0
@@ -219,10 +219,18 @@ class Rheometer:
         unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min']
         type_list = ['MH', 'ML', 't10', 't50', 't90', 'CR']
         # condition = [Service.file_name_without_target_and_expname(self.file_xlsx, self.target, self.exp_name)] * 6
-        condition = [self.temperature] * len(df_input)
+        # condition_list = [Service.file_name_without_target_and_expname(
+        #     self.file_now, self.target, self.exp_name)]*len(df_input)
+        condition_environment = ""
+        if Service.file_name_without_target_and_expname(self.file_now, self.target, self.exp_name) == "none":
+            pass
+        else:
+            condition_environment = Service.file_name_without_target_and_expname(self.file_now, self.target, self.exp_name)
+
+        condition = [f'{self.temperature} {condition_environment}'] * len(df_input)
         # something is needed in condition.....
         method_list = [Service.file_name_without_target(
-            self.file_xlsx, self.target)] * len(df_input)
+            self.file_now, self.target)] * len(df_input)
 
         # for i, method in enumerate(method_list):
         #     method_list[i] = method.split()[0]

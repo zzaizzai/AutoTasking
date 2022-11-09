@@ -2,7 +2,7 @@ import pandas as pd
 import Service
 import glob
 import os
-
+import numpy
 
 class Deruta:
 
@@ -22,7 +22,7 @@ class Deruta:
         self.file_now = ''
 
     def FindFile(self):
-        print('find files....')
+        print(f'find files of {self.exp_name}')
 
         # print(self.file_path)
 
@@ -61,7 +61,12 @@ class Deruta:
 
         # count number of target
         target_list = df['配合番号'].values.tolist()
-        # print('target list', target_list)
+        target_list_temp =  target_list
+        for index, value in enumerate(target_list):
+            print(value)
+            if "プレス1次" in str(value) or "スチーム1次" in str(value):
+                target_list_temp[index] = numpy.nan            
+        print('target list', target_list)
 
         # get targets
         target_list_temp = []

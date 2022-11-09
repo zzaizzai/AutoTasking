@@ -87,13 +87,16 @@ class Hardness:
         elif len(df) == 2:
             type = ['０秒', '3秒']
         condition = []
-
-        if file_name[0][-1] == 'S':
-            condition = ['スチームJIS'] * len(df)
-        elif file_name[0][-1] == 'Q':
-            condition = ['Q'] * len(df)
+        if Service.file_name_without_target_and_expname(self.file_now,self.target, self.exp_name) == "none":
+            condition = ['Press']* len(df)
         else:
-            condition = ['NormalJIS'] * len(df)
+            condition = [Service.file_name_without_target_and_expname(self.file_now,self.target, self.exp_name)] * len(df)
+        # if file_name[0][-1] == 'S':
+        #     condition = ['スチームJIS'] * len(df)
+        # elif file_name[0][-1] == 'Q':
+        #     condition = ['Q'] * len(df)
+        # else:
+        #     condition = ['NormalJIS'] * len(df)
 
         # method = [file_name[0]] * len(df)
         method = [Service.file_name_without_target(

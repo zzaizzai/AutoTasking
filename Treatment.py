@@ -67,7 +67,7 @@ class Treatment:
 
         # type 0.1
         df = Service.round_by_check_eachone(
-            df, 1, ['5p','ML','MV', 'T1', 'MH', 't10', 't50', 't90', 'CR', '25%M', '50%M', '100%M', 'TS'])
+            df, 1, ['5p','ML','MV', 'T1', 'MH', 't10', 't50', 't90', 'CR', 'M25', 'M50', 'M100', 'TS'])
         # type 0
         df = Service.round_by_check_eachone(
             df, 0, ['０秒', '3秒', 'HA(0s)', 'HA(3s)', '⊿V'])
@@ -91,7 +91,7 @@ class Treatment:
         # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
         # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python'))
         index_drop = df.query(
-            "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']", engine='python').index
+            "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['M25', 'M50', 'M100', 'EB']", engine='python').index
         df.drop(list(index_drop), inplace=True)
 
         # print(df)

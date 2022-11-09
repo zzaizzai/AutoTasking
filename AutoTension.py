@@ -123,7 +123,7 @@ class Tension:
             # print(df_part.iloc[[0]].values.tolist()[0])
 
             unit = ['MPa', 'MPa', 'MPa', 'MPa', '%']
-            method = ['25%M', '50%M', '100%M', 'TS', 'EB']
+            method = ['M25', 'M50', 'M100', 'TS', 'EB']
 
             condition_name = df_part[0][1]
             condition = [condition_name] * 5
@@ -170,7 +170,7 @@ class Tension:
 
         df = pd.read_excel(auto_file, header=None)
 
-        df[2] = df[2].fillna('Normal')
+        df[2] = df[2].fillna('Press')
         df[2] = df[2] + df[3]
 
         for i in range(len(df)):

@@ -3,13 +3,18 @@ import os
 import openpyxl
 import Service
 
-
-# Data_path = r"C:\Users\junsa\Desktop\CBA001\CBA001 Data.xlsx"
-# Data_path = r"C:\Users\1010020990\Desktop\FJX012 Data\FJX012 Data.xlsx"
-# Data_sheet_paht = r"C:\Users\junsa\Desktop\CBA001\CBA001 Data Sheet.xlsx"
-# Data_sheet_path = r"C:\Users\1010020990\Desktop\FJX012 Data\FJX012 Data Sheet.xlsx"
-
 def make_data_sheet(target:str):
+
+    def CellWidth(work_book):
+        print('fixing cell width')
+
+        wb = work_book
+        ws = wb.worksheets[0]
+
+        ws.column_dimensions['B'].width = 30
+        ws.column_dimensions['C'].width = 20
+
+        return wb
 
     Data_sheet_path = Service.data_dir(target) + fr'\{target} Data Sheet.xlsx'
     Data_path = Service.data_dir(target) + fr'\{target} Data.xlsx'
@@ -77,7 +82,14 @@ def make_data_sheet(target:str):
                 row_index += 1
 
     # print(df["method"].str.contains("レオメータ"))
+
+    # width of wrokbook
+    wb = CellWidth(wb)
+
     wb.save(Data_sheet_path)
+    
+
+
 def Doit(target:str):
     try:
         make_data_sheet(target)

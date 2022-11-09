@@ -38,13 +38,9 @@ class Muuni:
         else:
             print(f'No {self.exp_name}')
             return
-        # print(df_all)
 
         df_all = self.RemoveOtherInfo(df_all)
-        df_all = self.ChangeConditionName(df_all)
         
-
-
         self.WriteData(df_all)
 
     def RemoveOtherInfo(self, df_all):
@@ -55,27 +51,10 @@ class Muuni:
 
         index_remove = []
         for i, value in enumerate(df_all_temp_condition):
-            if ("121C" not in str(value)) and ("Vm" in df_all["type"][i] or "5p" in df_all["type"][i]):
+            if ("121℃" not in str(value)) and ("Vm" in df_all["type"][i] or "5p" in df_all["type"][i]):
                 print(value)
                 index_remove.append(i)
         df_all = df_all.drop(index=index_remove )
-        return df_all
-
-
-
-
-
-    def ChangeConditionName(self, df_all):
-
-        df_all = df_all.reset_index(drop=True)
-        # print(df_all)
-        df_all_temp_condition = df_all["condition"]
-
-        for i, value in enumerate(df_all_temp_condition):
-            df_all_temp_condition[i] = value.replace('C','℃')
-
-        df_all["condition"] = df_all_temp_condition
-        # print(df_all)
         return df_all
 
     def ReadFile(self):
@@ -113,8 +92,12 @@ class Muuni:
 
         unit = ['M', 'M', 'min']
         type_list = ['MV', 'Vm', '5p']
-        condition_list = [Service.file_name_without_target_and_expname(
-            self.file_now, self.target, self.exp_name)]*len(df_input)
+
+        condition_teperature = df.iat[1,5]
+        condition_teperature = str(int(float(condition_teperature.split("℃")[0]))) + '℃'
+
+        condition_list = [condition_teperature]*len(df_input)
+
         method_list = [Service.file_name_without_target(
             self.file_now, self.target)]*3
 
