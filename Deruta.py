@@ -4,14 +4,15 @@ import glob
 import os
 import numpy
 
-class Deruta:
 
-    test_mode = False
+class Deruta:
 
     def TestMode(self, mode: bool):
         self.TestMode = mode
 
     def __init__(self, target):
+        self.test_mode = False
+
         self.exp_name = 'ΔV'
 
         self.target = target
@@ -24,11 +25,14 @@ class Deruta:
     def FindFile(self):
         print(f'find files of {self.exp_name}')
 
-        # print(self.file_path)
+        if self.test_mode:
+            print(self.file_path)
 
         file_list = glob.glob(self.file_path)
         file_list = sorted(file_list, key=len)
-        # print(file_list)
+
+        if self.test_mode:
+            print(file_list)
 
         if len(file_list) > 0:
             print(f'found {len(file_list) } {self.exp_name} file(s)')
@@ -42,42 +46,46 @@ class Deruta:
 
     def FindIndexOfTitle(self, df) -> int:
         # print(df.columns.to_list().index('配合ＮＯ'))
-        print(df.columns.to_list())
-        standard_index_liquid = None
+        # print(df.columns.to_list())
+        target_col_index = None
         for index_title, title in enumerate(df.columns.to_list()):
             for index, cell in enumerate(df[title]):
                 # print(index, cell)
-                if '配合' in str(cell):
+                if '試験液' in str(cell):
                     # print(title, index)
-                    standard_index_liquid = index_title
+                    target_col_index = index_title
                     break
-            # print([df["試験液"][df[str(value)]=='試験液']].index)
-            
-        # print(standard_index_liquid)
-        return standard_index_liquid
-
-
+        return target_col_index - 1
 
     def ReadFile(self):
         print('read file ', os.path.basename(self.file_now))
 
         df = pd.read_excel(self.file_now, sheet_name='1',
-                           index_col=0, header=0)
-        # print(df)
-        # standard_index_liquid = int(self.FindIndexOfTitle(df))
-        # print(standard_index_liquid)
-        # print(df[standard_index_liquid])
+                           index_col=None, header=None)
+
+        target_col_index = self.FindIndexOfTitle(df)
+        print('target col : ', target_col_index)
 
         new_col = df.columns.to_list()
         # print(df.columns.to_list())
         # print(df)
-        new_col[1] = '配合番号'
-        new_col[2] = 'liquid_index'
-        new_col[3] = 'liquid'
-        new_col[6] = 'condition_index'
-        new_col[6] = 'condition'
-        new_col[7] = 'condition_time'
+
+        liquid_col_index = target_col_index + 1
+        liquid_col_kind = liquid_col_index + 1
+        condition_index = target_col_index + 6
+        condition_kind = condition_index + 1
+        condition_time = condition_index + 2
+
+        new_col[target_col_index] = '配合番号'
+        new_col[liquid_col_index] = 'liquid_index'
+        new_col[liquid_col_kind] = 'liquid'
+
+        new_col[condition_index] = 'condition_index'
+        new_col[condition_kind] = 'condition'
+        new_col[condition_time] = 'condition_time'
         df.columns = new_col
+
+        print(df)
 
         # print('after rename of title')
         # print(df)
@@ -87,61 +95,137 @@ class Deruta:
 
         # print(target_list)
 
-        target_list_temp =  target_list
         for index, value in enumerate(target_list):
             # print(value)
             if "プレス1次" in str(value) or "スチーム1次" in str(value):
-                target_list_temp[index] = numpy.nan            
+                target_list[index] = 'nan'
         # print('target list', target_list)
 
-        # get targets
-        target_list_temp = []
-        for i in range(len(target_list)):
-            # print(target_list[i])
-            if not str(target_list[i]).isalpha() and str(target_list[i]) != 'nan':
-                # print(target_list[i])
-                target_list_temp.append(int(target_list[i]))
-        if self.test_mode:
-            print('target temp', target_list_temp)
-        # print('target temp', target_list_temp)
-        target_list = target_list_temp
-        target_list_set = set(target_list)
-        target_list = list(target_list_set)
+        # # get targets
+        target_list_temp = [x for x in target_list if str(
+            x) != 'nan' and str(x).replace(".", "", 1).isdigit()]
+        # print(target_list_temp)
+        target_list_index = [i for i, x in enumerate(target_list) if str(
+            x) != 'nan' and str(x).replace(".", "", 1).isdigit()]
+        target_list = list(set(target_list_temp))
+        # if self.test_mode:
+        print('showginf target list')
+        print(target_list)
+        print(target_list_index)
+
         # print(target_list)
         if self.test_mode:
             print('target list', target_list)
 
-        # generate condition list
-
-        # return
-        conditions_list_index = []
+        conditions_list_index = [int(i) for i, value in enumerate(
+            df['liquid_index']) if value == "試験液"]
         # print(df['liquid_index'])
+        print('condition list index', conditions_list_index)
 
-        for i, value in enumerate(df['liquid_index']):
-            if value == "試験液":
-                conditions_list_index.append(int(i))
-        if self.test_mode:
-             print('condition list index', conditions_list_index)
+        def get_condition_list(row_index_condition):
+            print(f'get condition lsit row of {row_index_condition}')
+            condition_name = str(df.iat[row_index_condition, liquid_col_kind]) + ' ' + str(
+                df.iat[row_index_condition, condition_index]) + '℃×'
+            if str(str(df.iat[row_index_condition, condition_index + 1])) != 'nan':
+                condition_name = condition_name + \
+                    str(df.iat[row_index_condition, condition_index + 1])
 
-        # print('??')
-        condition_list = []
-        for index_liquid in conditions_list_index:
-            # print('index of liquid',index_liquid)
-            condition_name = str(df.iat[index_liquid, 3]) + ' ' + str(
-                df.iat[index_liquid, 7]) + '℃×' + str(df.iat[index_liquid, 8]) + 'H'
-            condition_list.append(condition_name)
-        print('condition list', condition_list)
+            if str(df.iat[row_index_condition + 3, condition_index + 1]) != "nan":
+                condition_name = condition_name + \
+                    str(df.iat[row_index_condition + 1, condition_index + 3])
+            print(condition_name)
+            return condition_name
+
+        # condition_list = []
+        # for row_index_liquid in conditions_list_index:
+        #     # print('index of liquid',index_liquid)
+        #     condition_name = str(df.iat[row_index_liquid, liquid_col_kind]) + ' ' + str(
+        #         df.iat[row_index_liquid, condition_index]) + '℃×' + str(df.iat[row_index_liquid, condition_index + 1])
+        #     condition_list.append(condition_name)
+        # print('condition list', condition_list)
 
         df_all = pd.DataFrame()
-        for i in range(len(condition_list)):
-            df_all = pd.concat([df_all, self.ReadDataBlock(
-                condition_list[i], conditions_list_index[i], len(target_list))])
-        # df_all.iloc[:,4:] = df_all.iloc[:,4:].round(0)
-        # print(df_all.iloc[:,4:].round(1))
-        # print('???')
+        condition_block_index = 0
+
+        for i in range(0, len(target_list_index), len(target_list)):
+            print('all condition index', conditions_list_index)
+            condition_candidate = target_list_index[i: i +
+                                                    len(target_list)][0] - 5
+            print(f'condition_candidate {condition_candidate}')
+            if condition_candidate in conditions_list_index:
+                print(f'condition index {condition_candidate} is in list ')
+                condition_block_index = condition_candidate
+            else:
+                print(
+                    f'might be it is same to the before block {condition_candidate} altinatly use index: {condition_block_index}')
+            condition_block_value = get_condition_list(condition_block_index)
+            df_block_for_merge = self.ReadBlock_2(
+                df, target_list, target_list_index[i: i+len(target_list)], condition_block_value)
+            df_all = pd.concat([df_all, df_block_for_merge], sort=False)
+        # self.ReadBlock_2(df, target_list, target_col_index)
+        # for i in range(len(condition_list)):
+        #     df_all = pd.concat([df_all, self.ReadDataBlock(
+        #         condition_list[i], conditions_list_index[i], len(target_list))])
+
         print(df_all)
+        self.writedata(df_all)
 
         # self.writedata(df_all)
+    def ReadBlock_2(self, df, target_list: list, target_list_index: list, condition: str):
+        print('targets', target_list, 'target index', target_list_index)
+        # print(df)
+        df_block = df.iloc[target_list_index[0]-2:target_list_index[-1]+2, :]
+
+        df_block.reset_index(inplace=True, drop=True)
+        titles_new = df_block.iloc[0, :].to_list()
+        df_block = df_block.drop(index=[0])
+        df_block.reset_index(inplace=True, drop=True)
+
+        for i, title in enumerate(titles_new):
+            if title == "空中重量":
+                titles_new[i - 2] = "配合番号"
+                titles_new[i - 1] = "順番"
+                break
+
+        df_block.columns = titles_new
+
+        df_block_temp = df_block
+        # print(df_block_targets_temp)
+        targets_index = [i for i, x in enumerate(
+            df_block_temp["配合番号"]) if str(x) != 'nan']
+        # print(targets_index)
+        for index in targets_index:
+            # print(df_block_targets_temp[index])
+            # new_value = df_block_targets_temp[index].copy()
+            df_block_temp.loc[index-1,
+                              '配合番号'] = df_block_temp.loc[index, '配合番号']
+            df_block_temp.loc[index+1,
+                              '配合番号'] = df_block_temp.loc[index, '配合番号']
+            # df_block_targets_temp[index +1] = df_block_targets_temp[index]
+        # print(df_block_temp)
+        df_block["配合番号"] = df_block_temp["配合番号"]
+
+        # print(df_block.loc[df_block["順番"] == "平均値",["配合番号","⊿V"]])
+
+        df_block_input = df_block.loc[df_block["順番"] == "平均値", ["配合番号", "⊿V"]]
+        df_block_input = df_block_input.transpose()
+
+        # print(df_block_input)
+        df_block_input.reset_index(inplace=True, drop=True)
+        titles_new = [Service.target_number(i, self.target) for i, _ in enumerate(
+            df_block_input.iloc[0, :].to_list())]
+        df_block_input.columns = titles_new
+        df_block_input = df_block_input.drop(index=[0])
+        df_block_input.reset_index(inplace=True, drop=True)
+
+        df_block_input.insert(0, 'unit', '%')
+        df_block_input.insert(0, 'type', "⊿V")
+        df_block_input.insert(0, 'condition', condition)
+        df_block_input.insert(0, 'method', Service.file_name_without_target(self.file_now, self.target))
+
+        # print(df_block_input)
+
+        return df_block_input
 
     def ReadDataBlock(self, condition_of_exp, conditions_list_index: int, numbers_target: int):
 
