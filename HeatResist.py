@@ -93,11 +93,11 @@ class HeatResist:
             temperature =  condition_split[0]
             hours = condition_split[1].split("Hｒ")[0]
 
-            df_all_tem["temperature"][i] = temperature
-            df_all_tem["hours"][i] = hours
+            df_all_tem["temperature"][i] = int(temperature)
+            df_all_tem["hours"][i] = int(hours)
         # # df_all["temperature"] = df_all_temperature
         # # df_all["hour"] = df_all_hours
-        df_all_tem.sort_values(by = ["temperature", "hours"], ascending=[True,False], inplace=True)
+        df_all_tem.sort_values(by = ["temperature", "hours"], ascending=[True,True], inplace=True)
         df_all_tem.drop(columns=["temperature", "hours"], inplace = True)
         # print(df_all_tem)
 

@@ -148,9 +148,24 @@ class Tension:
 
             # print(df_part)
 
+            df_part =  self.ChangeBrTension(df_part)
+
             self.WriteData(df_part)
 
         print('merge done')
+    def ChangeBrTension(self, df_part):
+        # print(df_part)
+        df_part_temp = df_part
+        df_part_temp = df_part_temp[df_part_temp["condition"].str.contains('ｱﾝｸﾞﾙ') & df_part_temp["type"].str.contains('TS')]
+        # print(df_part_temp.index.to_list())
+        if len(df_part_temp.index.to_list()) > 0:
+            for index in df_part_temp.index.to_list():
+                print(index)
+                df_part["type"][index] = 'Tr-B'
+        # print(df_part)
+        return df_part
+
+
 
     def WriteData(self, df_input):
         print('writing data...')

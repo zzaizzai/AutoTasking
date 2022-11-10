@@ -12,7 +12,7 @@ class Deruta:
         self.TestMode = mode
 
     def __init__(self, target):
-        self.exp_name = '⊿Ｖ'
+        self.exp_name = 'ΔV'
 
         self.target = target
         self.file_path = Service.data_dir(
@@ -40,20 +40,43 @@ class Deruta:
             print(f'No {self.exp_name}')
             return
 
+    def FindIndexOfTitle(self, df) -> int:
+        # print(df.columns.to_list().index('配合ＮＯ'))
+        print(df.columns.to_list())
+        standard_index_liquid = None
+        for index_title, title in enumerate(df.columns.to_list()):
+            for index, cell in enumerate(df[title]):
+                # print(index, cell)
+                if '配合' in str(cell):
+                    # print(title, index)
+                    standard_index_liquid = index_title
+                    break
+            # print([df["試験液"][df[str(value)]=='試験液']].index)
+            
+        # print(standard_index_liquid)
+        return standard_index_liquid
+
+
+
     def ReadFile(self):
         print('read file ', os.path.basename(self.file_now))
 
         df = pd.read_excel(self.file_now, sheet_name='1',
                            index_col=0, header=0)
         # print(df)
+        # standard_index_liquid = int(self.FindIndexOfTitle(df))
+        # print(standard_index_liquid)
+        # print(df[standard_index_liquid])
+
         new_col = df.columns.to_list()
         # print(df.columns.to_list())
+        # print(df)
         new_col[1] = '配合番号'
         new_col[2] = 'liquid_index'
         new_col[3] = 'liquid'
-        new_col[7] = 'condition_index'
-        new_col[7] = 'condition'
-        new_col[8] = 'condition_time'
+        new_col[6] = 'condition_index'
+        new_col[6] = 'condition'
+        new_col[7] = 'condition_time'
         df.columns = new_col
 
         # print('after rename of title')
@@ -61,12 +84,15 @@ class Deruta:
 
         # count number of target
         target_list = df['配合番号'].values.tolist()
+
+        # print(target_list)
+
         target_list_temp =  target_list
         for index, value in enumerate(target_list):
-            print(value)
+            # print(value)
             if "プレス1次" in str(value) or "スチーム1次" in str(value):
                 target_list_temp[index] = numpy.nan            
-        print('target list', target_list)
+        # print('target list', target_list)
 
         # get targets
         target_list_temp = []
@@ -77,10 +103,11 @@ class Deruta:
                 target_list_temp.append(int(target_list[i]))
         if self.test_mode:
             print('target temp', target_list_temp)
-
+        # print('target temp', target_list_temp)
         target_list = target_list_temp
         target_list_set = set(target_list)
         target_list = list(target_list_set)
+        # print(target_list)
         if self.test_mode:
             print('target list', target_list)
 
@@ -89,11 +116,12 @@ class Deruta:
         # return
         conditions_list_index = []
         # print(df['liquid_index'])
+
         for i, value in enumerate(df['liquid_index']):
             if value == "試験液":
                 conditions_list_index.append(int(i))
         if self.test_mode:
-            print('condition list index', conditions_list_index)
+             print('condition list index', conditions_list_index)
 
         # print('??')
         condition_list = []
@@ -111,9 +139,9 @@ class Deruta:
         # df_all.iloc[:,4:] = df_all.iloc[:,4:].round(0)
         # print(df_all.iloc[:,4:].round(1))
         # print('???')
-        # print(df_all)
+        print(df_all)
 
-        self.writedata(df_all)
+        # self.writedata(df_all)
 
     def ReadDataBlock(self, condition_of_exp, conditions_list_index: int, numbers_target: int):
 
