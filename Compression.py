@@ -15,7 +15,7 @@ class Compression:
         self.target = target
         self.exp_name = '圧縮永久歪み_自動集積'
         self.file_path = Service.data_dir(
-            target) + rf'\{self.exp_name} {target}*.xls*'
+            target) + rf'\{self.exp_name}* {target}*.xls*'
         self.file_now = ''
 
     def FindFile(self):
@@ -31,15 +31,18 @@ class Compression:
         else:
             print(f'No {self.exp_name}')
             print('search as 圧縮永久歪')
-            self.exp_name = '圧縮永久歪'
+            self.file_path = Service.data_dir(self.target) + rf'\圧縮永久歪* {self.target}*.xls*'
             file_list = glob.glob(self.file_path)
             file_list = sorted(file_list, key=len)
             if len(file_list) > 0:
+                print(f'found {len(file_list)} {self.exp_name} file(s)')
                 pass
             else:
+                print(f'No {self.exp_name}')
                 return
 
         for file in file_list:
+            print(file)
             self.file_now = file
             self.ReadFile()
                 
@@ -54,7 +57,7 @@ class Compression:
         df_all = pd.DataFrame()
 
         for sheet in sheet_list:
-            # print(sheet)
+            print(sheet)
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
 
         # print('all input data')

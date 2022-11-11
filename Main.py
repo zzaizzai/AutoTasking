@@ -19,6 +19,8 @@ import Ozone
 from dotenv import load_dotenv
 import SaveLog
 import MakeDataSheet
+import Zeika
+
 
 
 
@@ -35,6 +37,7 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
     OilTension.DoIt(target, test_mode=test_mode)
     Deruta.DoIt(target, test_mode=test_mode)
     Compression.DoIt(target, test_mode=test_mode)
+    Zeika.DoIt(target, test_mode=test_mode)
     Ozone.DoIt(target, test_mode=test_mode)
     Osidasi.DoIt(target, testMode=test_mode)
 

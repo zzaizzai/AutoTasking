@@ -162,6 +162,7 @@ class Tension:
             for index in df_part_temp.index.to_list():
                 print(index)
                 df_part["type"][index] = 'Tr-B'
+                df_part["unit"][index] = 'N/mm'
         # print(df_part)
         return df_part
 

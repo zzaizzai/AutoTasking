@@ -13,7 +13,7 @@ class Deruta:
     def __init__(self, target):
         self.test_mode = False
 
-        self.exp_name = 'ΔV'
+        self.exp_name = 'ΔV_自動集積'
 
         self.target = target
         self.file_path = Service.data_dir(
@@ -30,6 +30,12 @@ class Deruta:
 
         file_list = glob.glob(self.file_path)
         file_list = sorted(file_list, key=len)
+
+        if len(file_list) == 0:
+            self.file_path = Service.data_dir(target) + rf'\ΔV*{target}*.xls*'
+            file_list = glob.glob(self.file_path)
+            file_list = sorted(file_list, key=len)
+
 
         if self.test_mode:
             print(file_list)
@@ -122,17 +128,15 @@ class Deruta:
         # print(df['liquid_index'])
         print('condition list index', conditions_list_index)
 
-        def get_condition_list(row_index_condition):
+        def get_condition_list(row_index_condition, condition_candidate_index:int):
             print(f'get condition lsit row of {row_index_condition}')
             condition_name = str(df.iat[row_index_condition, liquid_col_kind]) + ' ' + str(
-                df.iat[row_index_condition, condition_index]) + '℃×'
+                df.iat[row_index_condition, condition_index])
             if str(str(df.iat[row_index_condition, condition_index + 1])) != 'nan':
-                condition_name = condition_name + \
-                    str(df.iat[row_index_condition, condition_index + 1])
+                condition_name = "℃×" +  condition_name + str(df.iat[row_index_condition, condition_index + 1]) + "h"
 
-            if str(df.iat[row_index_condition + 3, condition_index + 1]) != "nan":
-                condition_name = condition_name + \
-                    str(df.iat[row_index_condition + 1, condition_index + 3])
+            if str(df.iat[condition_candidate_index + 1, condition_index + 3]) != "nan":
+                condition_name = condition_name + str(df.iat[condition_candidate_index + 1, condition_index + 3])
             print(condition_name)
             return condition_name
 
@@ -146,19 +150,20 @@ class Deruta:
 
         df_all = pd.DataFrame()
         condition_block_index = 0
-
         for i in range(0, len(target_list_index), len(target_list)):
             print('all condition index', conditions_list_index)
-            condition_candidate = target_list_index[i: i +
+            condition_candidate_index = target_list_index[i: i +
                                                     len(target_list)][0] - 5
-            print(f'condition_candidate {condition_candidate}')
-            if condition_candidate in conditions_list_index:
-                print(f'condition index {condition_candidate} is in list ')
-                condition_block_index = condition_candidate
+            print(f'condition_candidate {condition_candidate_index}')
+            if condition_candidate_index in conditions_list_index:
+                print(f'condition index {condition_candidate_index} is in list ')
+                condition_block_index = condition_candidate_index
             else:
                 print(
-                    f'might be it is same to the before block {condition_candidate} altinatly use index: {condition_block_index}')
-            condition_block_value = get_condition_list(condition_block_index)
+                    f'might be it is same to the before block {condition_candidate_index} altinatly use index: {condition_block_index}')
+
+
+            condition_block_value = get_condition_list(condition_block_index, condition_candidate_index)
             df_block_for_merge = self.ReadBlock_2(
                 df, target_list, target_list_index[i: i+len(target_list)], condition_block_value)
             df_all = pd.concat([df_all, df_block_for_merge], sort=False)
@@ -207,7 +212,7 @@ class Deruta:
 
         # print(df_block.loc[df_block["順番"] == "平均値",["配合番号","⊿V"]])
 
-        df_block_input = df_block.loc[df_block["順番"] == "平均値", ["配合番号", "⊿V"]]
+        df_block_input = df_block.loc[df_block["順番"] == "平均値", ["配合番号", "△Ｖ"]]
         df_block_input = df_block_input.transpose()
 
         # print(df_block_input)

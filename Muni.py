@@ -90,8 +90,8 @@ class Muuni:
 
         file_name = os.path.splitext(os.path.basename(self.file_now))[0]
 
-        unit = ['M', 'M', 'min']
-        type_list = ['MV', 'Vm', '5p']
+        unit = ['kgf・cm', 'kgf・cm', 'min']
+        type_list = ['MV', 'Vm', 'ST 5p']
 
         condition_teperature = df.iat[1,5]
         condition_teperature = str(int(float(condition_teperature.split("℃")[0]))) + '℃'

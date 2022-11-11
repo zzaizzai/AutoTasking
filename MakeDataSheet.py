@@ -51,7 +51,7 @@ def make_data_sheet(target:str):
 
     condition_now = "123"
     row_index = row_start + 1
-    for method in ["ムーニー_ロータ_自動集積", "レオメータ", "初期物性", "硬度_自動集積 ","熱老化","耐油引張り", "⊿Ｖ ", "圧縮永久歪", "押出し", "オゾン"]:
+    for method in ["ムーニー_ロータ_自動集積", "レオメータ", "初期物性", "硬度_自動集積 ","熱老化","耐油引張り", "⊿Ｖ", 'ΔV', "圧縮永久歪", '脆化',"押出し", "オゾン"]:
         method_count = 0
         # print(method)
         for i, value in enumerate(df["method"].str.contains(method)):

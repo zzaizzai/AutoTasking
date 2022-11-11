@@ -13,6 +13,13 @@ def target_number(number: int, target: str) -> str:
     alphabet_num = alphabet + str('%03d' % (num + number))
     return alphabet_num
 
+def target_number_as(number: int, target: str) -> str:
+    """
+    target_number_as(24, ABC020) -> ABC024
+    """
+    alphabet = target[0:3]
+    alphabet_num = alphabet + str('%03d' % (number))
+    return alphabet_num
 
 def check_target(target: str) -> bool:
     if len(target) != 6:
