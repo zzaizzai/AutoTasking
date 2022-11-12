@@ -54,24 +54,24 @@ class Hardness:
         df.iloc[:, 13] = df_target
 
         df = df.iloc[:, 13:16]
-        # print(df)
+
 
         titles = df.columns.to_list()
-        # print(titles)
+
         titles = ['配合番号', '０秒', '3秒']
         df.columns = titles
 
         df.dropna(how='all', inplace=True)
         df.dropna(how='all', axis=1,  inplace=True)
-        # print(df)
+
 
         df = df.transpose()
-        # print(df)
+
         titles_new = df.loc['配合番号'].to_list()
-        # print(titles_new)
+
         df.columns = titles_new
         df = df.drop('配合番号', axis=0)
-        # print(df)
+
 
         # print(self.file_now)
         file_name = os.path.splitext(os.path.basename(self.file_now))
@@ -81,34 +81,31 @@ class Hardness:
         df.reset_index(inplace=True, drop=True)
 
         unit = ['HA'] * len(df)
-        type = []
+        type_list = []
         if len(df) == 1:
-            type = ['０秒']
+            type_list = ['０秒']
         elif len(df) == 2:
-            type = ['０秒', '3秒']
-        condition = []
-        if Service.file_name_without_target_and_expname(self.file_now,self.target, self.exp_name) == "none":
-            condition = ['Press']* len(df)
-        else:
-            condition = [Service.file_name_without_target_and_expname(self.file_now,self.target, self.exp_name)] * len(df)
-        # if file_name[0][-1] == 'S':
-        #     condition = ['スチームJIS'] * len(df)
-        # elif file_name[0][-1] == 'Q':
-        #     condition = ['Q'] * len(df)
-        # else:
-        #     condition = ['NormalJIS'] * len(df)
+            type_list = ['０秒', '3秒']
 
-        # method = [file_name[0]] * len(df)
+        condition = []
+
+        if Service.file_name_without_target_and_expname(self.file_now, self.target, self.exp_name) == "none":
+            condition = ['Press'] * len(df)
+        else:
+            condition = [Service.file_name_without_target_and_expname(
+                self.file_now, self.target, self.exp_name)] * len(df)
         method = [Service.file_name_without_target(
             self.file_now, self.target)] * len(df)
 
-        df.insert(0, 'unit', unit)
-        df.insert(0, 'type', type)
-        df.insert(0, 'condition', condition)
-        df.insert(0, 'method', method)
+        df = Service.create_method_condition_type_unit(df, method, condition, type_list, unit)
 
-        print(method[0] + " df")
-        print(df)
+        # df.insert(0, 'unit', unit)
+        # df.insert(0, 'type', type_list)
+        # df.insert(0, 'condition', condition)
+        # df.insert(0, 'method', method)
+
+        # print(method[0] + " df")
+        # print(df)
 
         try:
             self.WriteDate(df)
@@ -134,7 +131,6 @@ class Hardness:
         df_merge = pd.concat([df_data, df_input], sort=False)
         df_merge.reset_index(inplace=True, drop=True)
 
-
         try:
             df_merge.to_excel(file_data, index=True, header=True)
         except Exception as e:
@@ -144,7 +140,7 @@ class Hardness:
         print(f'saved data file in {file_data}')
 
 
-def DoIt(target: str, test_mode = False):
+def DoIt(target: str, test_mode=False):
     hado = Hardness(target)
     hado.TestMode(mode=test_mode)
     try:

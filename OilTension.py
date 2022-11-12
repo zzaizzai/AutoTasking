@@ -81,7 +81,6 @@ class OilTension:
         df_data.index = list_index
         # print(df_data)
 
-
         index_list = df_data.index.to_list()
         index_values = Service.remove_dufulicant(index_list)
 
@@ -117,16 +116,17 @@ class OilTension:
 
         df_data = df_mean.transpose()
 
-        unit = ['MPa', 'MPa', '%', 'HA']
-        type_list = ['100%M', 'TS', 'EB', 'HA(0s)']
-        condition = [sheet]*4
-        method = [Service.file_name_without_target(
+        unit_list = ['MPa', 'MPa', '%', 'HA']
+        type_list = ['M100', 'TS', 'EB', 'HA(0s)']
+        condition_list = [sheet]*4
+        method_list = [Service.file_name_without_target(
             self.file_now, self.target)]*4
 
-        df_data.insert(0, 'unit', unit)
-        df_data.insert(0, 'type', type_list)
-        df_data.insert(0, 'condition', condition)
-        df_data.insert(0, 'method', method)
+        df_data = Service.create_method_condition_type_unit(df_data, method_list, condition_list, type_list, unit_list)
+        # df_data.insert(0, 'unit', unit_list)
+        # df_data.insert(0, 'type', type_list)
+        # df_data.insert(0, 'condition', condition_list)
+        # df_data.insert(0, 'method', method_list)
 
         df_data.reset_index(inplace=True, drop=True)
 

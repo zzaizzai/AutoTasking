@@ -31,7 +31,8 @@ class Compression:
         else:
             print(f'No {self.exp_name}')
             print('search as 圧縮永久歪')
-            self.file_path = Service.data_dir(self.target) + rf'\圧縮永久歪* {self.target}*.xls*'
+            self.file_path = Service.data_dir(
+                self.target) + rf'\圧縮永久歪* {self.target}*.xls*'
             file_list = glob.glob(self.file_path)
             file_list = sorted(file_list, key=len)
             if len(file_list) > 0:
@@ -45,8 +46,6 @@ class Compression:
             print(file)
             self.file_now = file
             self.ReadFile()
-                
-            
 
     def ReadFile(self):
         print('read File ', os.path.basename(self.file_now))
@@ -65,6 +64,7 @@ class Compression:
         # print(df_all)
 
         self.WriteData(df_all)
+
     def SortByTemperature(self, df_all):
         # print(df_all)
 
@@ -79,9 +79,10 @@ class Compression:
             df_all_tem["temperature"][i] = int(value.split("℃×")[0])
             df_all_tem["hours"][i] = int(value.split("℃×")[1].split("H")[0])
         # print(df_all_tem)
-        df_all_tem.sort_values(by = ["temperature", "hours"], ascending=[True,True], inplace=True)
-        df_all_tem.drop(columns=["temperature", "hours"], inplace = True)
-        
+        df_all_tem.sort_values(by=["temperature", "hours"], ascending=[
+                               True, True], inplace=True)
+        df_all_tem.drop(columns=["temperature", "hours"], inplace=True)
+
         # print(df_all_tem)
 
         return df_all_tem

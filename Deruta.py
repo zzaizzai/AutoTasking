@@ -7,8 +7,9 @@ import numpy
 
 class Deruta:
 
-    def TestMode(self, mode: bool):
-        self.TestMode = mode
+    def set_testmode(self, mode: bool):
+
+        self.test_mode = mode
 
     def __init__(self, target):
         self.test_mode = False
@@ -35,7 +36,6 @@ class Deruta:
             self.file_path = Service.data_dir(target) + rf'\ΔV*{target}*.xls*'
             file_list = glob.glob(self.file_path)
             file_list = sorted(file_list, key=len)
-
 
         if self.test_mode:
             print(file_list)
@@ -73,8 +73,6 @@ class Deruta:
         print('target col : ', target_col_index)
 
         new_col = df.columns.to_list()
-        # print(df.columns.to_list())
-        # print(df)
 
         liquid_col_index = target_col_index + 1
         liquid_col_kind = liquid_col_index + 1
@@ -91,7 +89,8 @@ class Deruta:
         new_col[condition_time] = 'condition_time'
         df.columns = new_col
 
-        print(df)
+        if self.test_mode:
+            print(df)
 
         # print('after rename of title')
         # print(df)
@@ -128,54 +127,47 @@ class Deruta:
         # print(df['liquid_index'])
         print('condition list index', conditions_list_index)
 
-        def get_condition_list(row_index_condition, condition_candidate_index:int):
+        def get_condition_list(row_index_condition, condition_candidate_index: int):
             print(f'get condition lsit row of {row_index_condition}')
             condition_name = str(df.iat[row_index_condition, liquid_col_kind]) + ' ' + str(
                 df.iat[row_index_condition, condition_index])
             if str(str(df.iat[row_index_condition, condition_index + 1])) != 'nan':
-                condition_name = "℃×" +  condition_name + str(df.iat[row_index_condition, condition_index + 1]) + "h"
+                condition_name = "℃×" + condition_name + \
+                    str(df.iat[row_index_condition, condition_index + 1]) + "h"
 
             if str(df.iat[condition_candidate_index + 1, condition_index + 3]) != "nan":
-                condition_name = condition_name + str(df.iat[condition_candidate_index + 1, condition_index + 3])
+                condition_name = condition_name + \
+                    str(df.iat[condition_candidate_index +
+                        1, condition_index + 3])
             print(condition_name)
             return condition_name
-
-        # condition_list = []
-        # for row_index_liquid in conditions_list_index:
-        #     # print('index of liquid',index_liquid)
-        #     condition_name = str(df.iat[row_index_liquid, liquid_col_kind]) + ' ' + str(
-        #         df.iat[row_index_liquid, condition_index]) + '℃×' + str(df.iat[row_index_liquid, condition_index + 1])
-        #     condition_list.append(condition_name)
-        # print('condition list', condition_list)
 
         df_all = pd.DataFrame()
         condition_block_index = 0
         for i in range(0, len(target_list_index), len(target_list)):
             print('all condition index', conditions_list_index)
             condition_candidate_index = target_list_index[i: i +
-                                                    len(target_list)][0] - 5
+                                                          len(target_list)][0] - 5
             print(f'condition_candidate {condition_candidate_index}')
             if condition_candidate_index in conditions_list_index:
-                print(f'condition index {condition_candidate_index} is in list ')
+                print(
+                    f'condition index {condition_candidate_index} is in list ')
                 condition_block_index = condition_candidate_index
             else:
                 print(
                     f'might be it is same to the before block {condition_candidate_index} altinatly use index: {condition_block_index}')
 
-
-            condition_block_value = get_condition_list(condition_block_index, condition_candidate_index)
+            condition_block_value = get_condition_list(
+                condition_block_index, condition_candidate_index)
             df_block_for_merge = self.ReadBlock_2(
                 df, target_list, target_list_index[i: i+len(target_list)], condition_block_value)
             df_all = pd.concat([df_all, df_block_for_merge], sort=False)
-        # self.ReadBlock_2(df, target_list, target_col_index)
-        # for i in range(len(condition_list)):
-        #     df_all = pd.concat([df_all, self.ReadDataBlock(
-        #         condition_list[i], conditions_list_index[i], len(target_list))])
 
-        print(df_all)
+        if self.test_mode:
+            print(df_all)
+
         self.writedata(df_all)
 
-        # self.writedata(df_all)
     def ReadBlock_2(self, df, target_list: list, target_list_index: list, condition: str):
         print('targets', target_list, 'target index', target_list_index)
         # print(df)
@@ -200,17 +192,12 @@ class Deruta:
             df_block_temp["配合番号"]) if str(x) != 'nan']
         # print(targets_index)
         for index in targets_index:
-            # print(df_block_targets_temp[index])
-            # new_value = df_block_targets_temp[index].copy()
             df_block_temp.loc[index-1,
                               '配合番号'] = df_block_temp.loc[index, '配合番号']
             df_block_temp.loc[index+1,
                               '配合番号'] = df_block_temp.loc[index, '配合番号']
-            # df_block_targets_temp[index +1] = df_block_targets_temp[index]
-        # print(df_block_temp)
-        df_block["配合番号"] = df_block_temp["配合番号"]
 
-        # print(df_block.loc[df_block["順番"] == "平均値",["配合番号","⊿V"]])
+        df_block["配合番号"] = df_block_temp["配合番号"]
 
         df_block_input = df_block.loc[df_block["順番"] == "平均値", ["配合番号", "△Ｖ"]]
         df_block_input = df_block_input.transpose()
@@ -223,81 +210,10 @@ class Deruta:
         df_block_input = df_block_input.drop(index=[0])
         df_block_input.reset_index(inplace=True, drop=True)
 
-        df_block_input.insert(0, 'unit', '%')
-        df_block_input.insert(0, 'type', "⊿V")
-        df_block_input.insert(0, 'condition', condition)
-        df_block_input.insert(0, 'method', Service.file_name_without_target(self.file_now, self.target))
-
-        # print(df_block_input)
+        df_block_input = Service.create_method_condition_type_unit(
+            df_block_input, Service.file_name_without_target(self.file_now, self.target), condition, "⊿V",  '%')
 
         return df_block_input
-
-    def ReadDataBlock(self, condition_of_exp, conditions_list_index: int, numbers_target: int):
-
-        print(
-            f'read data block with {condition_of_exp}, index: {conditions_list_index}, targets: {numbers_target}')
-
-        df = pd.read_excel(self.file_now, sheet_name='1',
-                           header=conditions_list_index+4, index_col=2)
-        df = df.iloc[:3*numbers_target, :]
-        # print(df)
-        index_temp = df.index.to_list()
-        for i in range(1, len(index_temp) - 1):
-            if str(index_temp[i]) != 'nan' and str(index_temp[i-1]) == 'nan' and str(index_temp[i+1]) == 'nan':
-                index_temp[i-1] = index_temp[i]
-                index_temp[i+1] = index_temp[i]
-        # print(index_temp)
-
-        df.index = index_temp
-
-        # remove nan index
-        df = df.query("index == index")
-        index_temp = df.index.to_list()
-        # print(df)
-
-        index_target_temp = []
-        for value in index_temp:
-            target_inddex = int(value) - int(self.target[3:])
-            index_target_temp.append(
-                Service.target_number(target_inddex, self.target))
-
-        # print(index_target_temp)
-
-        df.index = index_target_temp
-        # print(df)
-
-        # change col titles
-        titles_temp = df.columns.values.tolist()
-        titles_temp[2] = 'mean'
-        df.columns = titles_temp
-        # print(df)
-
-        df = df.query("mean in ['平均値']")
-        # print(df)
-
-        df = df.loc[:, ['△Ｖ']]
-        # print(df)
-
-        df = df.transpose()
-
-        condition = [condition_of_exp]
-        # method = ['oil']
-        method = [Service.file_name_without_target(self.file_now, self.target)]
-        unit = ['%']
-        type_list = ['⊿V']
-
-        df.insert(0, 'unit', unit)
-        df.insert(0, 'type', type_list)
-        df.insert(0, 'condition', condition)
-        df.insert(0, 'method', method)
-
-        df.reset_index(inplace=True, drop=True)
-
-        # print(df.iloc[:,4:].round(1))
-        if self.test_mode:
-            print(df)
-
-        return df
 
     def writedata(self, df_input):
         print('writing data')
@@ -315,7 +231,7 @@ class Deruta:
 
 def DoIt(target: str, test_mode=False):
     ruta = Deruta(target)
-    ruta.TestMode(mode=test_mode)
+    ruta.set_testmode(mode=test_mode)
 
     try:
         ruta.FindFile()

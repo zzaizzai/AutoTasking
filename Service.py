@@ -13,6 +13,7 @@ def target_number(number: int, target: str) -> str:
     alphabet_num = alphabet + str('%03d' % (num + number))
     return alphabet_num
 
+
 def target_number_as(number: int, target: str) -> str:
     """
     target_number_as(24, ABC020) -> ABC024
@@ -20,6 +21,7 @@ def target_number_as(number: int, target: str) -> str:
     alphabet = target[0:3]
     alphabet_num = alphabet + str('%03d' % (number))
     return alphabet_num
+
 
 def check_target(target: str) -> bool:
     if len(target) != 6:
@@ -70,7 +72,7 @@ def round_by_check_eachone(df_round, demical: int, list_of_round: list):
     for i in range(len(df_round)):
         for j in range(len(df_round.columns)):
             # print(i, j, df_round.iat[i, j], type(df_round.iat[i, j]))
-            if type(df_round.iat[i, j]) == float or type(df_round.iat[i, j]) == int or type(df_round.iat[i, j]) == numpy.float64 :
+            if type(df_round.iat[i, j]) == float or type(df_round.iat[i, j]) == int or type(df_round.iat[i, j]) == numpy.float64:
                 if df_round.iat[i, 2] in list_of_round:
                     df_round.iat[i, j] = round(
                         df_round.iat[i, j] + 0.00001, demical)
@@ -97,11 +99,10 @@ def normal_round(df, round_num: int):
 
 
 def remove_dufulicant(duful_list: list):
-    target_list_set = set(duful_list)
-    return list(target_list_set)
+    return list(set(duful_list))
 
 
-def save_to_data_excel(file_data: str, df_input, file_name:str):
+def save_to_data_excel(file_data: str, df_input, file_name: str):
     """
     save df to data file as merged df
     """
@@ -118,6 +119,14 @@ def save_to_data_excel(file_data: str, df_input, file_name:str):
         print(f'{file_name} saved data file in {os.path.basename(file_data)}')
     except Exception as e:
         print(e)
+
+
+def create_method_condition_type_unit(df_create_MCTU: pd.DataFrame, method_list, condition_list, type_list, unit_list) -> pd.DataFrame:
+    df_create_MCTU.insert(0, 'unit', unit_list)
+    df_create_MCTU.insert(0, 'type', type_list)
+    df_create_MCTU.insert(0, 'condition', condition_list)
+    df_create_MCTU.insert(0, 'method', method_list)
+    return df_create_MCTU
 
 
 rakuraku_hose = """

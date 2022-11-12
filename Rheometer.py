@@ -240,13 +240,6 @@ class Rheometer:
         df_input.insert(0, 'condition', condition)
         df_input.insert(0, 'method', method_list)
 
-        # print(df_input)
-
-        # reset title and index
-        # df_input.reset_index(inplace=True, drop=True)
-        # df_input = df_input.T.reset_index(drop=True).T
-
-        # print(df_input)
 
         # return
         self.WriteData(df_input)

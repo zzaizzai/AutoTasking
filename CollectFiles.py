@@ -12,22 +12,40 @@ import pyexcel as p
 class CollectFiles:
 
     def __init__(self, user: str, target: str, destination_dir_path: str):
+        self.destination_dir_path = destination_dir_path
         self.user = user
         self.target = target
         self.filePath = destination_dir_path + fr'\{user}\*\**\*.x*'
+        # self.filePath = destination_dir_path + fr'\{user}\**\*{self.target}*.x*'
+        # it is better method ??
         self.data_dir = Service.data_dir(target)
         self.fileNamePath = destination_dir_path + fr'\{user}'
 
+    def FindDiseprDir(self):
+        print('find diser file..')
+
+        find_dir = self.destination_dir_path + \
+            fr'\{user}\分散\**\*{self.target}*'
+        file_list = glob.glob(find_dir, recursive=True)
+
+        for file_copy in file_list:
+            if os.path.isdir(file_copy):
+                try:
+                    shutil.copytree(file_copy, self.data_dir +
+                                    r'\bunsan ' + os.path.basename(file_copy))
+                except Exception as e:
+                    print(e)
+
     def FindFiles(self):
         os.makedirs(self.data_dir, exist_ok=True)
-        list = glob.glob(self.filePath, recursive=True)
+        file_list = glob.glob(self.filePath, recursive=True)
 
         file_copy_num: int = 0
         file_copy_failed_num: int = 0
-        for file in list:
-            if self.target in file:
+        for file_copy in file_list:
+            if self.target in file_copy:
                 try:
-                    self.Copyfiles(file)
+                    self.Copyfiles(file_copy)
                 except OSError as e:
                     print(e)
                     file_copy_failed_num += 1
@@ -77,21 +95,21 @@ class CollectFiles:
                 finally:
                     os.remove(file_xls)
         excel.Application.Quit()
+
     def conver_xls_to_xlsx(self):
         print('convert xls files to xlsx file...')
-        xls_list = glob.glob(self.data_dir + r'\*.xls' )
+        xls_list = glob.glob(self.data_dir + r'\*.xls')
         print(xls_list)
         for xls in xls_list:
             print('translate...', xls)
             xlsx = "{}".format(xls) + "x"
             # print(xlsx)
             try:
-                p.save_book_as(file_name = '{}'.format(xls), dest_file_name='{}'.format(xlsx))
+                p.save_book_as(file_name='{}'.format(
+                    xls), dest_file_name='{}'.format(xlsx))
                 os.remove(xls)
             except Exception as e:
                 print(e)
-            
-        
 
 
 def Check(user: str, target: str, destination_dir_path: str):
@@ -100,16 +118,18 @@ def Check(user: str, target: str, destination_dir_path: str):
         ff.FindFiles()
         ff.MakeDataExcel()
         ff.TranslateFromXlsToXlsx()
+
         # ff.conver_xls_to_xlsx()
+        ff.FindDiseprDir()
     except Exception as e:
         print(e)
 
 
 if __name__ == '__main__':
-    user = input('your fill name: ')
-    target = input('target: ')
-    # user = 'junsai'
-    # target = 'CBA001'
+    # user = input('your full name: ')
+    # target = input('target: ')
+    user = 'junsai'
+    target = 'CBA002'
     targetFolderPath = r'C:\Users\junsa\Desktop'
 
     Check(user, target, targetFolderPath)

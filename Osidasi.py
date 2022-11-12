@@ -158,22 +158,24 @@ class Osidasi:
 
     def Treat(self, df_all: pd.DataFrame):
 
-        condition = ['none']*len(df_all)
-        method = [Service.file_name_without_target(self.file_now, self.target)]*len(df_all)
-        unit = ['ss']*len(df_all)
+        condition_list = ['none']*len(df_all)
+        method_list = [Service.file_name_without_target(self.file_now, self.target)]*len(df_all)
+        unit_list = ['ss']*len(df_all)
 
         unit_names = ['eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', 'ratio', 'ratio', 'mm' ,'mm', 'ratio']
         if len(df_all) == len(unit_names):
-            unit = unit_names
+            unit_list = unit_names
         type_list = df_all.index.to_list()
 
         type_list[type_list.index('Swell')] = 'swell dia.'
         type_list[type_list.index('Swell.1')] = 'swell thick.'
 
-        df_all.insert(0, 'unit', unit)
-        df_all.insert(0, 'type', type_list)
-        df_all.insert(0, 'condition', condition)
-        df_all.insert(0, 'method', method)
+
+        df_all = Service.create_method_condition_type_unit(df_all, method_list, condition_list, type_list, unit_list)
+        # df_all.insert(0, 'unit', unit_list)
+        # df_all.insert(0, 'type', type_list)
+        # df_all.insert(0, 'condition', condition_list)
+        # df_all.insert(0, 'method', method_list)
 
         df_all.reset_index(inplace=True, drop=True)
 
