@@ -6,9 +6,6 @@ import Service
 
 class Muuni:
 
-    
-
-
     def __init__(self, target):
         self.test_mode = False
         
@@ -44,9 +41,25 @@ class Muuni:
 
         df_all = self.RemoveOtherInfo(df_all)
 
+        df_all = self.Change5pValue(df_all)
+
         self.WriteData(df_all)
 
-    def RemoveOtherInfo(self, df_all):
+    def Change5pValue(self, df_all: pd.DataFrame) -> pd.DataFrame:
+
+        df_temp = df_all
+
+        if self.test_mode:
+            print(df_temp)
+        for _, col_title in enumerate(df_all.columns.values[4:]):
+            for row_index, cell_value in enumerate(df_all[col_title]):
+                if cell_value == '******':
+                    df_temp.at[row_index, col_title] = "30 >"
+        # print(df_all)
+        return df_temp
+        
+
+    def RemoveOtherInfo(self, df_all: pd.DataFrame):
         if self.test_mode == True:
             print(df_all)
 
@@ -102,10 +115,6 @@ class Muuni:
             self.file_now, self.target)]*3
 
         df_input = Service.create_method_condition_type_unit(df_input, method_list, condition_list, type_list, unit_list)
-        # df_input.insert(0, 'unit', unit_list)
-        # df_input.insert(0, 'type', type_list)
-        # df_input.insert(0, 'condition', condition_list)
-        # df_input.insert(0, 'method', method_list)
 
         if self.test_mode:
             print(df_input)

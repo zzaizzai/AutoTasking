@@ -2,7 +2,6 @@
 import glob
 import os
 import shutil
-import string
 import openpyxl
 import win32com.client as win32
 import Service
@@ -53,7 +52,7 @@ class CollectFiles:
         print(
             f'we found {file_copy_num} files!! with {file_copy_failed_num} failed')
 
-    def Copyfiles(self, targetFile: string):
+    def Copyfiles(self, targetFile: str):
         experiments = os.listdir(self.fileNamePath)
 
         for experiment in experiments:
@@ -126,10 +125,8 @@ def Check(user: str, target: str, destination_dir_path: str):
 
 
 if __name__ == '__main__':
-    # user = input('your full name: ')
-    # target = input('target: ')
-    user = 'junsai'
-    target = 'CBA002'
+    user = input('your full name: ')
+    target = input('target: ')
     targetFolderPath = r'C:\Users\junsa\Desktop'
 
     Check(user, target, targetFolderPath)
