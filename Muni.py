@@ -103,17 +103,21 @@ class Muuni:
         # print(target_titles)
         df_input.columns = target_titles
 
-        file_name = os.path.splitext(os.path.basename(self.file_now))[0]
 
         unit_list = ['kgf・cm', 'kgf・cm', 'min']
         type_list = ['MV', 'Vm', 'ST 5p']
 
-        condition_teperature = df.iat[1, 5]
-        condition_teperature = str(
-            int(float(condition_teperature.split("℃")[0]))) + '℃'
-        condition_list = [condition_teperature]*len(df_input)
-        method_list = [Service.file_name_without_target(
-            self.file_now, self.target)]*3
+        condition_name = df.iat[1, 5]
+        condition_name = str(
+            int(float(condition_name.split("℃")[0]))) + '℃'
+        condition_from_file_name = Service.file_name_without_target_and_expname_distin_underbar(self.file_now, self.target, self.exp_name)
+        print('file name:',condition_from_file_name)
+
+        if condition_from_file_name != "none" and len(condition_from_file_name) > 5:
+            condition_name = condition_name +  " " + condition_from_file_name
+
+        condition_list = [condition_name]*len(df_input)
+        method_list = [Service.file_name_without_target_distin_underbar(self.file_now, self.target)]*3
 
         df_input = Service.create_method_condition_type_unit(df_input, method_list, condition_list, type_list, unit_list)
 

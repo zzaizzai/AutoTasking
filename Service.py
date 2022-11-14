@@ -87,16 +87,29 @@ def file_name_without_target_and_expname_distin_underbar(file_path: str, target:
     condition_name = ""
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     file_name_distin = re.split('[_ ]', file_name)
-
     for text in file_name_distin:
-        if text in target or text in ex_name.split("_"):
+        if target in text or text in ex_name.split("_"):
             pass
         else:
             condition_name += text + " "
     if condition_name == "":
         condition_name = "none"
+    # print("condition_name:  ",condition_name)
     return condition_name
 
+def file_name_without_target_distin_underbar(file_path: str, target: str) -> str:
+    condition_name = ""
+    file_name = os.path.splitext(os.path.basename(file_path))[0]
+    file_name_distin = re.split('[_ ]', file_name)
+    for text in file_name_distin:
+        if target in text:
+            pass
+        else:
+            condition_name += text + " "
+    if condition_name == "":
+        condition_name = "none"
+    # print("condition_name:  ",condition_name)
+    return condition_name
 
 
 def file_name_without_target_and_expname(file_path: str, target: str, ex_name: str):

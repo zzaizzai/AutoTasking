@@ -1,6 +1,6 @@
 # auto tasking system with data in complex files
 
-I am using it in my work. becuz I handle with many data values that we have to evaluate for new materials as my job
+I am using it in my work. becuz I handle with many data values that we have to evaluate for new materials as my job   
 
 ## Process
 Collect Files having name of target from share folder to my desktop so that i can see data files more quickly   
