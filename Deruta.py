@@ -33,7 +33,12 @@ class Deruta:
         file_list = sorted(file_list, key=len)
 
         if len(file_list) == 0:
-            self.file_path = Service.data_dir(target) + rf'\ΔV*{target}*.xls*'
+            self.file_path = Service.data_dir(self.target) + rf'\ΔV*{self.target}*.xls*'
+            file_list = glob.glob(self.file_path)
+            file_list = sorted(file_list, key=len)
+
+        if len(file_list) == 0:
+            self.file_path = Service.data_dir(self.target) + rf'\⊿Ｖ*{self.target}*.xls*'
             file_list = glob.glob(self.file_path)
             file_list = sorted(file_list, key=len)
 
@@ -69,6 +74,9 @@ class Deruta:
         df = pd.read_excel(self.file_now, sheet_name='1',
                            index_col=None, header=None)
 
+        if self.test_mode:
+            print(df)
+
         target_col_index = self.FindIndexOfTitle(df)
         print('target col : ', target_col_index)
 
@@ -91,6 +99,11 @@ class Deruta:
 
         if self.test_mode:
             print(df)
+            print(df["liquid_index"])
+            print(df["liquid"])
+            print(df["condition_index"])
+            print(df["condition"])
+            print(df["condition_time"])
 
         # print('after rename of title')
         # print(df)
@@ -131,13 +144,12 @@ class Deruta:
             print(f'get condition lsit row of {row_index_condition}')
             condition_name = str(df.iat[row_index_condition, liquid_col_kind]) + ' ' + str(
                 df.iat[row_index_condition, condition_index])
-            if str(str(df.iat[row_index_condition, condition_index + 1])) != 'nan':
-                condition_name = "℃×" + condition_name + \
-                    str(df.iat[row_index_condition, condition_index + 1]) + "h"
+
+            if str(df.iat[row_index_condition, condition_index + 1]) != 'nan':
+                condition_name =  condition_name + "℃×" + str(df.iat[row_index_condition, condition_index + 1]) + "h"
 
             if str(df.iat[condition_candidate_index + 1, condition_index + 3]) != "nan":
-                condition_name = condition_name + \
-                    str(df.iat[condition_candidate_index +
+                condition_name = condition_name + str(df.iat[condition_candidate_index +
                         1, condition_index + 3])
             print(condition_name)
             return condition_name

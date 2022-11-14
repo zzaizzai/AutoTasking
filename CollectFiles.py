@@ -14,8 +14,8 @@ class CollectFiles:
         self.destination_dir_path = destination_dir_path
         self.user = user
         self.target = target
-        self.filePath = destination_dir_path + fr'\{user}\*\**\*.x*'
-        # self.filePath = destination_dir_path + fr'\{user}\**\*{self.target}*.x*'
+        # self.filePath = destination_dir_path + fr'\{user}\*\**\*.x*'
+        self.filePath = destination_dir_path + fr'\{user}\**\*{self.target}*.x*'
         # it is better method ??
         self.data_dir = Service.data_dir(target)
         self.fileNamePath = destination_dir_path + fr'\{user}'
@@ -24,14 +24,14 @@ class CollectFiles:
         print('find diser file..')
 
         find_dir = self.destination_dir_path + \
-            fr'\{user}\分散\**\*{self.target}*'
+            fr'\{self.user}\分散\**\*{self.target}*'
         file_list = glob.glob(find_dir, recursive=True)
 
         for file_copy in file_list:
             if os.path.isdir(file_copy):
                 try:
                     shutil.copytree(file_copy, self.data_dir +
-                                    r'\bunsan ' + os.path.basename(file_copy))
+                                    r'\分散 ' + os.path.basename(file_copy))
                 except Exception as e:
                     print(e)
 

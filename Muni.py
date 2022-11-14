@@ -51,11 +51,12 @@ class Muuni:
 
         if self.test_mode:
             print(df_temp)
-        for _, col_title in enumerate(df_all.columns.values[4:]):
-            for row_index, cell_value in enumerate(df_all[col_title]):
-                if cell_value == '******':
+        for _, col_title in enumerate(df_temp.columns.values[4:]):
+            for row_index in df_temp[col_title].index.to_list():
+                if df_temp.at[row_index, col_title] == '******':
                     df_temp.at[row_index, col_title] = "30 >"
-        # print(df_all)
+
+        # print(df_temp)
         return df_temp
         
 
