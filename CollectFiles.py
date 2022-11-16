@@ -75,7 +75,12 @@ class CollectFiles:
         file_list = glob.glob(self.data_dir + r'\*.xls')
         # print(file_list)
 
-        excel = win32.gencache.EnsureDispatch('Excel.Application')
+        excel = win32.Dispatch('Excel.Application')
+        excel.DisplayAlerts = False
+        excel.Visible = False
+        excel.ScreenUpdating = False
+        excel.EnableEvents = False
+        excel.Interactive = False
         for file_xls in file_list:
             is_file = os.path.isfile(file_xls + 'x')
             if is_file:
@@ -83,8 +88,6 @@ class CollectFiles:
             else:
                 print(f'translate... {file_xls} + x')
                 try:
-                    excel.DisplayAlerts = False
-                    excel.Visible = False
                     wb = excel.Workbooks.Open(file_xls)
                     # FileFormat = 51 is for .xlsx extension
                     wb.SaveAs(file_xls+"x", FileFormat=51)

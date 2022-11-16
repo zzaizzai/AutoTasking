@@ -89,10 +89,10 @@ class Hardness:
 
         condition = []
 
-        if Service.file_name_without_target_distin_underbar(self.file_now, self.target, self.exp_name) == "none":
+        if Service.file_name_without_target_and_expname_distin_underbar(self.file_now, self.target, self.exp_name) == "none":
             condition = ['Press'] * len(df)
         else:
-            condition = [Service.file_name_without_target_distin_underbar(
+            condition = [Service.file_name_without_target_and_expname_distin_underbar(
                 self.file_now, self.target, self.exp_name)] * len(df)
         method = [Service.file_name_without_target(
             self.file_now, self.target)] * len(df)
