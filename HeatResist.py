@@ -16,9 +16,13 @@ class HeatResist:
         self.target = target
 
         self.exp_name = '熱老化_自動集積 '
+        self.exp_name_2 = '自動引張り '
 
         self.file_path = Service.data_dir(
             target) + rf'\{self.exp_name}*{target}*.xls*'
+
+        self.file_path_2 = Service.data_dir(
+            target) + rf'\{self.exp_name_2}*{target}*.xls*'
 
         self.file_now = ''
 
@@ -26,7 +30,7 @@ class HeatResist:
         print('find files...')
         print(self.file_path)
 
-        file_list = glob.glob(self.file_path)
+        file_list = glob.glob(self.file_path) + glob.glob(self.file_path_2)
         file_list = sorted(file_list, key=len)
         print(file_list)
 
@@ -187,7 +191,7 @@ class HeatResist:
         condition = [sheet]*len(df_input)
         method = ['熱老化']*len(df_input)
         unit = ['MPa', 'MPa', '%', 'HA', 'HA']
-        type_list = ['100%M', 'TS', 'EB', 'HA(0s)', 'HA(3s)']
+        type_list = ['M100', 'TS', 'EB', 'HA(0s)', 'HA(3s)']
         df_input.insert(0, 'unit', unit)
         df_input.insert(0, 'type', type_list)
         df_input.insert(0, 'condition', condition)

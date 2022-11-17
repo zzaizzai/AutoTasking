@@ -67,7 +67,7 @@ class Treatment:
 
         # type 0.1
         df = Service.round_by_check_eachone(
-            df, 1, ['ST 5p','ML','MV', 'T1', 'MH', 't10', 't50', 't90', 'CR', 'M25', 'M50', 'M100', 'TS','Tr-B'])
+            df, 1, ['ST 5p','ML','MV', 'T1', 'MH', 'ts1','t10', 't50', 't90', 'CR', 'M25', 'M50', 'M100', 'TS','Tr-B'])
         # type 0
         df = Service.round_by_check_eachone(
             df, 0, ['０秒', '3秒', 'HA(0s)', 'HA(3s)', '⊿V'])

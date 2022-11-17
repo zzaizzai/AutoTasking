@@ -204,7 +204,7 @@ class Rheometer:
 
         df_input = df_input.transpose()
         # print(df_input)
-        df_input = df_input.loc[[2, 3, 5, 6, 7, 8]]
+        df_input = df_input.loc[[2, 3, 4, 5, 6, 7, 8]]
 
         # print(df_input)
 
@@ -216,8 +216,8 @@ class Rheometer:
         print(target_title)
         df_input.columns = target_title
 
-        unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min']
-        type_list = ['MH', 'ML', 't10', 't50', 't90', 'CR']
+        unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min', 'min']
+        type_list = ['MH', 'ML', 'ts1', 't10', 't50', 't90', 'CR']
         # condition = [Service.file_name_without_target_and_expname(self.file_xlsx, self.target, self.exp_name)] * 6
         # condition_list = [Service.file_name_without_target_and_expname(
         #     self.file_now, self.target, self.exp_name)]*len(df_input)
