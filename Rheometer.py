@@ -148,7 +148,7 @@ class Rheometer:
         # chart.y_axis.scaling.max = 35
 
         chart.x_axis.scaling.min = 0
-        chart.x_axis.scaling.max = 30
+        chart.x_axis.scaling.max = 45
 
         chart.legend.position = 'r'
         # chart.layout = Layout(
@@ -170,13 +170,10 @@ class Rheometer:
             alphabet_num = alphabet + str('%03d' % (num + number))
             return alphabet_num
 
-        # change legend title
-        # print("legen title")
         for i in range(self.number_of_target):
-            # print(ws.cell(row=standard_cell.row, column=2 + i*4).value)
             ws.cell(row=standard_cell.row, column=2 +
                     i*4).value = target_number(i)
-            # print(target_number(i))
+
 
         ws.add_chart(chart, 'B8')
         wb.save(self.file_now)
@@ -188,7 +185,7 @@ class Rheometer:
 
         num_target = 0
         row_init = 0
-        # print(df)
+
         for i, value in enumerate(df[0]):
             if value == '特性値：':
                 num_target = df[0][i-1]
@@ -203,13 +200,12 @@ class Rheometer:
             df_input = df_input.append(df.loc[[row_init + 2*i]])
 
         df_input = df_input.transpose()
-        # print(df_input)
+
         df_input = df_input.loc[[2, 3, 4, 5, 6, 7, 8]]
 
-        # print(df_input)
 
         print('changing target numbers')
-        # print(len(df_input.columns))
+
         target_title = []
         for i in range(len(df_input.columns)):
             target_title.append(Service.target_number(i, self.target))
@@ -218,9 +214,7 @@ class Rheometer:
 
         unit = ['kgf・cm', 'kgf・cm', 'min', 'min', 'min', 'min', 'min']
         type_list = ['MH', 'ML', 'ts1', 't10', 't50', 't90', 'CR']
-        # condition = [Service.file_name_without_target_and_expname(self.file_xlsx, self.target, self.exp_name)] * 6
-        # condition_list = [Service.file_name_without_target_and_expname(
-        #     self.file_now, self.target, self.exp_name)]*len(df_input)
+
         condition_environment = ""
         if Service.file_name_without_target_and_expname(self.file_now, self.target, self.exp_name) == "none":
             pass

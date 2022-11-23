@@ -100,7 +100,6 @@ class Muuni:
         target_titles = []
         for i in range(len(df_input.columns)):
             target_titles.append(Service.target_number(i, self.target))
-        # print(target_titles)
         df_input.columns = target_titles
 
 

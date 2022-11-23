@@ -172,10 +172,6 @@ class Osidasi:
 
 
         df_all = Service.create_method_condition_type_unit(df_all, method_list, condition_list, type_list, unit_list)
-        # df_all.insert(0, 'unit', unit_list)
-        # df_all.insert(0, 'type', type_list)
-        # df_all.insert(0, 'condition', condition_list)
-        # df_all.insert(0, 'method', method_list)
 
         df_all.reset_index(inplace=True, drop=True)
 

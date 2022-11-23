@@ -95,7 +95,7 @@ class Zeika:
                         if str(cell_value) in  ['5', '5.0'] :
                             df_Tb.at[row_index, "ゼンハカイ"] = df_Tb.at[0, col_index]
             
-            df_Tb = df_Tb.loc[:, ['配合番号','脆化点', 'ムハカイ', 'ゼンハカイ']]
+            df_Tb = df_Tb.loc[:, ['配合番号', 'ムハカイ','脆化点', 'ゼンハカイ']]
             df_Tb = df_Tb.drop(index=[0])
             df_Tb.reset_index(inplace=True, drop=True)
 

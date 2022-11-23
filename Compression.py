@@ -59,14 +59,11 @@ class Compression:
             print(sheet)
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
 
-        # print('all input data')
         df_all = self.SortByTemperature(df_all)
-        # print(df_all)
 
         self.WriteData(df_all)
 
     def SortByTemperature(self, df_all):
-        # print(df_all)
 
         df_all = df_all.reset_index(drop=True)
         df_all_tem = df_all
@@ -83,28 +80,23 @@ class Compression:
                                True, True], inplace=True)
         df_all_tem.drop(columns=["temperature", "hours"], inplace=True)
 
-        # print(df_all_tem)
 
         return df_all_tem
 
     def ReadDataSheet(self, sheet: str):
         print(sheet)
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9)
-        # print(df)
         df = df.iloc[:, [1, 7]]
 
         title = ['配合番号', '歪率']
         df.columns = title
         df['配合番号'] = df['配合番号'].ffill()
 
-        # print(df)
 
         target_list = df['配合番号'].to_list()
 
         target_list_set = set(target_list)
         target_list = list(target_list_set)
-
-        # print(target_list)
 
         # find mean data
 
@@ -122,7 +114,6 @@ class Compression:
         df = df.transpose()
         df.columns = df.loc['配合番号']
         df.drop(index=['配合番号'], inplace=True)
-        # print(df)
 
         unit = ['%']
         # method = ['compression']
@@ -135,8 +126,6 @@ class Compression:
         df.insert(0, 'condition', condition)
         df.insert(0, 'method', method)
         df.reset_index(inplace=True, drop=True)
-
-        # print(df)
 
         return df
 

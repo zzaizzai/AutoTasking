@@ -167,7 +167,6 @@ class HeatResist:
             else:
                 break
 
-        # print(row_zero)
         df.loc[[12]] = row_zero
         df.loc[[13]] = row_three
         # print(df)
@@ -178,14 +177,11 @@ class HeatResist:
         # change unit title
         unit_list = df_input.columns.tolist()
         unit_list[0] = 'type'
-        # print(unit_list)
         df_input.columns = unit_list
 
         df_input = df_input.query(
             "type in ['M 100%', '抗張力 ＭＰａ', '破断伸び％', '０秒','3秒']")
         df_input = df_input.iloc[:, 1:]
-        # print('after query')
-        # print(df_input)
 
         # condition
         condition = [sheet]*len(df_input)

@@ -48,8 +48,6 @@ class hippari:
             df = pd.read_excel(file_auto)
 
             target_rows = df.query(f'配合番号 == "{self.target}"')
-            # print(target_rows)
-            # print(target_rows['ファイル名'])
             file_date_list = []
             for date in target_rows['測定日']:
                 file_date_list.append(date)
@@ -60,8 +58,6 @@ class hippari:
             myname_rows = df.query(f'依頼者名 == "{self.user_family_name}"')
             for date in file_date_list:
                 target_files = myname_rows.query(f'測定日 == "{date}"')
-                # print('target_files')
-                # print(target_files)
                 for file_name in target_files['ファイル名']:
                     files_list.append(file_name)
 
@@ -98,7 +94,6 @@ class hippari:
             while len(file_path) < 1:
                 files_path = glob.glob(
                     rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\{month}*\{file[0:8]}\**\{file}*', recursive=True)
-                # print(files_path)
                 file_path = files_path[0]
                 print(os.path.basename(file_path))
             return file_path
@@ -107,7 +102,6 @@ class hippari:
         pool = ThreadPool(4)
 
         file_path_list = list(pool.map(get_file_path, files_list))
-        # print(file_path_list)
         copy_count = 0
         copy_count_failed = 0
         for file_path in file_path_list:
@@ -137,8 +131,5 @@ def DoIt(target: str, user_family_name: str, test_mode = False):
 if __name__ == '__main__':
     user_family_name = input('user name (only family name): ')
     target = input('target Series ( ex: ABC001 ): ')
-
-    # user_family_name = '小暮'
-    # target = 'FJX001'
 
     DoIt(target, user_family_name, test_mode=True)

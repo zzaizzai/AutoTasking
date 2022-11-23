@@ -108,7 +108,6 @@ def file_name_without_target_distin_underbar(file_path: str, target: str) -> str
             condition_name += text + " "
     if condition_name == "":
         condition_name = "none"
-    # print("condition_name:  ",condition_name)
     return condition_name
 
 
@@ -138,10 +137,8 @@ def save_to_data_excel(file_data: str, df_input, file_name: str):
     save df to data file as merged df
     """
     df = pd.read_excel(file_data, index_col=0)
-    # print(df)
 
     df_merge = pd.concat([df, df_input], sort=False)
-    # print(df_merge)
 
     df_merge.reset_index(inplace=True, drop=True)
 

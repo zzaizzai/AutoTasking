@@ -99,14 +99,6 @@ class Hardness:
 
         df = Service.create_method_condition_type_unit(df, method, condition, type_list, unit)
 
-        # df.insert(0, 'unit', unit)
-        # df.insert(0, 'type', type_list)
-        # df.insert(0, 'condition', condition)
-        # df.insert(0, 'method', method)
-
-        # print(method[0] + " df")
-        # print(df)
-
         try:
             self.WriteDate(df)
         except Exception as e:

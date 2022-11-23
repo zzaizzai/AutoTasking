@@ -105,9 +105,7 @@ class OilTension:
         index_mean = []
         for i in range(number_target):
             index_mean.append(3 + 4*i + 1)
-        # print(index_mean)
         df_mean = df_data.iloc[index_mean, :]
-        # print('mean data')
 
         # get hardness data
         index_mean_hardness = list(map(lambda x: x-3, index_mean))
@@ -123,10 +121,6 @@ class OilTension:
             self.file_now, self.target)]*4
 
         df_data = Service.create_method_condition_type_unit(df_data, method_list, condition_list, type_list, unit_list)
-        # df_data.insert(0, 'unit', unit_list)
-        # df_data.insert(0, 'type', type_list)
-        # df_data.insert(0, 'condition', condition_list)
-        # df_data.insert(0, 'method', method_list)
 
         df_data.reset_index(inplace=True, drop=True)
 
