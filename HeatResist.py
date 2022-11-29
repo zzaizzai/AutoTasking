@@ -82,7 +82,7 @@ class HeatResist:
         for i, value in enumerate(df_all_temp_condition):
             temperature_value = value.split("℃×")[0]
             housr_value = value.split("℃×")[1].split("H")[0]
-            df_all_temp_condition[i] = temperature_value +  "℃×" + housr_value + "h"
+            df_all_temp_condition[i] = temperature_value +  "℃×" + housr_value + "H"
         df_all["condition"] = df_all_temp_condition
 
         return df_all
@@ -122,7 +122,7 @@ class HeatResist:
 
         # title
         col_index = []
-        for i, value in enumerate(df.loc[[4]].values.tolist()[0]):
+        for i, value in enumerate(df.loc[[3]].values.tolist()[0]):
             if not 'nan' in str(value):
                 col_index.append(i)
 

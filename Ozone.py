@@ -146,13 +146,14 @@ class Ozone:
             type_list = [f'n={number}']*len(df)
             df.insert(0, 'type', type_list)
 
-            condition_list = [sheet]*len(df)
+            if steam:
+                condition_list = [f'{sheet} スチーム']*len(df)
+            else:
+                condition_list = [f'{sheet} プレス']*len(df)
+
             df.insert(0, 'condition', condition_list)
             
-            if steam:
-                method_list = [f'{self.exp_name} スチーム']*len(df)
-            else:
-                method_list = [self.exp_name]*len(df)
+            method_list = [self.exp_name]*len(df)
             df.insert(0, 'method', method_list)
             return df
 
