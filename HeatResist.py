@@ -34,57 +34,61 @@ class HeatResist:
         file_list = sorted(file_list, key=len)
         print(file_list)
 
+        
+        df_all_files = pd.DataFrame()
+
         if len(file_list) > 0:
             print(f'found {len(file_list)} {self.exp_name} file(s)')
 
             for file in file_list:
                 self.file_now = file
-                self.ReadFile()
+                df_all_files = pd.concat([df_all_files, self.ReadFile()])
 
         else:
             print(f'No {self.exp_name}')
             return
 
+        df_all_files = self.SortByTemperature(df_all_files)
+
+        df_all_files = self.ChangeConditionName(df_all_files)
+
+        self.WriteData(df_all_files)
+
     def ReadFile(self):
         print('read file...')
         print(self.file_now)
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
-        # print(sheet_list)
+
 
         if '設定シート' in sheet_list:
             sheet_list.remove('設定シート')
         else:
             pass
 
-        # print(sheet_list)
 
         df_all = pd.DataFrame()
 
         for sheet in sheet_list:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
+            
+        return df_all
+    
 
-        df_all = self.SortByTemperature(df_all)
-
-        df_all = self.ChangeConditionName(df_all)
-
-        self.WriteData(df_all)
     def ChangeConditionName(self, df_all):
         df_all = df_all.reset_index(drop=True)
         
         df_all_temp_condition = df_all["condition"]
-        # print(df_all)
+
         for i, value in enumerate(df_all_temp_condition):
-            # print(value.split("℃×"))
             temperature_value = value.split("℃×")[0]
             housr_value = value.split("℃×")[1].split("H")[0]
-            # print(temperature_value, housr_value)
-            df_all_temp_condition[i] = temperature_value +  "℃×" + housr_value + "H"
+            df_all_temp_condition[i] = temperature_value +  "℃×" + housr_value + "h"
         df_all["condition"] = df_all_temp_condition
-        # print(df_all)
+
         return df_all
         
     def SortByTemperature(self, df_all):
-        # print(df_all)
+
 
         df_all = df_all.reset_index(drop=True)
 
@@ -99,11 +103,10 @@ class HeatResist:
 
             df_all_tem["temperature"][i] = int(temperature)
             df_all_tem["hours"][i] = int(hours)
-        # # df_all["temperature"] = df_all_temperature
-        # # df_all["hour"] = df_all_hours
+
         df_all_tem.sort_values(by = ["temperature", "hours"], ascending=[True,True], inplace=True)
         df_all_tem.drop(columns=["temperature", "hours"], inplace = True)
-        # print(df_all_tem)
+
 
         df_all = df_all_tem
 
@@ -116,16 +119,11 @@ class HeatResist:
                            header=9, index_col=1)
         df = df.transpose()
         df.reset_index(inplace=True, drop=True)
-        # print(df.index)
-
-        # print(df)
 
         # title
         col_index = []
         for i, value in enumerate(df.loc[[4]].values.tolist()[0]):
-            # print(i, value)
             if not 'nan' in str(value):
-                # print('not nan')
                 col_index.append(i)
 
 
@@ -134,19 +132,16 @@ class HeatResist:
         title_index = df.columns.values.tolist()
         for i, value in enumerate(title_index):
             if 'nan' in str(value):
-                # print('nan',i)
                 title_index[i] = title_index[i-1]
-        # print(title_index)
+
         df.columns = title_index
-        # print(df)
+
 
         mean_col_index = [0]
         row_mean_str = df.loc[[2]].values.tolist()[0]
-        # print(row_mean_str)
+
         for i, value in enumerate(row_mean_str):
-            # print(value)
             if '中央値' in str(value):
-                # print('mean str', i)
                 mean_col_index.append(i)
 
         #  0s
@@ -155,13 +150,11 @@ class HeatResist:
         row_three = df.loc[[13]].values.tolist()[0]
 
         for i in range(10):
-            # print(row_zero[1+ i*4])
             if str(row_zero[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_zero):
                 row_zero[1+i*4 + 3] = row_zero[1+i*4]
             else:
                 break
         for i in range(10):
-            # print(row_three[1+ i*4])
             if str(row_three[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_three):
                 row_three[1+i*4 + 3] = row_three[1+i*4]
             else:
@@ -169,7 +162,6 @@ class HeatResist:
 
         df.loc[[12]] = row_zero
         df.loc[[13]] = row_three
-        # print(df)
 
 
         df_input = df.iloc[:, mean_col_index]
