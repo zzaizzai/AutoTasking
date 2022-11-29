@@ -51,7 +51,7 @@ class HeatResist:
         df_all_files = self.SortByTemperature(df_all_files)
 
         df_all_files = self.ChangeConditionName(df_all_files)
-
+        # print(df_all_files.to_markdown())
         self.WriteData(df_all_files)
 
     def ReadFile(self):
@@ -128,7 +128,7 @@ class HeatResist:
 
 
         df = df.iloc[:, col_index]
-
+       
         title_index = df.columns.values.tolist()
         for i, value in enumerate(title_index):
             if 'nan' in str(value):
@@ -140,32 +140,33 @@ class HeatResist:
         mean_col_index = [0]
         row_mean_str = df.loc[[2]].values.tolist()[0]
 
+        
         for i, value in enumerate(row_mean_str):
             if '中央値' in str(value):
                 mean_col_index.append(i)
-
         #  0s
         zero_col_index = [0]
         row_zero = df.loc[[12]].values.tolist()[0]
         row_three = df.loc[[13]].values.tolist()[0]
 
-        for i in range(10):
-            if str(row_zero[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_zero):
-                row_zero[1+i*4 + 3] = row_zero[1+i*4]
-            else:
-                break
-        for i in range(10):
-            if str(row_three[1+i*4]) != 'nan' and 1+i*4 + 3 < len(row_three):
-                row_three[1+i*4 + 3] = row_three[1+i*4]
-            else:
-                break
-
+        # duplicate the value of hardness to the mean data row in order to get mean data with one line
+        for i in range(20):
+            if 1+i*4 + 3 < len(row_zero):
+                if str(row_zero[1+i*4]) != 'nan':
+                    row_zero[1+i*4 + 3] = row_zero[1+i*4]
+        for i in range(20):
+            if 1+i*4 + 3 < len(row_three):
+                if str(row_three[1+i*4]) != 'nan':
+                    row_three[1+i*4 + 3] = row_three[1+i*4]
+        # print(row_zero)            
         df.loc[[12]] = row_zero
         df.loc[[13]] = row_three
-
-
+        
+        
         df_input = df.iloc[:, mean_col_index]
 
+        # print(sheet)
+        # print(df_input.to_markdown())
         # change unit title
         unit_list = df_input.columns.tolist()
         unit_list[0] = 'type'
