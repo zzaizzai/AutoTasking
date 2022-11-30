@@ -96,6 +96,10 @@ class Osidasi:
         # get only mean data
         df_mean = df.iloc[index_mean, :]
         df_mean = df_mean.loc[:, ['L', 'W', 'Swell', 'Swell.1']]
+        df_mean['Swell'] = (df_mean['Swell'] - 1) * 100  
+        df_mean['Swell'] = df_mean['Swell'].apply(round)
+        df_mean['Swell.1'] = (df_mean['Swell.1'] - 1) * 100  
+        df_mean['Swell.1'] = df_mean['Swell.1'].apply(round)
 
         # get evaluations data
         df_eval = df.iloc[index_eval, :]
@@ -108,7 +112,9 @@ class Osidasi:
         # get Sulfurization data
         df_sulf = df.iloc[index_mean, :]
         df_sulf = df_sulf.loc[:, ['加硫前', '加硫後']]
-        df_sulf['収縮率'] = df_sulf['加硫前'] / df_sulf['加硫後']
+        shrink_percentage = ((df_sulf['加硫前'] / df_sulf['加硫後'])-1) * 100
+        df_sulf['収縮率'] = shrink_percentage.apply(round)
+        df_sulf = df_sulf.loc[:,['収縮率']]
 
 
         values_pressure_CH = df.loc[:, 'C.H'].to_list()[1:]
@@ -148,8 +154,8 @@ class Osidasi:
         df_sulf = df_sulf.transpose()
 
         df_all = pd.concat([df_all, df_eval])
-        df_all = pd.concat([df_all, df_tempa])
         df_all = pd.concat([df_all, df_pressrue])
+        df_all = pd.concat([df_all, df_tempa])
         df_all = pd.concat([df_all, df_mean])
         df_all = pd.concat([df_all, df_sulf])
 
@@ -162,7 +168,7 @@ class Osidasi:
         method_list = [Service.file_name_without_target(self.file_now, self.target)]*len(df_all)
         unit_list = ['ss']*len(df_all)
 
-        unit_names = ['eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', 'ratio', 'ratio', 'mm' ,'mm', 'ratio']
+        unit_names = ['eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', '%', '%', '%']
         if len(df_all) == len(unit_names):
             unit_list = unit_names
         type_list = df_all.index.to_list()
@@ -180,8 +186,10 @@ class Osidasi:
         if self.testMode:
             print(df_all)
 
+
         self.Write(df_all)
 
+ 
     def Write(self, df_input):
         print('writing')
 

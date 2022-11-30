@@ -149,10 +149,29 @@ class Tension:
             # print(df_part)
 
             df_part =  self.ChangeBrTension(df_part)
+            df_merge = pd.concat([df_merge, df_part])
+            
 
-            self.WriteData(df_part)
+        # print(df_merge)
 
-        print('merge done')
+        # df_merge = self.drop_anguru_without_ts(df_merge)
+
+        self.WriteData(df_merge)
+        # print('merge done')
+    def drop_anguru_without_ts(self, df:pd.DataFrame) -> pd.DataFrame:
+
+        df.reset_index(inplace=True, drop=True)
+        index_drop = df.query(
+            "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['M25', 'M50', 'M100', 'EB']", engine='python').index
+        df.drop(list(index_drop), inplace=True)
+        index_press = df.query("condition.str.contains('PressJIS')").index
+        print(index_press)
+        print(df)
+
+        df_ordering_unit = pd.DataFrame({'unit_order': ['1', 2,3,4,5,6], 'unit':['M25', 'M50','M100', 'TS', 'EB' ,'Tr-B']})
+        print(pd.merge(df, df_ordering_unit, on="unit" ,how='left'))
+        print(df_ordering_unit)
+        return 
     def ChangeBrTension(self, df_part):
         # print(df_part)
         df_part_temp = df_part
