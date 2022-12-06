@@ -25,6 +25,7 @@ class Rheometer:
         self.file_xls = ''
         self.file_now = ''
         self.temperature = ''
+        self.standard_cell = ''
 
     def StartProcess(self):
         print('find file rheometer...')
@@ -63,6 +64,7 @@ class Rheometer:
             for cell in row:
                 if cell.value == 'Time(NO.1)':
                     standard_cell = cell
+                    self.standard_cell = cell
                     is_ok = True
                     break
             if is_ok:
@@ -104,14 +106,24 @@ class Rheometer:
         chart.x_axis.title.tx.rich.p[0].pPr = para_prop
         chart.y_axis.title.tx.rich.p[0].pPr = para_prop
 
-        colors = ['ff0000', 'ffaa00', '00ff00', '0055ff', '8000ff',
-                  '00ff55', 'ff00d5', 'ff00d5', 'ff00d5', 'ff00d5']
+        colors = {
+            'blue': '0000ff',
+            'red' : 'ff0000',
+            'green': '00cc00',
+            'orange' : 'ff8000',
+            'violet' : 'ff00ff',
+            'pink' : 'ff00d5',
+        }
+        colors = [colors['red'], colors['blue'] , colors['green'],colors['orange'], colors['violet'],
+                  colors['pink'], colors['pink'], colors['pink'], colors['pink'], colors['pink']]
         # add series
         if self.test_mode:
             print('adding serials')
 
+        print(self.number_of_target)
         for i in range(self.number_of_target):
-            serial_name = ws.cell(row=21, column=2 + 4*i).value
+            serial_name = ws.cell(row=self.standard_cell.row, column=2 + 4*i).value
+            print('serial name' ,serial_name)
             if serial_name != None:
 
                 if self.test_mode:

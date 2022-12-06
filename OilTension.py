@@ -68,10 +68,8 @@ class OilTension:
         df = pd.read_excel(self.file_now, sheet_name=sheet,
                            header=9, index_col=1)
 
-        df_data = df.iloc[:, [8, 9, 10, 11]]
-        # df_data = df.iloc[:,[8,9,10]]
+        df_data = df.iloc[:, [8, 9, 10, 11,12]]
         print(sheet)
-        # print(df_data)
 
         # set init target name for not written in first cell
         list_index = df_data.index.to_list()
@@ -79,7 +77,6 @@ class OilTension:
             list_index[1] = str(self.target)
 
         df_data.index = list_index
-        # print(df_data)
 
         index_list = df_data.index.to_list()
         index_values = Service.remove_dufulicant(index_list)
@@ -99,7 +96,6 @@ class OilTension:
                        3] = Service.target_number(i, self.target)
 
         df_data.index = index_list
-        # print(df_data)
 
         # mean data
         index_mean = []
@@ -110,15 +106,15 @@ class OilTension:
         # get hardness data
         index_mean_hardness = list(map(lambda x: x-3, index_mean))
         df_hardness = df_data.iloc[index_mean_hardness, :]
-        df_mean.loc[:, 'HS'] = df_hardness.loc[:, 'HS']
+        df_mean.loc[:, ['HS','Unnamed: 13']] = df_hardness.loc[:, ['HS','Unnamed: 13']]
 
         df_data = df_mean.transpose()
 
-        unit_list = ['MPa', 'MPa', '%', 'HA']
-        type_list = ['M100', 'TS', 'EB', 'HA(0s)']
-        condition_list = [sheet]*4
+        unit_list = ['MPa', 'MPa', '%', 'HA','HA']
+        type_list = ['M100', 'TS', 'EB', 'HA(0s)', 'HA(3s)']
+        condition_list = [sheet]*len(df_data)
         method_list = [Service.file_name_without_target(
-            self.file_now, self.target)]*4
+            self.file_now, self.target)]*len(df_data)
 
         df_data = Service.create_method_condition_type_unit(df_data, method_list, condition_list, type_list, unit_list)
 

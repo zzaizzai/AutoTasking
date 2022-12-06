@@ -46,7 +46,6 @@ class Osidasi:
         df = pd.read_excel(self.file_now, header=16, index_col=1)
 
         target_list = df.index.to_list()
-        # print(len(target_list))
         index_target_init = []
         for i, value in enumerate(target_list):
             # print(i , value)
@@ -65,28 +64,23 @@ class Osidasi:
 
         # without nan
         number_of_target: int = len(target_list_numbers) - 1
-        # print('number_of_target',number_of_target)
 
         df = df.iloc[:number_of_target*4+1, :]
 
-        # print(df.columns.to_list())
         titles = df.columns.to_list()
         titles[0] = 'mean'
         df.columns = titles
-        # print(len(df))
+
 
         # mean data
-        # print(target_list)
         count_for_mean = 0
         index_mean = []
         index_eval = []
         index_tempa = []
         for i in range(len(target_list)):
-            # print(target_list[i])
             if str(target_list[i]) != 'nan':
                 count_for_mean += 1
                 if count_for_mean % 4 == 0:
-                    # print('mean')
                     index_mean.append(i)
                     index_eval.append(i-2)
                     index_tempa.append(i-3)
@@ -103,7 +97,7 @@ class Osidasi:
 
         # get evaluations data
         df_eval = df.iloc[index_eval, :]
-        df_eval = df_eval.loc[:, ['H.1', 'Sc', 'R.F']]
+        df_eval = df_eval.loc[:, ['H.1', 'Sc', 'R.F','押出肌']]
 
         # get temp data
         df_tempa = df.iloc[index_tempa, :]
@@ -168,7 +162,7 @@ class Osidasi:
         method_list = [Service.file_name_without_target(self.file_now, self.target)]*len(df_all)
         unit_list = ['ss']*len(df_all)
 
-        unit_names = ['eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', '%', '%', '%']
+        unit_names = ['eval', 'eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', '%', '%', '%']
         if len(df_all) == len(unit_names):
             unit_list = unit_names
         type_list = df_all.index.to_list()

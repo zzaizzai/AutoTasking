@@ -19,9 +19,25 @@ class CollectFiles:
         # it is better method ??
         self.data_dir = Service.data_dir(target)
         self.fileNamePath = destination_dir_path + fr'\{user}'
+    def FindGeman(self):
+        print('find geman data')
+        find_pdf = self.destination_dir_path + \
+            fr'\{self.user}\ゲーマン\**\*{self.target}*.pdf'
+        file_list = glob.glob(find_pdf, recursive=True)
+        print(file_list)
+        for file_copy in file_list:
+            if os.path.isfile(file_copy):
+                try:
+                    shutil.copy2(file_copy, self.data_dir +
+                                    r'\ゲーマン ' + os.path.basename(file_copy))
+                except Exception as e:
+                    print(e)
+
+
 
     def FindDiseprDir(self):
         print('find diser file..')
+
 
         find_dir = self.destination_dir_path + \
             fr'\{self.user}\分散\**\*{self.target}*'
@@ -123,6 +139,7 @@ def Check(user: str, target: str, destination_dir_path: str):
 
         # ff.conver_xls_to_xlsx()
         ff.FindDiseprDir()
+        ff.FindGeman()
     except Exception as e:
         print(e)
 
