@@ -80,18 +80,26 @@ class Compression:
                                True, True], inplace=True)
         df_all_tem.drop(columns=["temperature", "hours"], inplace=True)
 
-
         return df_all_tem
 
     def ReadDataSheet(self, sheet: str):
         print(sheet)
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9)
-        df = df.iloc[:, [1, 7]]
+
+        # find data col index
+        col_index_data : int = 7
+        for i in range(10):
+            if  str(df.iat[0,i]) == "9.38":
+                # print("next of this is the data col index")
+                col_index_data = i + 1
+                # print("col_index_data:", col_index_data)
+                break
+
+        df = df.iloc[:, [1, col_index_data]]
 
         title = ['配合番号', '歪率']
         df.columns = title
         df['配合番号'] = df['配合番号'].ffill()
-
 
         target_list = df['配合番号'].to_list()
 
