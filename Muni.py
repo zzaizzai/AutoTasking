@@ -8,9 +8,9 @@ class Muuni:
 
     def __init__(self, target):
         self.test_mode = False
-        
+
         self.exp_name = 'ムーニー_ロータ_自動集積'
-    
+
         self.target = target
         self.path_xlsx = Service.data_dir(
             target) + rf'\{self.exp_name} {target}*.xlsx'
@@ -24,9 +24,12 @@ class Muuni:
         print('find files as ', os.path.basename(self.path_xlsx))
         # print(self.path_xlsx)
 
-        file_list = glob.glob(self.path_xlsx)
-        file_list = sorted(file_list, key=len)
-        # print(file_list)
+        file_list = sorted(glob.glob(self.path_xlsx), key=len)
+
+        # when the ordering missed by title name with BK
+        if len(file_list) > 3:
+            if "140C" in os.path.basename(file_list[2]) and "121C" in os.path.basename(file_list[3]):
+                file_list[2], file_list[3] = file_list[3], file_list[2]
 
         df_all = pd.DataFrame()
         if len(file_list) > 0:
@@ -58,7 +61,6 @@ class Muuni:
 
         # print(df_temp)
         return df_temp
-        
 
     def RemoveOtherInfo(self, df_all: pd.DataFrame):
         if self.test_mode == True:
@@ -102,23 +104,26 @@ class Muuni:
             target_titles.append(Service.target_number(i, self.target))
         df_input.columns = target_titles
 
-
         unit_list = ['kgf・cm', 'kgf・cm', 'min']
         type_list = ['MV', 'Vm', 'ST 5p']
 
         condition_name = df.iat[1, 5]
         condition_name = str(
             int(float(condition_name.split("℃")[0]))) + '℃'
-        condition_from_file_name = Service.file_name_without_target_and_expname_distin_underbar(self.file_now, self.target, self.exp_name)
-        print('file name:',condition_from_file_name)
+
+        condition_from_file_name = Service.file_name_without_target_and_expname_distin_underbar(
+            self.file_now, self.target, self.exp_name)
+        print('file name:', condition_from_file_name)
 
         if condition_from_file_name != "none" and len(condition_from_file_name) > 5:
-            condition_name = condition_name +  " " + condition_from_file_name
+            condition_name = condition_name + " " + condition_from_file_name
 
         condition_list = [condition_name]*len(df_input)
-        method_list = [Service.file_name_without_target_distin_underbar(self.file_now, self.target)]*3
+        method_list = [Service.file_name_without_target_distin_underbar(
+            self.file_now, self.target)]*3
 
-        df_input = Service.create_method_condition_type_unit(df_input, method_list, condition_list, type_list, unit_list)
+        df_input = Service.create_method_condition_type_unit(
+            df_input, method_list, condition_list, type_list, unit_list)
 
         if self.test_mode:
             print(df_input)
