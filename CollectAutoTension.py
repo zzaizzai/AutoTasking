@@ -93,7 +93,7 @@ class hippari:
 
             while len(file_path) < 1:
                 files_path = glob.glob(
-                    rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\{month}*\{file[0:8]}\**\{file}*', recursive=True)
+                    rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\{month}*\{file[0:8]}*\**\{file}*', recursive=True)
                 file_path = files_path[0]
                 print(os.path.basename(file_path))
             return file_path
@@ -129,7 +129,10 @@ def DoIt(target: str, user_family_name: str, test_mode = False):
 
 
 if __name__ == '__main__':
-    user_family_name = input('user name (only family name): ')
+    # user_family_name = input('user name (only family name): ')
+
+    user_family_name= "小暮"
+
     target = input('target Series ( ex: ABC001 ): ')
 
     DoIt(target, user_family_name, test_mode=True)
