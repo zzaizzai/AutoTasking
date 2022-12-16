@@ -82,11 +82,12 @@ def round_by_check_eachone(df_round, demical: int, list_of_round: list):
                     df_round.iat[i, j] = round(df_round.iat[i, j] + 0.00001, 2)
     return df_round
 
-
 def file_name_without_target_and_expname_distin_underbar(file_path: str, target: str, ex_name: str):
     condition_name = ""
+
     file_name = os.path.splitext(os.path.basename(file_path))[0]
-    file_name_distin = re.split('[_ ]', file_name)
+    print(file_name)
+    file_name_distin = re.split(' |_|-', file_name)
     for text in file_name_distin:
         if target in text or text in ex_name.split("_"):
             pass

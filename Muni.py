@@ -110,13 +110,11 @@ class Muuni:
         condition_name = df.iat[1, 5]
         condition_name = str(
             int(float(condition_name.split("℃")[0]))) + '℃'
+        from pathlib import Path
+        for name_in_file_name in Path(self.file_now).stem.split(" "):
+            if "%" in name_in_file_name:
+                condition_name += "  " +  name_in_file_name
 
-        condition_from_file_name = Service.file_name_without_target_and_expname_distin_underbar(
-            self.file_now, self.target, self.exp_name)
-        print('file name:', condition_from_file_name)
-
-        if condition_from_file_name != "none" and len(condition_from_file_name) > 5:
-            condition_name = condition_name + " " + condition_from_file_name
 
         condition_list = [condition_name]*len(df_input)
         method_list = [Service.file_name_without_target_distin_underbar(
