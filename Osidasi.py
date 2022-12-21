@@ -60,7 +60,7 @@ class Osidasi:
 
         df.index = target_list
 
-        target_list_numbers = Service.remove_dufulicant(target_list)
+        target_list_numbers = Service.remove_dufulicant_in_list(target_list)
 
         # without nan
         number_of_target: int = len(target_list_numbers) - 1

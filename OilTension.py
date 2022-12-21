@@ -79,7 +79,7 @@ class OilTension:
         df_data.index = list_index
 
         index_list = df_data.index.to_list()
-        index_values = Service.remove_dufulicant(index_list)
+        index_values = Service.remove_dufulicant_in_list(index_list)
 
         number_target = len(index_values) - 1
 
