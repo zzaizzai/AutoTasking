@@ -105,8 +105,6 @@ class Deruta:
             print(df["condition"])
             print(df["condition_time"])
 
-        # print('after rename of title')
-        # print(df)
 
         # count number of target
         target_list = df['配合番号'].values.tolist()
@@ -117,7 +115,7 @@ class Deruta:
             # print(value)
             if "プレス1次" in str(value) or "スチーム1次" in str(value):
                 target_list[index] = 'nan'
-        # print('target list', target_list)
+
 
         # # get targets
         target_list_temp = [x for x in target_list if str(
@@ -137,7 +135,8 @@ class Deruta:
 
         conditions_list_index = [int(i) for i, value in enumerate(
             df['liquid_index']) if value == "試験液"]
-        # print(df['liquid_index'])
+
+
         print('condition list index', conditions_list_index)
 
         def get_condition_list(row_index_condition, condition_candidate_index: int):

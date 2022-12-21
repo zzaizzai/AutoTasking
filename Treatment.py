@@ -76,20 +76,10 @@ class Treatment:
         df = Service.round_by_check_eachone(
             df, -1, ['elongation', 'EB', '破断伸び％'])
 
-        # df[(df['type'] == '０秒')] = Service.normal_round(df[(df['type'] == '０秒')],0)
-        # df[(df['type'] == '3秒')] = Service.normal_round(df[(df['type'] == '3秒')],0)
-        # df[(df['type'] == 'HA(0s)')]= Service.normal_round(df[(df['type'] == 'HA(0s)')],0)
-        # df[(df['type'] == '⊿V')]= Service.normal_round(df[(df['type'] == '⊿V')],0)
-        # print(df)
-
         if self.test_mode:
             print('rounding done')
             print(df)
 
-        # drop angles of autotension
-        # print(df.query('condition in ["Normalアングル", "スチームアングル"] and type in ["25%M", "50%M"]'))
-        # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'elongation']" ,engine='python'))
-        # print(df.query("condition.str.contains('ｱﾝｸﾞﾙ') and type in ['25%M', '50%M', '100%M', 'EB']" ,engine='python'))
         index_drop = df.query(
             "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['M25', 'M50', 'M100', 'EB']", engine='python').index
         df.drop(list(index_drop), inplace=True)

@@ -59,7 +59,6 @@ class Muuni:
                 if df_temp.at[row_index, col_title] == '******':
                     df_temp.at[row_index, col_title] = "30 >"
 
-        # print(df_temp)
         return df_temp
 
     def RemoveOtherInfo(self, df_all: pd.DataFrame):

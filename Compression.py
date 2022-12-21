@@ -56,7 +56,6 @@ class Compression:
         df_all = pd.DataFrame()
 
         for sheet in sheet_list:
-            print(sheet)
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
 
         df_all = self.SortByTemperature(df_all)
@@ -134,7 +133,6 @@ class Compression:
 
         for i, value in enumerate(df_all_tem["condition"]):
             condition_split = value.split("℃×")
-            print(condition_split)
             df_all_tem["temperature"][i] = int(value.split("℃×")[0])
             df_all_tem["hours"][i] = int(value.split("℃×")[1].split("H")[0])
         # print(df_all_tem)

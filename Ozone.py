@@ -94,19 +94,24 @@ class Ozone:
         # return
     
         df_sheet = df_sheet.iloc[:, 3:]
-        df_sheet = df_sheet.dropna(how='all', axis=1)
+        # print(df_sheet)
+        del_list = []
+        for _, col_name in enumerate(df_sheet.columns.to_list()):
+            if "Unnamed" in str(col_name):
+                del_list.append(str(col_name))
 
-        
-        
+        if len(del_list) > 0:
+            df_sheet = df_sheet.drop(del_list, axis=1)
+
+        # df_sheet = df_sheet.dropna(how='all', axis=1)
+
         target_list = df_sheet.index.to_list()
         for i, value in enumerate(target_list):
-            # print(i, value)
             if str(value) == 'nan' and i > 0:
                 target_list[i] = target_list[i-1]
 
         # print(target_list)
         df_sheet.index = target_list
-
         if self.test_mode:
             print(df_sheet)
 
@@ -123,7 +128,7 @@ class Ozone:
         if self.test_mode:
             print('df_steam')
             print(df_steam)
-        
+
 
         df_press_n1 = df_press[~df_press.index.duplicated(keep='first')]
         df_press_n2 =  df_press[~df_press.index.duplicated(keep='last')]

@@ -83,8 +83,9 @@ class Rheometer:
         # data titles
 
         temperature_cell = ws.cell(row=2, column=6)
-        # print(temperature_cell)
-        # print(temperature_cell.value)
+
+        
+
         temperature_title = str(int(float(temperature_cell.value[:-1]))) + '℃'
         self.temperature = temperature_title
         # print(temperature_title)
@@ -120,10 +121,8 @@ class Rheometer:
         if self.test_mode:
             print('adding serials')
 
-        print(self.number_of_target)
         for i in range(self.number_of_target):
             serial_name = ws.cell(row=self.standard_cell.row, column=2 + 4*i).value
-            print('serial name' ,serial_name)
             if serial_name != None:
 
                 if self.test_mode:
@@ -238,8 +237,6 @@ class Rheometer:
         method_list = [Service.file_name_without_target(
             self.file_now, self.target)] * len(df_input)
 
-        # for i, method in enumerate(method_list):
-        #     method_list[i] = method.split()[0]
 
         df_input.insert(0, 'unit', unit)
         df_input.insert(0, 'type', type_list)
