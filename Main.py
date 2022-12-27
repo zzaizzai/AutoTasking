@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 import SaveLog
 import MakeDataSheet
 import Zeika
+import Gabe
 
 
 
@@ -40,6 +41,7 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
     Zeika.DoIt(target, test_mode=test_mode)
     Ozone.DoIt(target, test_mode=test_mode)
     Osidasi.DoIt(target, testMode=test_mode)
+    Gabe.DoIt(target, test_mode=test_mode)
 
     Treatment.DoIt(target, test_mode=test_mode)
     MakeDataSheet.Doit(target)
@@ -124,7 +126,7 @@ if __name__ == '__main__':
 
     # for exception
     if user_first == "EPDM":
-        user = '※※住化EPDM代替関連テーマ(FG〇～)※※'
+        user = 'EPDM'
     else:
         pass
 

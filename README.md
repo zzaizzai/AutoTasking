@@ -8,5 +8,13 @@ Collect Files having name of target from share folder to my desktop so that i ca
 -> normalize Data values like rounding   
 -> Make Data Sheet we can use it as a report data   
 
+```
+python 3.7.8
+```
+
+```
+python Main.py
+```
+
 
 there are some confidential information but I manage the information in a environment file

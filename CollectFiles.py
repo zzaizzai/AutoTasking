@@ -15,7 +15,7 @@ class CollectFiles:
         self.user = user
         self.target = target
         # self.filePath = destination_dir_path + fr'\{user}\*\**\*.x*'
-        self.filePath = destination_dir_path + fr'\{user}\**\*{self.target}*.x*'
+        self.filePath = destination_dir_path + fr'\*{user}*\**\*{self.target}*.x*'
         # it is better method ??
         self.data_dir = Service.data_dir(target)
         self.fileNamePath = destination_dir_path + fr'\{user}'
