@@ -1,11 +1,14 @@
 # auto tasking system with data in complex files
 
-I am using it in my work. becuz I handle with many data values that we have to evaluate for new materials as my job   
+I use it in my work. becuz I handle with many data values which I have to evaluate for new or current materials as my job.
+Without this code, I have to spend much time finding data files in share folder and considering which data should be nessasery.
+however, with this code, I can save about 80% my time handling with data in excels. Also I dont have to confirm that certain data were completed and exist on share folder. It restains excessive effort and make me concentrate on considering the mehcanism of phenomenon.
+
 
 ## Process
-Collect Files having name of target from share folder to my desktop so that i can see data files more quickly   
+Collect Files having name of target from share folder to my desktop so that i can see data files more quickly and easily 
 -> Read Data Files with pandas   
--> normalize Data values like rounding   
+-> normalize Data values from excel files with pandas
 -> Make Data Sheet we can use it as a report data   
 
 ```
