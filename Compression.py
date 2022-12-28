@@ -75,7 +75,6 @@ class Compression:
 
         number_of_target: int = 0
         for i in range(len(df_hardness)):
-            # print(df_hardness.iat[i,0])
             if str(df_hardness.iat[i,0]) != "nan" and i % 4 == 0 :
                 number_of_target += 1
                 df_hardness.iat[i+1,0]= df_hardness.iat[i,0]
@@ -143,16 +142,13 @@ class Compression:
         return df_all_tem
 
     def ReadDataSheet(self, sheet: str):
-        print(sheet)
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9)
 
         # find data col index
         col_index_data : int = 7
         for i in range(10):
             if  str(df.iat[0,i]) == "9.38":
-                # print("next of this is the data col index")
                 col_index_data = i + 1
-                # print("col_index_data:", col_index_data)
                 break
 
         df = df.iloc[:, [1, col_index_data]]
@@ -171,7 +167,6 @@ class Compression:
         mean_data_index = []
         for i in range(len(target_list)):
             mean_index = 3 + 4*i
-            # print(mean_index, df['配合番号'][mean_index])
             mean_data_index.append(mean_index)
 
         df = df.loc[mean_data_index]

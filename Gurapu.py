@@ -15,20 +15,15 @@ class Gurapu:
 
         row_start = 0
         for i, value in enumerate(df[0]):
-            print(value)
             if value == 'Time(NO.1)':
                 row_start = i
                 break
-        print(row_start
-        )
         df = df[row_start:]
         df = df.dropna(axis=1)
-        print(df)
         df.columns = df.iloc[0]
         df = df[1:]
         df.reset_index(inplace=True, drop=True)
         df = df.T.reset_index(drop=True).T
-        print(df)
 
         df.plot(0)
         plt.xlim(0,)

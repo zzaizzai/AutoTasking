@@ -86,7 +86,6 @@ def file_name_without_target_and_expname_distin_underbar(file_path: str, target:
     condition_name = ""
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
-    print(file_name)
     file_name_distin = re.split(' |_|-', file_name)
     for text in file_name_distin:
         if target in text or text in ex_name.split("_"):

@@ -51,7 +51,7 @@ class HeatResist:
         df_all_files = self.SortByTemperature(df_all_files)
 
         df_all_files = self.ChangeConditionName(df_all_files)
-        # print(df_all_files.to_markdown())
+
         self.WriteData(df_all_files)
 
     def ReadFile(self):
@@ -157,16 +157,13 @@ class HeatResist:
         for i in range(20):
             if 1+i*4 + 3 < len(row_three):
                 if str(row_three[1+i*4]) != 'nan':
-                    row_three[1+i*4 + 3] = row_three[1+i*4]
-        # print(row_zero)            
+                    row_three[1+i*4 + 3] = row_three[1+i*4]    
         df.loc[[12]] = row_zero
         df.loc[[13]] = row_three
         
         
         df_input = df.iloc[:, mean_col_index]
 
-        # print(sheet)
-        # print(df_input.to_markdown())
         # change unit title
         unit_list = df_input.columns.tolist()
         unit_list[0] = 'type'
@@ -186,7 +183,6 @@ class HeatResist:
         df_input.insert(0, 'condition', condition)
         df_input.insert(0, 'method', method)
 
-        # print(df_input)
         return df_input
 
     def WriteData(self, df_input):

@@ -33,10 +33,7 @@ class Tension:
             return
 
         auto_file_path = self.auto_file_dir + r'\*.xlsm'
-        # print(auto_file_path)
         auto_file_list = glob.glob(auto_file_path)
-        
-        # print(auto_file_list)
 
         if len(auto_file_list) == 0:
             print('no auto tesnion data file')
@@ -48,15 +45,12 @@ class Tension:
             print(os.path.basename(auto_file))
             df_all = pd.concat([df_all, self.GetData(auto_file)])
 
-        # print(df_all)
-
         print('showing merge df with sorted')
         # sort witt tile
         df_all = df_all.sort_values(by=[2, 1])
 
         df_all.reset_index(inplace=True, drop=True)
         df_all = df_all.T.reset_index(drop=True).T
-        # print(df_all)
 
         # remove another targets with checking target number and data file lengh
         df_len = pd.read_excel(self.file_data, index_col=0)
@@ -76,7 +70,6 @@ class Tension:
             print(df_all)
 
         for i, value in enumerate(df_all[0]):
-            # print(int(value[3:]))
             if int(value[3:]) < int(self.target[3:]):
                 if self.test_mode:
                     print(int(value[3:]))
@@ -87,9 +80,7 @@ class Tension:
                     print(int(value[3:]))
                     print('over range')
                 remove_row_list.append(i)
-        # print(remove_row_list)
         df_all = df_all.drop(remove_row_list)
-        # print(df_all)
 
         df_all.reset_index(inplace=True, drop=True)
         df_all = df_all.T.reset_index(drop=True).T
@@ -113,14 +104,11 @@ class Tension:
             for i, value in enumerate(df_all[1]):
                 if value == condition:
                     df_part = df_part.append(df_all.loc[[i]])
-            # print(df_part)
 
             df_part = df_part.transpose()
             df_part = df_part.T.reset_index(drop=True).T
             df_part.reset_index(inplace=True, drop=True)
-            # print(df_part)
             target_titles = df_part.iloc[[0]].values.tolist()[0]
-            # print(df_part.iloc[[0]].values.tolist()[0])
 
             unit = ['MPa', 'MPa', 'MPa', 'MPa', '%']
             method = ['M25', 'M50', 'M100', 'TS', 'EB']
@@ -132,57 +120,48 @@ class Tension:
             df_part = df_part.loc[[2, 3, 4, 5, 6]]
 
             df_part.columns = target_titles
-            # print(df_part)
 
             df_part.insert(loc=0, column='unit', value=unit)
             df_part.insert(loc=0, column='type', value=method)
             df_part.insert(loc=0, column='condition', value=condition)
             df_part.insert(loc=0, column='method', value=name)
 
-            # df_part = df_part.T.reset_index(drop=True).T
             df_part.reset_index(inplace=True, drop=True)
 
-            # print(df_part)
-            # df_part = df_part.duplicated(keep='last', axis=1)
             df_part = df_part.loc[:, ~df_part.columns.duplicated(keep="last")]
-
-            # print(df_part)
 
             df_part =  self.ChangeBrTension(df_part)
             df_merge = pd.concat([df_merge, df_part])
             
 
-        # print(df_merge)
 
         # df_merge = self.drop_anguru_without_ts(df_merge)
 
         self.WriteData(df_merge)
         # print('merge done')
-    def drop_anguru_without_ts(self, df:pd.DataFrame) -> pd.DataFrame:
+    # def drop_anguru_without_ts(self, df:pd.DataFrame) -> pd.DataFrame:
 
-        df.reset_index(inplace=True, drop=True)
-        index_drop = df.query(
-            "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['M25', 'M50', 'M100', 'EB']", engine='python').index
-        df.drop(list(index_drop), inplace=True)
-        index_press = df.query("condition.str.contains('PressJIS')").index
-        print(index_press)
-        print(df)
+    #     df.reset_index(inplace=True, drop=True)
+    #     index_drop = df.query(
+    #         "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['M25', 'M50', 'M100', 'EB']", engine='python').index
+    #     df.drop(list(index_drop), inplace=True)
+    #     index_press = df.query("condition.str.contains('PressJIS')").index
+    #     print(index_press)
+    #     print(df)
 
-        df_ordering_unit = pd.DataFrame({'unit_order': ['1', 2,3,4,5,6], 'unit':['M25', 'M50','M100', 'TS', 'EB' ,'Tr-B']})
-        print(pd.merge(df, df_ordering_unit, on="unit" ,how='left'))
-        print(df_ordering_unit)
-        return 
+    #     df_ordering_unit = pd.DataFrame({'unit_order': ['1', 2,3,4,5,6], 'unit':['M25', 'M50','M100', 'TS', 'EB' ,'Tr-B']})
+    #     print(pd.merge(df, df_ordering_unit, on="unit" ,how='left'))
+    #     print(df_ordering_unit)
+    #     return 
+
     def ChangeBrTension(self, df_part):
-        # print(df_part)
         df_part_temp = df_part
         df_part_temp = df_part_temp[df_part_temp["condition"].str.contains('ｱﾝｸﾞﾙ') & df_part_temp["type"].str.contains('TS')]
-        # print(df_part_temp.index.to_list())
         if len(df_part_temp.index.to_list()) > 0:
             for index in df_part_temp.index.to_list():
                 print(index)
                 df_part["type"][index] = 'Tr-B'
                 df_part["unit"][index] = 'N/mm'
-        # print(df_part)
         return df_part
 
 
@@ -191,14 +170,10 @@ class Tension:
         print('writing data...')
 
         df = pd.read_excel(self.file_data, index_col=0)
-
         df_merge = pd.concat([df, df_input], axis=0, sort=False)
-
         df_merge.reset_index(inplace=True, drop=True)
-
         df_merge.to_excel(self.file_data, header=True, startcol=0)
 
-        # print(df_merge)
         print(f'saved data file in {self.file_data}')
 
     def GetData(self, auto_file) -> (any):
@@ -213,7 +188,6 @@ class Tension:
             if row_num < len(df):
                 for j in range(1, 4):
                     df.at[row_num + 3, j] = df.at[row_num, j]
-        # print(df)
 
         df_data = pd.DataFrame()
 
@@ -224,14 +198,10 @@ class Tension:
 
         target_list_row = []
         for i, value in enumerate(df_data[1]):
-            # print(i)
-            # print(value)
             if self.target[:2] in str(value):
-                # print(f'include {self.target[0:2]} at {value}')
                 target_list_row.append(i)
 
         df_data = df_data.loc[target_list_row]
-        # print(df_data)
 
         # select titles
         df_data = df_data[[1, 2, 9, 10, 11, 14, 15]]

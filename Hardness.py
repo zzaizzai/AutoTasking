@@ -45,12 +45,11 @@ class Hardness:
 
         df = pd.read_excel(self.file_now, header=7)
         df_target = df.iloc[:, 13].to_list()
-        # print(df_target)
 
         for i in range(len(df_target)):
             if str(df_target[i]) != 'nan':
                 df_target[i] = Service.target_number(i, self.target)
-        # print(df_target)
+
         df.iloc[:, 13] = df_target
 
         df = df.iloc[:, 13:16]
@@ -72,12 +71,9 @@ class Hardness:
         df.columns = titles_new
         df = df.drop('配合番号', axis=0)
 
-
-        # print(self.file_now)
         file_name = os.path.splitext(os.path.basename(self.file_now))
         print(file_name)
 
-        # print(len(df))
         df.reset_index(inplace=True, drop=True)
 
         unit = ['HA'] * len(df)
@@ -127,7 +123,6 @@ class Hardness:
             df_merge.to_excel(file_data, index=True, header=True)
         except Exception as e:
             print(e)
-        # print(df_merge)
 
         print(f'saved data file in {file_data}')
 
