@@ -138,4 +138,4 @@ def DoIt(target: str, test_mode=False):
 
 if __name__ == '__main__':
     target = input('target: ')
-    DoIt(target)
+    DoIt(target, test_mode=True)

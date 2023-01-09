@@ -22,7 +22,6 @@ class Muuni:
 
     def FindFile(self):
         print('find files as ', os.path.basename(self.path_xlsx))
-        # print(self.path_xlsx)
 
         file_list = sorted(glob.glob(self.path_xlsx), key=len)
 

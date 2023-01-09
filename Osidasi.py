@@ -105,12 +105,23 @@ class Osidasi:
         df_tempa = df_tempa.loc[:, ['D', 'R']]
 
         # get Sulfurization data
-
         df_sulf = df.iloc[index_mean, :]
         df_sulf = df_sulf[df_sulf['L'].notna()]
+
+        is_exist_shirnk_data = False
+
         df_sulf = df_sulf.loc[:, ['加硫前', '加硫後']]
-        shrink_percentage = ((df_sulf['加硫前'] / df_sulf['加硫後'])-1) * 100
-        df_sulf['収縮率'] = shrink_percentage.apply(round)
+
+        if str(df_sulf['加硫後'][0]) != 'nan' :
+            is_exist_shirnk_data = True
+
+        if is_exist_shirnk_data:
+            shrink_percentage = ((df_sulf['加硫前'] / df_sulf['加硫後'])-1) * 100
+
+            df_sulf['収縮率'] = shrink_percentage.apply(round)
+        else:
+            df_sulf['収縮率'] = '-'
+
         df_sulf = df_sulf.loc[:,['収縮率']]
 
         values_pressure_CH = df.loc[:, 'C.H'].to_list()[1:]
@@ -164,10 +175,11 @@ class Osidasi:
         condition_list = ['none']*len(df_all)
         method_list = [Service.file_name_without_target(self.file_now, self.target)]*len(df_all)
         unit_list = ['ss']*len(df_all)
-
-        unit_names = ['eval', 'eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', '%', '%', '%']
-        if len(df_all) == len(unit_names):
-            unit_list = unit_names
+        print(len(df_all))
+        if len(df_all) == 13:
+            unit_list = ['eval', 'eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', '%', '%', '%']
+        elif len(df_all) == 12:
+            unit_list = ['eval', 'eval', 'eval', 'eval', 'C','C','kg/cm2', 'kg/cm2', 'mm/20s','g/20s', '%', '%']
         type_list = df_all.index.to_list()
 
         type_list[type_list.index('Swell')] = 'swell dia.'

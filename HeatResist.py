@@ -7,7 +7,7 @@ import Service
 class HeatResist:
 
     test_mode = False
-
+    
     def TestMode(self, mode: bool):
         self.TestMode = mode
 
@@ -27,6 +27,10 @@ class HeatResist:
         self.file_now = ''
 
     def StartProcess(self):
+
+        if self.TestMode:
+            print('test mode', self.TestMode)
+
         print('find files...')
         print(self.file_path)
 
@@ -214,4 +218,4 @@ if __name__ == '__main__':
     # target = 'FJX001'
     target = input('target: ')
 
-    DoIt(target)
+    DoIt(target, test_mode=True)

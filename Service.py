@@ -131,7 +131,7 @@ def normal_round(df, round_num: int):
     return df
 
 
-def remove_dufulicant_in_list(duful_list: list):
+def remove_dufulicant_in_list(duful_list: list) -> list:
     return list(set(duful_list))
 
 
