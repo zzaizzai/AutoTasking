@@ -71,7 +71,6 @@ class Osidasi:
         titles[0] = 'mean'
         df.columns = titles
 
-
         # mean data
         count_for_mean = 0
         index_mean = []
@@ -89,6 +88,8 @@ class Osidasi:
 
         # get only mean data
         df_mean = df.iloc[index_mean, :]
+        df_mean = df_mean[df_mean['L'].notna()]
+
         df_mean = df_mean.loc[:, ['L', 'W', 'Swell', 'Swell.1']]
         df_mean['Swell'] = (df_mean['Swell'] - 1) * 100  
         df_mean['Swell'] = df_mean['Swell'].apply(round)
@@ -104,12 +105,13 @@ class Osidasi:
         df_tempa = df_tempa.loc[:, ['D', 'R']]
 
         # get Sulfurization data
+
         df_sulf = df.iloc[index_mean, :]
+        df_sulf = df_sulf[df_sulf['L'].notna()]
         df_sulf = df_sulf.loc[:, ['加硫前', '加硫後']]
         shrink_percentage = ((df_sulf['加硫前'] / df_sulf['加硫後'])-1) * 100
         df_sulf['収縮率'] = shrink_percentage.apply(round)
         df_sulf = df_sulf.loc[:,['収縮率']]
-
 
         values_pressure_CH = df.loc[:, 'C.H'].to_list()[1:]
         values_pressure_H = df.loc[:, 'H'].to_list()[1:]
@@ -133,6 +135,7 @@ class Osidasi:
                         str(values_pressure_CH[i-1]) + ' → ' + str(values_pressure_CH[i]))
 
         df_pressrue = df.iloc[index_eval, :]
+        df_pressrue = df_pressrue[df_pressrue['L'].notna()]
         df_pressrue = df_pressrue.loc[:, ['H', 'C.H']]
 
         df_pressrue.loc[:, 'H'] = list_pressure_H
