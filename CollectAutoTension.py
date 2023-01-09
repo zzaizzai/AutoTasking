@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 
 class hippari:
-    
+
     load_dotenv()
 
     test_mode = False
@@ -92,8 +92,9 @@ class hippari:
             day = file[6:8]
 
             while len(file_path) < 1:
+                # years of 2022 ~ 2023
                 files_path = glob.glob(
-                    rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\2022年*\{month}*\{file[0:8]}*\**\{file}*', recursive=True)
+                    rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\{year}年*\{month}*\{file[0:8]}*\**\{file}*', recursive=True)
                 file_path = files_path[0]
                 print(os.path.basename(file_path))
             return file_path
@@ -114,9 +115,10 @@ class hippari:
         print(f'copy done {copy_count} files with {copy_count_failed} failed')
 
 
-def DoIt(target: str, user_family_name: str, test_mode = False):
+def DoIt(target: str, user_family_name: str, test_mode=False):
 
-    file_auto_list = [str(os.environ.get('AUTO_TENSION_ALL_XLSX_1'))]
+    file_auto_list = [str(os.environ.get('AUTO_TENSION_ALL_XLSX_1')),
+                      str(os.environ.get('AUTO_TENSION_ALL_XLSX_2'))]
 
     hip = hippari(target, file_auto_list, user_family_name)
     hip.TestMode(mode=test_mode)
@@ -129,9 +131,8 @@ def DoIt(target: str, user_family_name: str, test_mode = False):
 
 
 if __name__ == '__main__':
-    # user_family_name = input('user name (only family name): ')
 
-    user_family_name= "小暮"
+    user_family_name = "小暮"
 
     target = input('target Series ( ex: ABC001 ): ')
 
