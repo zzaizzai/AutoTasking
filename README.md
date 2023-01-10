@@ -24,6 +24,7 @@ python Main.py
 ```
 HOSE_DIR = 
 AUTO_TENSION_ALL_XLSX_1 = 
+AUTO_TENSION_ALL_XLSX_2 = 
 ```
 
 **There are some confidential information but I manage the information in a environment file**
