@@ -94,8 +94,9 @@ class Tension:
 
         print(target_condition_list)
 
-        target_condition_list = sorted(
-            target_condition_list, key=len, reverse=True)
+        target_condition_list = sorted(target_condition_list,
+                                       key=len,
+                                       reverse=True)
 
         df_merge = pd.DataFrame()
         for condition in target_condition_list:
@@ -130,15 +131,14 @@ class Tension:
 
             df_part = df_part.loc[:, ~df_part.columns.duplicated(keep="last")]
 
-            df_part =  self.ChangeBrTension(df_part)
+            df_part = self.ChangeBrTension(df_part)
             df_merge = pd.concat([df_merge, df_part])
-            
-
 
         # df_merge = self.drop_anguru_without_ts(df_merge)
 
         self.WriteData(df_merge)
         # print('merge done')
+
     # def drop_anguru_without_ts(self, df:pd.DataFrame) -> pd.DataFrame:
 
     #     df.reset_index(inplace=True, drop=True)
@@ -152,19 +152,19 @@ class Tension:
     #     df_ordering_unit = pd.DataFrame({'unit_order': ['1', 2,3,4,5,6], 'unit':['M25', 'M50','M100', 'TS', 'EB' ,'Tr-B']})
     #     print(pd.merge(df, df_ordering_unit, on="unit" ,how='left'))
     #     print(df_ordering_unit)
-    #     return 
+    #     return
 
     def ChangeBrTension(self, df_part):
         df_part_temp = df_part
-        df_part_temp = df_part_temp[df_part_temp["condition"].str.contains('ｱﾝｸﾞﾙ') & df_part_temp["type"].str.contains('TS')]
+        df_part_temp = df_part_temp[
+            df_part_temp["condition"].str.contains('ｱﾝｸﾞﾙ')
+            & df_part_temp["type"].str.contains('TS')]
         if len(df_part_temp.index.to_list()) > 0:
             for index in df_part_temp.index.to_list():
                 print(index)
                 df_part["type"][index] = 'Tr-B'
                 df_part["unit"][index] = 'N/mm'
         return df_part
-
-
 
     def WriteData(self, df_input):
         print('writing data...')
@@ -184,7 +184,7 @@ class Tension:
         df[2] = df[2] + df[3]
 
         for i in range(len(df)):
-            row_num = 2 + i*4
+            row_num = 2 + i * 4
             if row_num < len(df):
                 for j in range(1, 4):
                     df.at[row_num + 3, j] = df.at[row_num, j]
@@ -192,7 +192,7 @@ class Tension:
         df_data = pd.DataFrame()
 
         for i in range(len(df)):
-            row_num = 5 + i*4
+            row_num = 5 + i * 4
             if row_num < len(df):
                 df_data = df_data.append(df.loc[[row_num]], ignore_index=True)
 

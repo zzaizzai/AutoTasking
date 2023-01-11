@@ -27,7 +27,8 @@ class Muuni:
 
         # when the ordering missed by title name with BK
         if len(file_list) > 3:
-            if "140C" in os.path.basename(file_list[2]) and "121C" in os.path.basename(file_list[3]):
+            if "140C" in os.path.basename(
+                    file_list[2]) and "121C" in os.path.basename(file_list[3]):
                 file_list[2], file_list[3] = file_list[3], file_list[2]
 
         df_all = pd.DataFrame()
@@ -69,7 +70,8 @@ class Muuni:
 
         index_remove = []
         for i, value in enumerate(df_all_temp_condition):
-            if ("121℃" not in str(value)) and ("Vm" in df_all["type"][i] or "5p" in df_all["type"][i]):
+            if ("121℃" not in str(value)) and ("Vm" in df_all["type"][i]
+                                               or "5p" in df_all["type"][i]):
                 print(value)
                 index_remove.append(i)
         df_all = df_all.drop(index=index_remove)
@@ -82,7 +84,7 @@ class Muuni:
 
         for i, value in enumerate(df[0]):
             if value == '特性値：':
-                num_target = df[0][i-1]
+                num_target = df[0][i - 1]
                 row_init = i + 4
 
         if self.test_mode:
@@ -91,7 +93,7 @@ class Muuni:
 
         df_input = df.loc[[row_init]]
         for i in range(1, num_target):
-            df_input = df_input.append(df.loc[[row_init + 2*i]])
+            df_input = df_input.append(df.loc[[row_init + 2 * i]])
 
         df_input = df_input.transpose()
 
@@ -106,17 +108,17 @@ class Muuni:
         type_list = ['MV', 'Vm', 'ST 5p']
 
         condition_name = df.iat[1, 5]
-        condition_name = str(
-            int(float(condition_name.split("℃")[0]))) + '℃'
+        condition_name = str(int(float(condition_name.split("℃")[0]))) + '℃'
         from pathlib import Path
         for name_in_file_name in Path(self.file_now).stem.split(" "):
             if "%" in name_in_file_name:
-                condition_name += "  " +  name_in_file_name
+                condition_name += "  " + name_in_file_name
 
-
-        condition_list = [condition_name]*len(df_input)
-        method_list = [Service.file_name_without_target_distin_underbar(
-            self.file_now, self.target)]*3
+        condition_list = [condition_name] * len(df_input)
+        method_list = [
+            Service.file_name_without_target_distin_underbar(
+                self.file_now, self.target)
+        ] * 3
 
         df_input = Service.create_method_condition_type_unit(
             df_input, method_list, condition_list, type_list, unit_list)

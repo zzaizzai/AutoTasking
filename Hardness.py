@@ -54,15 +54,13 @@ class Hardness:
 
         df = df.iloc[:, 13:16]
 
-
         titles = df.columns.to_list()
 
         titles = ['配合番号', '０秒', '3秒']
         df.columns = titles
 
         df.dropna(how='all', inplace=True)
-        df.dropna(how='all', axis=1,  inplace=True)
-
+        df.dropna(how='all', axis=1, inplace=True)
 
         df = df.transpose()
 
@@ -85,15 +83,20 @@ class Hardness:
 
         condition = []
 
-        if Service.file_name_without_target_and_expname_distin_underbar(self.file_now, self.target, self.exp_name) == "none":
+        if Service.file_name_without_target_and_expname_distin_underbar(
+                self.file_now, self.target, self.exp_name) == "none":
             condition = ['Press'] * len(df)
         else:
-            condition = [Service.file_name_without_target_and_expname_distin_underbar(
-                self.file_now, self.target, self.exp_name)] * len(df)
-        method = [Service.file_name_without_target(
-            self.file_now, self.target)] * len(df)
+            condition = [
+                Service.file_name_without_target_and_expname_distin_underbar(
+                    self.file_now, self.target, self.exp_name)
+            ] * len(df)
+        method = [
+            Service.file_name_without_target(self.file_now, self.target)
+        ] * len(df)
 
-        df = Service.create_method_condition_type_unit(df, method, condition, type_list, unit)
+        df = Service.create_method_condition_type_unit(df, method, condition,
+                                                       type_list, unit)
 
         try:
             self.WriteDate(df)

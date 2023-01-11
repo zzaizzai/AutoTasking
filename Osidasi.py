@@ -100,7 +100,7 @@ class Osidasi:
         df_eval = df.iloc[index_eval, :]
         df_eval = df_eval.loc[:, ['H.1', 'Sc', 'R.F','押出肌']]
 
-        # get temp data
+        # get temparature data
         df_tempa = df.iloc[index_tempa, :]
         df_tempa = df_tempa.loc[:, ['D', 'R']]
 

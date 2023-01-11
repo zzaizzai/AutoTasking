@@ -23,10 +23,11 @@ import Zeika
 import Gabe
 
 
-
-
-
-def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, test_mode=False):
+def DoProcess(user: str,
+              user_family: str,
+              target: str,
+              target_dir_path: str,
+              test_mode=False):
     SaveLog.Save_Data(user, target)
     CollectFiles.Check(user, target, target_dir_path)
     CollectAutoTension.DoIt(target, user_family, test_mode=test_mode)
@@ -46,7 +47,6 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
     Treatment.DoIt(target, test_mode=test_mode)
     MakeDataSheet.Doit(target)
 
-    
     print('\n=========================================================')
     # print('   process done   ')
     print(Service.work_done)
@@ -55,11 +55,16 @@ def DoProcess(user: str, user_family: str, target: str, target_dir_path: str, te
 
 if __name__ == '__main__':
     load_dotenv()
-    print(f'=========================================================================================')
-    print(f' Hello!! this is Auto Handling Data System made by K.J.  ver 0.2 \n ')
+    print(
+        f'========================================================================================='
+    )
+    print(
+        f' Hello!! this is Auto Handling Data System made by K.J.  ver 0.2 \n '
+    )
     display_time = time.localtime()
     print(
-        f' Current time : {display_time.tm_year}/ {display_time.tm_mon}/ {display_time.tm_mday}   {display_time.tm_hour}:{display_time.tm_min}  \n')
+        f' Current time : {display_time.tm_year}/ {display_time.tm_mon}/ {display_time.tm_mday}   {display_time.tm_hour}:{display_time.tm_min}  \n'
+    )
     # for company
     target_dir_path = str(os.environ.get('HOSE_DIR'))
     # target_dir_path = r'C:\Users\junsa\Desktop'
@@ -69,7 +74,9 @@ if __name__ == '__main__':
     print(f' save_dir : {os.path.expanduser("~/Desktop")}')
     print(f' path : {target_dir_path}')
 
-    print(f'=========================================================================================')
+    print(
+        f'========================================================================================='
+    )
     print('11/2 Oshidashi added + some bug issue fixed 11/3 Ozone added')
     print('some rounding issure.')
     print('python version: ', platform.python_version())
@@ -114,7 +121,8 @@ if __name__ == '__main__':
     # checking first name
     while not if_ok_first_name:
         user_first = input(
-            '\n ※ if you want EPDM data, please input EPDM \n input your first name (ex: 花子) :  ')
+            '\n ※ if you want EPDM data, please input EPDM \n input your first name (ex: 花子) :  '
+        )
 
         if Service.check_user_name(user_first):
             if_ok_first_name = True
@@ -147,8 +155,11 @@ if __name__ == '__main__':
                 print(f'test mode: {test_mode}')
                 time.sleep(1)
 
-                DoProcess(user, user_family, target,
-                          target_dir_path, test_mode=test_mode)
+                DoProcess(user,
+                          user_family,
+                          target,
+                          target_dir_path,
+                          test_mode=test_mode)
 
             else:
                 print()

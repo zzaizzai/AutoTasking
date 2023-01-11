@@ -16,7 +16,8 @@ class hippari:
     def TestMode(self, mode: bool):
         self.TestMode = mode
 
-    def __init__(self, target: str, file_auto_list: list, user_family_name: str):
+    def __init__(self, target: str, file_auto_list: list,
+                 user_family_name: str):
         self.file_auto_list = file_auto_list
         self.target = target
         self.data_dir = Service.data_dir(target)
@@ -94,7 +95,8 @@ class hippari:
             while len(file_path) < 1:
                 # years of 2022 ~ 2023
                 files_path = glob.glob(
-                    rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\{year}年*\{month}*\{file[0:8]}*\**\{file}*', recursive=True)
+                    rf'\\kfs04\share2\4501-R_AND_D\JSK\全自動引張り\データ\{year}年*\{month}*\{file[0:8]}*\**\{file}*',
+                    recursive=True)
                 file_path = files_path[0]
                 print(os.path.basename(file_path))
             return file_path
@@ -117,8 +119,10 @@ class hippari:
 
 def DoIt(target: str, user_family_name: str, test_mode=False):
 
-    file_auto_list = [str(os.environ.get('AUTO_TENSION_ALL_XLSX_1')),
-                      str(os.environ.get('AUTO_TENSION_ALL_XLSX_2'))]
+    file_auto_list = [
+        str(os.environ.get('AUTO_TENSION_ALL_XLSX_1')),
+        str(os.environ.get('AUTO_TENSION_ALL_XLSX_2'))
+    ]
 
     hip = hippari(target, file_auto_list, user_family_name)
     hip.TestMode(mode=test_mode)

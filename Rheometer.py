@@ -71,7 +71,8 @@ class Rheometer:
                 break
 
         self.number_of_target = int(
-            ws.cell(row=standard_cell.row - 2, column=standard_cell.column).value)
+            ws.cell(row=standard_cell.row - 2,
+                    column=standard_cell.column).value)
         print(f'number of target: {self.number_of_target}')
 
         print(f'standard postion cell: {standard_cell}')
@@ -83,8 +84,6 @@ class Rheometer:
         # data titles
 
         temperature_cell = ws.cell(row=2, column=6)
-
-        
 
         temperature_title = str(int(float(temperature_cell.value[:-1]))) + '℃'
         self.temperature = temperature_title
@@ -109,32 +108,41 @@ class Rheometer:
 
         colors = {
             'blue': '0000ff',
-            'red' : 'ff0000',
+            'red': 'ff0000',
             'green': '00cc00',
-            'orange' : 'ff8000',
-            'violet' : 'ff00ff',
-            'pink' : 'ff00d5',
+            'orange': 'ff8000',
+            'violet': 'ff00ff',
+            'pink': 'ff00d5',
         }
-        colors = [colors['red'], colors['blue'] , colors['green'],colors['orange'], colors['violet'],
-                  colors['pink'], colors['pink'], colors['pink'], colors['pink'], colors['pink']]
+        colors = [
+            colors['red'], colors['blue'], colors['green'], colors['orange'],
+            colors['violet'], colors['pink'], colors['pink'], colors['pink'],
+            colors['pink'], colors['pink']
+        ]
         # add series
         if self.test_mode:
             print('adding serials')
 
         for i in range(self.number_of_target):
-            serial_name = ws.cell(row=self.standard_cell.row, column=2 + 4*i).value
+            serial_name = ws.cell(row=self.standard_cell.row,
+                                  column=2 + 4 * i).value
             if serial_name != None:
 
                 if self.test_mode:
                     print(serial_name)
 
-                data = openpyxl.chart.Reference(
-                    ws, min_col=2 + i*4, min_row=standard_cell.row, max_row=1000)
-                times = openpyxl.chart.Reference(
-                    ws, min_col=1, min_row=standard_cell.row + 1, max_row=1000)
+                data = openpyxl.chart.Reference(ws,
+                                                min_col=2 + i * 4,
+                                                min_row=standard_cell.row,
+                                                max_row=1000)
+                times = openpyxl.chart.Reference(ws,
+                                                 min_col=1,
+                                                 min_row=standard_cell.row + 1,
+                                                 max_row=1000)
 
-                series = openpyxl.chart.Series(
-                    data, times, title_from_data=True)
+                series = openpyxl.chart.Series(data,
+                                               times,
+                                               title_from_data=True)
                 # series.graphicalProperties.line.noFill = True
 
                 series.graphicalProperties.line.solidFill = colors[i]
@@ -154,10 +162,11 @@ class Rheometer:
         if self.test_mode:
             print(f'number of series: {len(chart.series)}')
 
-        # # data scail
+        # y scale
         # chart.y_axis.scaling.min = 0
         # chart.y_axis.scaling.max = 35
 
+        # x scale
         chart.x_axis.scaling.min = 0
         chart.x_axis.scaling.max = 45
 
@@ -182,9 +191,8 @@ class Rheometer:
             return alphabet_num
 
         for i in range(self.number_of_target):
-            ws.cell(row=standard_cell.row, column=2 +
-                    i*4).value = target_number(i)
-
+            ws.cell(row=standard_cell.row,
+                    column=2 + i * 4).value = target_number(i)
 
         ws.add_chart(chart, 'B8')
         wb.save(self.file_now)
@@ -199,7 +207,7 @@ class Rheometer:
 
         for i, value in enumerate(df[0]):
             if value == '特性値：':
-                num_target = df[0][i-1]
+                num_target = df[0][i - 1]
                 row_init = i + 4
 
         if self.test_mode:
@@ -208,12 +216,11 @@ class Rheometer:
 
         df_input = df.loc[[row_init]]
         for i in range(1, num_target):
-            df_input = df_input.append(df.loc[[row_init + 2*i]])
+            df_input = df_input.append(df.loc[[row_init + 2 * i]])
 
         df_input = df_input.transpose()
 
         df_input = df_input.loc[[2, 3, 4, 5, 6, 7, 8]]
-
 
         print('changing target numbers')
 
@@ -227,24 +234,25 @@ class Rheometer:
         type_list = ['MH', 'ML', 'ts1', 't10', 't50', 't90', 'CR']
 
         condition_environment = ""
-        if Service.file_name_without_target_and_expname(self.file_now, self.target, self.exp_name) == "none":
+        if Service.file_name_without_target_and_expname(
+                self.file_now, self.target, self.exp_name) == "none":
             pass
         else:
-            condition_environment = Service.file_name_without_target_and_expname(self.file_now, self.target, self.exp_name)
+            condition_environment = Service.file_name_without_target_and_expname(
+                self.file_now, self.target, self.exp_name)
 
-        condition = [f'{self.temperature} {condition_environment}'] * len(df_input)
+        condition = [f'{self.temperature} {condition_environment}'
+                     ] * len(df_input)
         # something is needed in condition.....
-        method_list = [Service.file_name_without_target(
-            self.file_now, self.target)] * len(df_input)
-
+        method_list = [
+            Service.file_name_without_target(self.file_now, self.target)
+        ] * len(df_input)
 
         df_input.insert(0, 'unit', unit)
         df_input.insert(0, 'type', type_list)
         df_input.insert(0, 'condition', condition)
         df_input.insert(0, 'method', method_list)
 
-
-        # return
         self.WriteData(df_input)
 
     def WriteData(self, df_input):

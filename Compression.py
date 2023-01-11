@@ -60,47 +60,47 @@ class Compression:
 
         df_all = self.SortByTemperature(df_all)
 
-
         df_all = pd.concat([df_all, self.get_hardness(sheet_list[0])])
 
         self.WriteData(df_all)
 
-    def get_hardness(self, sheet_name_the_first:str):
+    def get_hardness(self, sheet_name_the_first: str):
         print("get hardness 0-3")
         print(sheet_name_the_first)
-        df = pd.read_excel(self.file_now, sheet_name=sheet_name_the_first, header=9)
-        df_hardness = df.loc[:,["Unnamed: 1","瞬間値","3秒値"]]
+        df = pd.read_excel(self.file_now,
+                           sheet_name=sheet_name_the_first,
+                           header=9)
+        df_hardness = df.loc[:, ["Unnamed: 1", "瞬間値", "3秒値"]]
 
         print()
 
         number_of_target: int = 0
         for i in range(len(df_hardness)):
-            if str(df_hardness.iat[i,0]) != "nan" and i % 4 == 0 :
+            if str(df_hardness.iat[i, 0]) != "nan" and i % 4 == 0:
                 number_of_target += 1
-                df_hardness.iat[i+1,0]= df_hardness.iat[i,0]
-                df_hardness.iat[i+2,0]= df_hardness.iat[i,0]
-                df_hardness.iat[i+3,0]= df_hardness.iat[i,0]
+                df_hardness.iat[i + 1, 0] = df_hardness.iat[i, 0]
+                df_hardness.iat[i + 2, 0] = df_hardness.iat[i, 0]
+                df_hardness.iat[i + 3, 0] = df_hardness.iat[i, 0]
 
-        index_row_middle = [4*i + 3 for i in range(number_of_target)]
+        index_row_middle = [4 * i + 3 for i in range(number_of_target)]
 
-        df_middle_value = df_hardness.loc[index_row_middle ,:]
-
-        
+        df_middle_value = df_hardness.loc[index_row_middle, :]
 
         # rounding
-        df_middle_value["瞬間値"]  = df_middle_value["瞬間値"] + 0.001
-        df_middle_value["瞬間値"]  = df_middle_value["瞬間値"].round(0)
-        df_middle_value["瞬間値"]  = df_middle_value["瞬間値"].apply(int).apply(str)
+        df_middle_value["瞬間値"] = df_middle_value["瞬間値"] + 0.001
+        df_middle_value["瞬間値"] = df_middle_value["瞬間値"].round(0)
+        df_middle_value["瞬間値"] = df_middle_value["瞬間値"].apply(int).apply(str)
 
-        df_middle_value["H0-H3"] = df_middle_value["瞬間値"] 
+        df_middle_value["H0-H3"] = df_middle_value["瞬間値"]
 
-        df_middle_value["3秒値"]  = df_middle_value["3秒値"] + 0.001
-        df_middle_value["3秒値"]  = df_middle_value["3秒値"].round(0)
-        df_middle_value["3秒値"]  = df_middle_value["3秒値"].apply(int).apply(str)
-        
+        df_middle_value["3秒値"] = df_middle_value["3秒値"] + 0.001
+        df_middle_value["3秒値"] = df_middle_value["3秒値"].round(0)
+        df_middle_value["3秒値"] = df_middle_value["3秒値"].apply(int).apply(str)
+
         # H0-H3
-        df_middle_value["H0-H3"] = df_middle_value["H0-H3"].str.cat(df_middle_value["3秒値"], sep=" - ")
-        df_middle_value = df_middle_value.loc[:,["Unnamed: 1", "H0-H3"]]
+        df_middle_value["H0-H3"] = df_middle_value["H0-H3"].str.cat(
+            df_middle_value["3秒値"], sep=" - ")
+        df_middle_value = df_middle_value.loc[:, ["Unnamed: 1", "H0-H3"]]
         df_middle_value = df_middle_value.transpose()
         df_middle_value.reset_index(inplace=True, drop=True)
 
@@ -119,10 +119,6 @@ class Compression:
 
         return df_middle_value
 
-
-
-
-
     def SortByTemperature(self, df_all):
 
         df_all = df_all.reset_index(drop=True)
@@ -135,8 +131,9 @@ class Compression:
             df_all_tem["temperature"][i] = int(value.split("℃×")[0])
             df_all_tem["hours"][i] = int(value.split("℃×")[1].split("H")[0])
         # print(df_all_tem)
-        df_all_tem.sort_values(by=["temperature", "hours"], ascending=[
-                               True, True], inplace=True)
+        df_all_tem.sort_values(by=["temperature", "hours"],
+                               ascending=[True, True],
+                               inplace=True)
         df_all_tem.drop(columns=["temperature", "hours"], inplace=True)
 
         return df_all_tem
@@ -145,9 +142,9 @@ class Compression:
         df = pd.read_excel(self.file_now, sheet_name=sheet, header=9)
 
         # find data col index
-        col_index_data : int = 7
+        col_index_data: int = 7
         for i in range(10):
-            if  str(df.iat[0,i]) == "9.38":
+            if str(df.iat[0, i]) == "9.38":
                 col_index_data = i + 1
                 break
 
@@ -166,7 +163,7 @@ class Compression:
 
         mean_data_index = []
         for i in range(len(target_list)):
-            mean_index = 3 + 4*i
+            mean_index = 3 + 4 * i
             mean_data_index.append(mean_index)
 
         df = df.loc[mean_data_index]

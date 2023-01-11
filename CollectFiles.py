@@ -1,4 +1,3 @@
-
 import glob
 import os
 import shutil
@@ -17,6 +16,7 @@ class CollectFiles:
         self.filePath = destination_dir_path + fr'\*{user}*\**\*{self.target}*.x*'
         self.data_dir = Service.data_dir(target)
         self.fileNamePath = destination_dir_path + fr'\{user}'
+
     def FindGeman(self):
         print('find geman data')
         find_pdf = self.destination_dir_path + \
@@ -26,12 +26,11 @@ class CollectFiles:
         for file_copy in file_list:
             if os.path.isfile(file_copy):
                 try:
-                    shutil.copy2(file_copy, self.data_dir +
-                                    r'\ゲーマン ' + os.path.basename(file_copy))
+                    shutil.copy2(
+                        file_copy, self.data_dir + r'\ゲーマン ' +
+                        os.path.basename(file_copy))
                 except Exception as e:
                     print(e)
-
-
 
     def FindDiseprDir(self):
         print('find diser file..')
@@ -44,8 +43,9 @@ class CollectFiles:
         for file_copy in file_list:
             if os.path.isdir(file_copy):
                 try:
-                    shutil.copytree(file_copy, self.data_dir +
-                                    r'\分散 ' + os.path.basename(file_copy))
+                    shutil.copytree(
+                        file_copy,
+                        self.data_dir + r'\分散 ' + os.path.basename(file_copy))
                 except Exception as e:
                     print(e)
 
@@ -64,7 +64,8 @@ class CollectFiles:
                     file_copy_failed_num += 1
                 file_copy_num = file_copy_num + 1
         print(
-            f'we found {file_copy_num} files!! with {file_copy_failed_num} failed')
+            f'we found {file_copy_num} files!! with {file_copy_failed_num} failed'
+        )
 
     def Copyfiles(self, targetFile: str):
         experiments = os.listdir(self.fileNamePath)
@@ -74,8 +75,9 @@ class CollectFiles:
 
                 print(targetFile)
                 try:
-                    shutil.copy2(targetFile, self.data_dir +
-                                 fr'\{experiment} {os.path.basename(targetFile)}')
+                    shutil.copy2(
+                        targetFile, self.data_dir +
+                        fr'\{experiment} {os.path.basename(targetFile)}')
                 except Exception as e:
                     print(e)
 
@@ -104,7 +106,7 @@ class CollectFiles:
                 try:
                     wb = excel.Workbooks.Open(file_xls)
                     # FileFormat = 51 is for .xlsx extension
-                    wb.SaveAs(file_xls+"x", FileFormat=51)
+                    wb.SaveAs(file_xls + "x", FileFormat=51)
                     wb.Close()
                 except Exception as e:
                     print(e)
@@ -121,8 +123,8 @@ class CollectFiles:
             xlsx = "{}".format(xls) + "x"
             # print(xlsx)
             try:
-                p.save_book_as(file_name='{}'.format(
-                    xls), dest_file_name='{}'.format(xlsx))
+                p.save_book_as(file_name='{}'.format(xls),
+                               dest_file_name='{}'.format(xlsx))
                 os.remove(xls)
             except Exception as e:
                 print(e)

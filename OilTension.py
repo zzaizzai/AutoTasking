@@ -65,10 +65,12 @@ class OilTension:
 
     def ReadDataSheet(self, sheet: str):
         print(f'reading data of {sheet}')
-        df = pd.read_excel(self.file_now, sheet_name=sheet,
-                           header=9, index_col=1)
+        df = pd.read_excel(self.file_now,
+                           sheet_name=sheet,
+                           header=9,
+                           index_col=1)
 
-        df_data = df.iloc[:, [8, 9, 10, 11,12]]
+        df_data = df.iloc[:, [8, 9, 10, 11, 12]]
         print(sheet)
 
         # set init target name for not written in first cell
@@ -85,38 +87,41 @@ class OilTension:
 
         # set all target names, sometimes there is no name in target cells.... becuz of mistakes..?
         for i in range(number_target):
-            index_for_target = i*4 + 1
+            index_for_target = i * 4 + 1
             index_list[index_for_target] = Service.target_number(
                 i, self.target)
-            index_list[index_for_target +
-                       1] = Service.target_number(i, self.target)
-            index_list[index_for_target +
-                       2] = Service.target_number(i, self.target)
-            index_list[index_for_target +
-                       3] = Service.target_number(i, self.target)
+            index_list[index_for_target + 1] = Service.target_number(
+                i, self.target)
+            index_list[index_for_target + 2] = Service.target_number(
+                i, self.target)
+            index_list[index_for_target + 3] = Service.target_number(
+                i, self.target)
 
         df_data.index = index_list
 
         # mean data
         index_mean = []
         for i in range(number_target):
-            index_mean.append(3 + 4*i + 1)
+            index_mean.append(3 + 4 * i + 1)
         df_mean = df_data.iloc[index_mean, :]
 
         # get hardness data
-        index_mean_hardness = list(map(lambda x: x-3, index_mean))
+        index_mean_hardness = list(map(lambda x: x - 3, index_mean))
         df_hardness = df_data.iloc[index_mean_hardness, :]
-        df_mean.loc[:, ['HS','Unnamed: 13']] = df_hardness.loc[:, ['HS','Unnamed: 13']]
+        df_mean.loc[:, ['HS', 'Unnamed: 13'
+                        ]] = df_hardness.loc[:, ['HS', 'Unnamed: 13']]
 
         df_data = df_mean.transpose()
 
-        unit_list = ['MPa', 'MPa', '%', 'HA','HA']
+        unit_list = ['MPa', 'MPa', '%', 'HA', 'HA']
         type_list = ['M100', 'TS', 'EB', 'HA(0s)', 'HA(3s)']
-        condition_list = [sheet]*len(df_data)
-        method_list = [Service.file_name_without_target(
-            self.file_now, self.target)]*len(df_data)
+        condition_list = [sheet] * len(df_data)
+        method_list = [
+            Service.file_name_without_target(self.file_now, self.target)
+        ] * len(df_data)
 
-        df_data = Service.create_method_condition_type_unit(df_data, method_list, condition_list, type_list, unit_list)
+        df_data = Service.create_method_condition_type_unit(
+            df_data, method_list, condition_list, type_list, unit_list)
 
         df_data.reset_index(inplace=True, drop=True)
 

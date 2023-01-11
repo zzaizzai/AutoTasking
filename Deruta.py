@@ -33,12 +33,14 @@ class Deruta:
         file_list = sorted(file_list, key=len)
 
         if len(file_list) == 0:
-            self.file_path = Service.data_dir(self.target) + rf'\ΔV*{self.target}*.xls*'
+            self.file_path = Service.data_dir(
+                self.target) + rf'\ΔV*{self.target}*.xls*'
             file_list = glob.glob(self.file_path)
             file_list = sorted(file_list, key=len)
 
         if len(file_list) == 0:
-            self.file_path = Service.data_dir(self.target) + rf'\⊿Ｖ*{self.target}*.xls*'
+            self.file_path = Service.data_dir(
+                self.target) + rf'\⊿Ｖ*{self.target}*.xls*'
             file_list = glob.glob(self.file_path)
             file_list = sorted(file_list, key=len)
 
@@ -71,8 +73,10 @@ class Deruta:
     def ReadFile(self):
         print('read file ', os.path.basename(self.file_now))
 
-        df = pd.read_excel(self.file_now, sheet_name='1',
-                           index_col=None, header=None)
+        df = pd.read_excel(self.file_now,
+                           sheet_name='1',
+                           index_col=None,
+                           header=None)
 
         if self.test_mode:
             print(df)
@@ -105,7 +109,6 @@ class Deruta:
             print(df["condition"])
             print(df["condition_time"])
 
-
         # count number of target
         target_list = df['配合番号'].values.tolist()
 
@@ -116,13 +119,16 @@ class Deruta:
             if "プレス1次" in str(value) or "スチーム1次" in str(value):
                 target_list[index] = 'nan'
 
-
         # # get targets
-        target_list_temp = [x for x in target_list if str(
-            x) != 'nan' and str(x).replace(".", "", 1).isdigit()]
+        target_list_temp = [
+            x for x in target_list
+            if str(x) != 'nan' and str(x).replace(".", "", 1).isdigit()
+        ]
         # print(target_list_temp)
-        target_list_index = [i for i, x in enumerate(target_list) if str(
-            x) != 'nan' and str(x).replace(".", "", 1).isdigit()]
+        target_list_index = [
+            i for i, x in enumerate(target_list)
+            if str(x) != 'nan' and str(x).replace(".", "", 1).isdigit()
+        ]
         target_list = list(set(target_list_temp))
         # if self.test_mode:
         print('showginf target list')
@@ -133,23 +139,28 @@ class Deruta:
         if self.test_mode:
             print('target list', target_list)
 
-        conditions_list_index = [int(i) for i, value in enumerate(
-            df['liquid_index']) if value == "試験液"]
-
+        conditions_list_index = [
+            int(i) for i, value in enumerate(df['liquid_index'])
+            if value == "試験液"
+        ]
 
         print('condition list index', conditions_list_index)
 
-        def get_condition_list(row_index_condition, condition_candidate_index: int):
+        def get_condition_list(row_index_condition,
+                               condition_candidate_index: int):
             print(f'get condition lsit row of {row_index_condition}')
-            condition_name = str(df.iat[row_index_condition, liquid_col_kind]) + ' ' + str(
-                df.iat[row_index_condition, condition_index])
+            condition_name = str(
+                df.iat[row_index_condition, liquid_col_kind]) + ' ' + str(
+                    df.iat[row_index_condition, condition_index])
 
             if str(df.iat[row_index_condition, condition_index + 1]) != 'nan':
-                condition_name =  condition_name + "℃×" + str(df.iat[row_index_condition, condition_index + 1]) + "h"
+                condition_name = condition_name + "℃×" + str(
+                    df.iat[row_index_condition, condition_index + 1]) + "h"
 
-            if str(df.iat[condition_candidate_index + 1, condition_index + 3]) != "nan":
-                condition_name = condition_name + str(df.iat[condition_candidate_index +
-                        1, condition_index + 3])
+            if str(df.iat[condition_candidate_index + 1,
+                          condition_index + 3]) != "nan":
+                condition_name = condition_name + str(
+                    df.iat[condition_candidate_index + 1, condition_index + 3])
             print(condition_name)
             return condition_name
 
@@ -157,8 +168,8 @@ class Deruta:
         condition_block_index = 0
         for i in range(0, len(target_list_index), len(target_list)):
             print('all condition index', conditions_list_index)
-            condition_candidate_index = target_list_index[i: i +
-                                                          len(target_list)][0] - 5
+            condition_candidate_index = target_list_index[i:i + len(target_list
+                                                                    )][0] - 5
             print(f'condition_candidate {condition_candidate_index}')
             if condition_candidate_index in conditions_list_index:
                 print(
@@ -166,12 +177,14 @@ class Deruta:
                 condition_block_index = condition_candidate_index
             else:
                 print(
-                    f'might be it is same to the before block {condition_candidate_index} altinatly use index: {condition_block_index}')
+                    f'might be it is same to the before block {condition_candidate_index} altinatly use index: {condition_block_index}'
+                )
 
             condition_block_value = get_condition_list(
                 condition_block_index, condition_candidate_index)
             df_block_for_merge = self.ReadBlock_2(
-                df, target_list, target_list_index[i: i+len(target_list)], condition_block_value)
+                df, target_list, target_list_index[i:i + len(target_list)],
+                condition_block_value)
             df_all = pd.concat([df_all, df_block_for_merge], sort=False)
 
         if self.test_mode:
@@ -179,10 +192,12 @@ class Deruta:
 
         self.writedata(df_all)
 
-    def ReadBlock_2(self, df, target_list: list, target_list_index: list, condition: str):
+    def ReadBlock_2(self, df, target_list: list, target_list_index: list,
+                    condition: str):
         print('targets', target_list, 'target index', target_list_index)
         # print(df)
-        df_block = df.iloc[target_list_index[0]-2:target_list_index[-1]+2, :]
+        df_block = df.iloc[target_list_index[0] - 2:target_list_index[-1] +
+                           2, :]
 
         df_block.reset_index(inplace=True, drop=True)
         titles_new = df_block.iloc[0, :].to_list()
@@ -199,14 +214,15 @@ class Deruta:
 
         df_block_temp = df_block
         # print(df_block_targets_temp)
-        targets_index = [i for i, x in enumerate(
-            df_block_temp["配合番号"]) if str(x) != 'nan']
+        targets_index = [
+            i for i, x in enumerate(df_block_temp["配合番号"]) if str(x) != 'nan'
+        ]
         # print(targets_index)
         for index in targets_index:
-            df_block_temp.loc[index-1,
-                              '配合番号'] = df_block_temp.loc[index, '配合番号']
-            df_block_temp.loc[index+1,
-                              '配合番号'] = df_block_temp.loc[index, '配合番号']
+            df_block_temp.loc[index - 1, '配合番号'] = df_block_temp.loc[index,
+                                                                     '配合番号']
+            df_block_temp.loc[index + 1, '配合番号'] = df_block_temp.loc[index,
+                                                                     '配合番号']
 
         df_block["配合番号"] = df_block_temp["配合番号"]
 
@@ -215,14 +231,18 @@ class Deruta:
 
         # print(df_block_input)
         df_block_input.reset_index(inplace=True, drop=True)
-        titles_new = [Service.target_number(i, self.target) for i, _ in enumerate(
-            df_block_input.iloc[0, :].to_list())]
+        titles_new = [
+            Service.target_number(i, self.target)
+            for i, _ in enumerate(df_block_input.iloc[0, :].to_list())
+        ]
         df_block_input.columns = titles_new
         df_block_input = df_block_input.drop(index=[0])
         df_block_input.reset_index(inplace=True, drop=True)
 
         df_block_input = Service.create_method_condition_type_unit(
-            df_block_input, Service.file_name_without_target(self.file_now, self.target), condition, "⊿V",  '%')
+            df_block_input,
+            Service.file_name_without_target(self.file_now, self.target),
+            condition, "⊿V", '%')
 
         return df_block_input
 

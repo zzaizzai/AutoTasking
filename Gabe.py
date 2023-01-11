@@ -42,17 +42,16 @@ class GabeGabe:
 
     def ReadFile(self):
 
-
-        df = pd.read_excel(self.file_now,)
+        df = pd.read_excel(self.file_now, )
 
         df = df.drop(columns=["Unnamed: 0"])
-        method = ["ガーベイダイ"]*2
-        condition_list = ["BK"]*2
+        method = ["ガーベイダイ"] * 2
+        condition_list = ["BK"] * 2
         type_list = ["Surface", 'Edge']
-        unit_list = ["Eval"]*2
-        df = Service.create_method_condition_type_unit(df,method , condition_list, type_list, unit_list)
-
-
+        unit_list = ["Eval"] * 2
+        df = Service.create_method_condition_type_unit(df, method,
+                                                       condition_list,
+                                                       type_list, unit_list)
 
         self.WriteData(df)
 

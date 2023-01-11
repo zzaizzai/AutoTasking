@@ -52,7 +52,6 @@ class Treatment:
         print('rounding data')
         df = pd.read_excel(self.file, index_col=0)
 
-
         if self.test_mode:
             print('before rounding')
             print(df)
@@ -66,22 +65,25 @@ class Treatment:
             pass
 
         # type 0.1
-        df = Service.round_by_check_eachone(
-            df, 1, ['ST 5p','ML','MV', 'T1', 'MH', 'ts1','t10', 't50', 't90', 'CR', 'M25', 'M50', 'M100', 'TS','Tr-B'])
+        df = Service.round_by_check_eachone(df, 1, [
+            'ST 5p', 'ML', 'MV', 'T1', 'MH', 'ts1', 't10', 't50', 't90', 'CR',
+            'M25', 'M50', 'M100', 'TS', 'Tr-B'
+        ])
         # type 0
         df = Service.round_by_check_eachone(
             df, 0, ['０秒', '3秒', 'HA(0s)', 'HA(3s)', '⊿V'])
 
         # type 10
-        df = Service.round_by_check_eachone(
-            df, -1, ['elongation', 'EB', '破断伸び％'])
+        df = Service.round_by_check_eachone(df, -1,
+                                            ['elongation', 'EB', '破断伸び％'])
 
         if self.test_mode:
             print('rounding done')
             print(df)
 
         index_drop = df.query(
-            "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['M25', 'M50', 'M100', 'EB']", engine='python').index
+            "condition.str.contains('ｱﾝｸﾞﾙ') and type in ['M25', 'M50', 'M100', 'EB']",
+            engine='python').index
         df.drop(list(index_drop), inplace=True)
 
         # print(df)
@@ -115,7 +117,7 @@ class Treatment:
         df = pd.read_excel(self.file, index_col=0)
 
 
-def DoIt(target: str, test_mode = False):
+def DoIt(target: str, test_mode=False):
     toritori = Treatment(target)
     toritori.TestMode(test_mode)
     try:

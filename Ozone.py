@@ -45,6 +45,7 @@ class Ozone:
     def ReadData(self):
         print('reading files')
         print(self.file_now)
+
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
 
         if '設定シート' in sheet_list:
@@ -90,8 +91,6 @@ class Ozone:
         else:
             print('index stream start', index_steam_start)
             
-
-        # return
     
         df_sheet = df_sheet.iloc[:, 3:]
         del_list = []

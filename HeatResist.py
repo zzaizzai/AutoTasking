@@ -7,7 +7,7 @@ import Service
 class HeatResist:
 
     test_mode = False
-    
+
     def TestMode(self, mode: bool):
         self.TestMode = mode
 
@@ -38,7 +38,6 @@ class HeatResist:
         file_list = sorted(file_list, key=len)
         print(file_list)
 
-        
         df_all_files = pd.DataFrame()
 
         if len(file_list) > 0:
@@ -63,36 +62,33 @@ class HeatResist:
         print(self.file_now)
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
 
-
         if '設定シート' in sheet_list:
             sheet_list.remove('設定シート')
         else:
             pass
 
-
         df_all = pd.DataFrame()
 
         for sheet in sheet_list:
             df_all = pd.concat([df_all, self.ReadDataSheet(sheet)])
-            
+
         return df_all
-    
 
     def ChangeConditionName(self, df_all):
         df_all = df_all.reset_index(drop=True)
-        
+
         df_all_temp_condition = df_all["condition"]
 
         for i, value in enumerate(df_all_temp_condition):
             temperature_value = value.split("℃×")[0]
             housr_value = value.split("℃×")[1].split("H")[0]
-            df_all_temp_condition[i] = temperature_value +  "℃×" + housr_value + "H"
+            df_all_temp_condition[
+                i] = temperature_value + "℃×" + housr_value + "H"
         df_all["condition"] = df_all_temp_condition
 
         return df_all
-        
-    def SortByTemperature(self, df_all):
 
+    def SortByTemperature(self, df_all):
 
         df_all = df_all.reset_index(drop=True)
 
@@ -102,15 +98,16 @@ class HeatResist:
 
         for i, value in enumerate(df_all_tem["condition"]):
             condition_split = value.split("℃×")
-            temperature =  condition_split[0]
+            temperature = condition_split[0]
             hours = condition_split[1].split("Hｒ")[0]
 
             df_all_tem["temperature"][i] = int(temperature)
             df_all_tem["hours"][i] = int(hours)
 
-        df_all_tem.sort_values(by = ["temperature", "hours"], ascending=[True,True], inplace=True)
-        df_all_tem.drop(columns=["temperature", "hours"], inplace = True)
-
+        df_all_tem.sort_values(by=["temperature", "hours"],
+                               ascending=[True, True],
+                               inplace=True)
+        df_all_tem.drop(columns=["temperature", "hours"], inplace=True)
 
         df_all = df_all_tem
 
@@ -119,8 +116,10 @@ class HeatResist:
     def ReadDataSheet(self, sheet: str):
 
         print('reading sheet: ', sheet)
-        df = pd.read_excel(self.file_now, sheet_name=sheet,
-                           header=9, index_col=1)
+        df = pd.read_excel(self.file_now,
+                           sheet_name=sheet,
+                           header=9,
+                           index_col=1)
         df = df.transpose()
         df.reset_index(inplace=True, drop=True)
 
@@ -130,21 +129,18 @@ class HeatResist:
             if not 'nan' in str(value):
                 col_index.append(i)
 
-
         df = df.iloc[:, col_index]
-       
+
         title_index = df.columns.values.tolist()
         for i, value in enumerate(title_index):
             if 'nan' in str(value):
-                title_index[i] = title_index[i-1]
+                title_index[i] = title_index[i - 1]
 
         df.columns = title_index
-
 
         mean_col_index = [0]
         row_mean_str = df.loc[[2]].values.tolist()[0]
 
-        
         for i, value in enumerate(row_mean_str):
             if '中央値' in str(value):
                 mean_col_index.append(i)
@@ -155,17 +151,16 @@ class HeatResist:
 
         # duplicate the value of hardness to the mean data row in order to get mean data with one line
         for i in range(20):
-            if 1+i*4 + 3 < len(row_zero):
-                if str(row_zero[1+i*4]) != 'nan':
-                    row_zero[1+i*4 + 3] = row_zero[1+i*4]
+            if 1 + i * 4 + 3 < len(row_zero):
+                if str(row_zero[1 + i * 4]) != 'nan':
+                    row_zero[1 + i * 4 + 3] = row_zero[1 + i * 4]
         for i in range(20):
-            if 1+i*4 + 3 < len(row_three):
-                if str(row_three[1+i*4]) != 'nan':
-                    row_three[1+i*4 + 3] = row_three[1+i*4]    
+            if 1 + i * 4 + 3 < len(row_three):
+                if str(row_three[1 + i * 4]) != 'nan':
+                    row_three[1 + i * 4 + 3] = row_three[1 + i * 4]
         df.loc[[12]] = row_zero
         df.loc[[13]] = row_three
-        
-        
+
         df_input = df.iloc[:, mean_col_index]
 
         # change unit title
@@ -178,8 +173,8 @@ class HeatResist:
         df_input = df_input.iloc[:, 1:]
 
         # condition
-        condition = [sheet]*len(df_input)
-        method = ['熱老化']*len(df_input)
+        condition = [sheet] * len(df_input)
+        method = ['熱老化'] * len(df_input)
         unit = ['MPa', 'MPa', '%', 'HA', 'HA']
         type_list = ['M100', 'TS', 'EB', 'HA(0s)', 'HA(3s)']
         df_input.insert(0, 'unit', unit)

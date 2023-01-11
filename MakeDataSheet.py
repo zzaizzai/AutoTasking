@@ -3,7 +3,8 @@ import os
 import openpyxl
 import Service
 
-def make_data_sheet(target:str):
+
+def make_data_sheet(target: str):
 
     def CellWidth(work_book):
         print('fixing cell width')
@@ -30,14 +31,12 @@ def make_data_sheet(target:str):
     target_list = [x for x in df.columns.to_list() if x[3:].isdigit()]
     print(target_list)
 
-
     title_list = ["method", "condition", "type", "unit"] + target_list
 
     wb = openpyxl.Workbook()
-    ws = wb.active 
+    ws = wb.active
     row_start = 4
     col_start = 2
-    # ws.cell(row_start, col_start).value = 
 
     # make titles
     col_title = col_start
@@ -48,19 +47,20 @@ def make_data_sheet(target:str):
         else:
             col_title += 1
 
-
     condition_now = "123"
     row_index = row_start + 1
-    for method in ["ムーニー", "レオメータ", "初期物性", "硬度","熱老化","耐油引張り", "⊿Ｖ", 'ΔV', "圧縮永久歪", '脆化',"押出し", "オゾン"]:
+    for method in [
+            "ムーニー", "レオメータ", "初期物性", "硬度", "熱老化", "耐油引張り", "⊿Ｖ", 'ΔV', "圧縮永久歪",
+            '脆化', "押出し", "オゾン"
+    ]:
         method_count = 0
         # print(method)
         for i, value in enumerate(df["method"].str.contains(method)):
             col_index = col_start
             # print(i, value)
-            
+
             if value:
                 row = df.iloc[i, :]
-                # print(row["method"], row["condition"], row["type"], row["unit"])
                 for title in title_list:
 
                     if method_count > 0 and title == "method":
@@ -69,10 +69,9 @@ def make_data_sheet(target:str):
                         pass
                     else:
                         ws.cell(row_index, col_index).value = row[title]
-                    
+
                     if title == "condition":
                         condition_now = row["condition"]
-
 
                     method_count += 1
                     if col_index >= col_start + 4:
@@ -81,20 +80,18 @@ def make_data_sheet(target:str):
                         col_index += 1
                 row_index += 1
 
-    # print(df["method"].str.contains("レオメータ"))
-
     # width of wrokbook
     wb = CellWidth(wb)
 
     wb.save(Data_sheet_path)
-    
 
 
-def Doit(target:str):
+def Doit(target: str):
     try:
         make_data_sheet(target)
     except Exception as e:
         print(e)
+
 
 if __name__ == "__main__":
     print("make data sheet")
