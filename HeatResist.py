@@ -16,13 +16,13 @@ class HeatResist:
         self.target = target
 
         self.exp_name = '熱老化_自動集積 '
-        self.exp_name_2 = '自動引張り '
+        # self.exp_name_2 = '自動引張り '
 
         self.file_path = Service.data_dir(
             target) + rf'\{self.exp_name}*{target}*.xls*'
 
-        self.file_path_2 = Service.data_dir(
-            target) + rf'\{self.exp_name_2}*{target}*.xls*'
+        # self.file_path_2 = Service.data_dir(
+            # target) + rf'\{self.exp_name_2}*{target}*.xls*'
 
         self.file_now = ''
 
@@ -34,7 +34,8 @@ class HeatResist:
         print('find files...')
         print(self.file_path)
 
-        file_list = glob.glob(self.file_path) + glob.glob(self.file_path_2)
+        file_list = glob.glob(self.file_path)
+        # + glob.glob(self.file_path_2)
         file_list = sorted(file_list, key=len)
         print(file_list)
 
