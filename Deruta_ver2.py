@@ -2,8 +2,6 @@ import pandas as pd
 import Service
 import glob
 import os
-import numpy
-
 
 class Deruta2:
 
@@ -57,27 +55,17 @@ class Deruta2:
             print(f'No {self.exp_name}')
             return
 
-    def FindIndexOfTitle(self, df) -> int:
-
-        target_col_index = None
-        for index_title, title in enumerate(df.columns.to_list()):
-            for index, cell in enumerate(df[title]):
-                # print(index, cell)
-                if '試験液' in str(cell):
-                    # print(title, index)
-                    target_col_index = index_title
-                    break
-        return target_col_index - 1
-
     def ReadFile(self):
         print('read file ', os.path.basename(self.file_now))
         
         
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
         
-        
+        df_sheets_all = pd.DataFrame()
         for sheet in sheet_list:
-            print(self.ReadSheet(sheet))
+            df_sheets_all = pd.concat(df_sheets_all, self.ReadSheet(sheetName=sheet), sort=False)
+
+        print(df_sheets_all)
         
     def ReadSheet(self, sheetName: str):
         
@@ -87,14 +75,12 @@ class Deruta2:
         df_information = pd_sheet.iloc[[0],0:11]
         df_data = pd_sheet.iloc[3:,0:11]
 
-
         # get liquid information 
         information_liquid = df_information.iat[0, 3]
         information_temperature = df_information.iat[0, 7]
         information_time = df_information.iat[0, 8]
         information_all = f"{information_liquid} {information_temperature}℃x{information_time}H"
         
-    
         df_deltaV = df_data.iloc[:,[1,9]] 
 
         values_target_list = df_deltaV.iloc[:,0].values
@@ -139,6 +125,16 @@ class Deruta2:
         results["information"] = information_all
         results["df_deltaV"] = df_deltaV
 
+
+        df_data_result = Service.create_method_condition_type_unit(
+            df_deltaV,
+            Service.file_name_without_target(self.file_now, self.target),
+            ["⊿V"],
+            ["%"]   
+        )
+
+        print(df_data_result)
+        
         return results
                 
                 

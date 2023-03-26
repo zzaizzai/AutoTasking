@@ -22,9 +22,9 @@ python Main.py
 
 ### .env
 ```
-HOSE_DIR = 
-AUTO_TENSION_ALL_XLSX_1 = 
-AUTO_TENSION_ALL_XLSX_2 = 
+HOSE_DIR = "データが入っている場所"
+AUTO_TENSION_ALL_XLSX_1 = "AutoTension用のエクセルファイル"
+AUTO_TENSION_ALL_XLSX_2 = "AutoTension用のエクセルファイル"
 ```
 
-**There are some confidential information but I manage the information in a environment file**
+**There are some confidential information but I manage that in a environment file**

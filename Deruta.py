@@ -4,6 +4,8 @@ import glob
 import os
 import numpy
 
+# Oldversion 
+
 
 class Deruta:
 
@@ -58,14 +60,11 @@ class Deruta:
             return
 
     def FindIndexOfTitle(self, df) -> int:
-        # print(df.columns.to_list().index('配合ＮＯ'))
-        # print(df.columns.to_list())
+
         target_col_index = None
         for index_title, title in enumerate(df.columns.to_list()):
             for index, cell in enumerate(df[title]):
-                # print(index, cell)
                 if '試験液' in str(cell):
-                    # print(title, index)
                     target_col_index = index_title
                     break
         return target_col_index - 1
