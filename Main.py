@@ -21,6 +21,7 @@ import SaveLog
 import MakeDataSheet
 import Zeika
 import Gabe
+import Deruta_ver2
 
 
 def DoProcess(user: str,
@@ -37,7 +38,8 @@ def DoProcess(user: str,
     Hardness.DoIt(target, test_mode=test_mode)
     HeatResist.DoIt(target, test_mode=test_mode)
     OilTension.DoIt(target, test_mode=test_mode)
-    Deruta.DoIt(target, test_mode=test_mode)
+    # Deruta.DoIt(target, test_mode=test_mode)
+    Deruta_ver2.DoIt(target, test_mode=test_mode)
     Compression.DoIt(target, test_mode=test_mode)
     Zeika.DoIt(target, test_mode=test_mode)
     Ozone.DoIt(target, test_mode=test_mode)
@@ -48,7 +50,7 @@ def DoProcess(user: str,
     MakeDataSheet.Doit(target)
 
     print('\n=========================================================')
-    # print('   process done   ')
+    print(f'   {target}   ')
     print(Service.work_done)
     print('=========================================================\n')
 
@@ -139,27 +141,41 @@ if __name__ == '__main__':
         pass
 
     if user == '小暮準才':
-        print('Hello my lord')
+        print(' Hello my lord')
     else:
         print(f'Hello {user}!')
 
+    target_list = []
     while True:
-        target = input(' what is your target (ex: ABC001) or say "bye" : ')
+        print(f" current target list: {target_list}")
+        target = input(
+            ' what is your target (ex: ABC001) or say "bye", say "doit" when you want to start  : '
+        )
         if target == "bye":
             print("I miss you! :(")
             time.sleep(3)
             break
+        elif target == "cancle" and len(target_list) > 0:
+            target_list.pop()
+        elif target == "doit":
+            print("do it! ")
+
+            time.sleep(1)
+
+            for a_target in target_list:
+                DoProcess(user,
+                          user_family,
+                          a_target,
+                          target_dir_path,
+                          test_mode=test_mode)
+            
+            target_list.clear()
+
         else:
             if Service.check_target(target):
                 print(f'target is {target}')
                 print(f'test mode: {test_mode}')
-                time.sleep(1)
-
-                DoProcess(user,
-                          user_family,
-                          target,
-                          target_dir_path,
-                          test_mode=test_mode)
+                target_list.append(target)
 
             else:
                 print()

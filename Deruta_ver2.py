@@ -61,12 +61,68 @@ class Deruta2:
         
         sheet_list = pd.ExcelFile(self.file_now).sheet_names
         
-        df_sheets_all = pd.DataFrame()
-        for sheet in sheet_list:
-            df_sheets_all = pd.concat(df_sheets_all, self.ReadSheet(sheetName=sheet), sort=False)
-
-        print(df_sheets_all)
         
+        df_deltaV_all = pd.DataFrame()
+        for sheet in sheet_list:
+            if sheet == sheet_list[0]:
+                data_SG = self.GetSGData(sheet)
+                df_deltaV_all = pd.concat([df_deltaV_all, data_SG])
+            
+            data  = self.ReadSheet(sheet)
+            df_deltaV_all = pd.concat([df_deltaV_all, data])
+        
+        
+        self.writedata(df_deltaV_all)
+    def GetSGData(self, sheetName: str):
+        pd_sheet = pd.read_excel(self.file_now, sheet_name=sheetName, header=None)
+        pd_sheet = pd_sheet.loc[2:,0:11]
+        df_data = pd_sheet.iloc[3:,0:11]
+        
+        df_SG = df_data.iloc[:, [1,5]]
+        values_target_list = df_SG.iloc[:,0].values
+        index_target_list = []
+        for i, name in enumerate(df_SG.iloc[:,0].values):
+            if str(name) != "nan":
+                index_target_list.append(i)
+        
+        for i in index_target_list:
+            values_target_list[i+1] = values_target_list[i ]
+            values_target_list[i] = "nan"
+            
+        df_temp = pd.DataFrame(values_target_list, columns=['taret'])
+        df_SG = df_SG.reset_index()
+        df_SG["SG"] = df_SG[5]
+        df_SG["target"]= df_temp
+        
+        index_delta_mean = []
+        for i, value in enumerate(df_SG["target"]):
+            if str(value) != "nan":
+                index_delta_mean.append(i)           
+        
+        df_SG = df_SG.loc[index_delta_mean,["target", "SG"]]
+        df_SG = df_SG.reset_index()
+        
+        for i, value in enumerate(df_SG["target"]):
+            df_SG.loc[i, "target"] = Service.target_number(i, self.target)
+
+        df_SG.drop(columns=["index"], inplace=True)
+        df_SG = df_SG.transpose()
+        
+        values_target_list = df_SG.loc["target",:].values.tolist()
+        df_SG.columns = values_target_list
+        df_SG = df_SG.iloc[[1], :]
+        df_SG.reset_index(drop=True, inplace=True)
+        
+        df_data_result = Service.create_method_condition_type_unit(
+            df_SG,
+            Service.file_name_without_target(self.file_now, self.target),
+            "SG",
+            "SG",
+            'g/cm3'   
+        )
+        
+        return df_data_result
+    
     def ReadSheet(self, sheetName: str):
         
         pd_sheet = pd.read_excel(self.file_now, sheet_name=sheetName, header=None)
@@ -75,15 +131,18 @@ class Deruta2:
         df_information = pd_sheet.iloc[[0],0:11]
         df_data = pd_sheet.iloc[3:,0:11]
 
+
         # get liquid information 
         information_liquid = df_information.iat[0, 3]
         information_temperature = df_information.iat[0, 7]
         information_time = df_information.iat[0, 8]
-        information_all = f"{information_liquid} {information_temperature}℃x{information_time}H"
+        information_all = f"{information_liquid} {information_temperature}℃×{information_time}H"
         
+    
         df_deltaV = df_data.iloc[:,[1,9]] 
 
         values_target_list = df_deltaV.iloc[:,0].values
+        
         
         index_target_list = []
         for i, name in enumerate(df_deltaV.iloc[:,0].values):
@@ -93,6 +152,7 @@ class Deruta2:
         for i in index_target_list:
             values_target_list[i+1] = values_target_list[i ]
             values_target_list[i] = "nan"
+        
         
         
         df_temp = pd.DataFrame(values_target_list, columns=['taret'])
@@ -120,22 +180,15 @@ class Deruta2:
         df_deltaV = df_deltaV.iloc[[1], :]
         df_deltaV.reset_index(drop=True, inplace=True)
 
-        
-        results = {}
-        results["information"] = information_all
-        results["df_deltaV"] = df_deltaV
-
-
         df_data_result = Service.create_method_condition_type_unit(
             df_deltaV,
             Service.file_name_without_target(self.file_now, self.target),
-            ["⊿V"],
-            ["%"]   
+            information_all,
+            "⊿V",
+            '%'   
         )
-
-        print(df_data_result)
         
-        return results
+        return df_data_result
                 
                 
     def writedata(self, df_input):
